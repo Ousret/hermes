@@ -1,0 +1,290 @@
+{% extends 'admin/master.html' %}
+{% block head_meta %}
+    {{ super() }}
+    {% if not current_user.is_authenticated %}
+        <meta http-equiv="refresh" content="0; url={{ url_for('security.login') }}"/>
+    {% endif %}
+{% endblock %}
+{% block body %}
+    {{ super() }}
+
+    {% if current_user.is_authenticated %}
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Hermes
+                <small>Interface utilisateur pour gérer le service et mettre en oeuvre des actions sur les automates</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Hermes</a></li>
+                <li class="active">Service & Editeur d'Action</li>
+            </ol>
+        </section>
+
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3 id="nb-automate">0</h3>
+                            <p>Automate</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-android"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Nombre d'automate programmé</a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3 id="taux-reussite-execution">0<sup style="font-size: 20px">%</sup></h3>
+
+                            <p>Taux de réussite</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-balance-scale"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Ratio automate succès / échec</a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3 id="nb-execution-reussite">0</h3>
+
+                            <p>Réussite</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-check-circle-o"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Nombre execution en réussite</a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3 id="nb-execution-echec">0</h3>
+
+                            <p>Echec</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Nombre execution en échec</a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+            <!-- Main row -->
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div data-step="1" data-intro="Cette section va vous permettre de contrôler le service d'interopérabilité, le mode production en soit." class="box">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Contrôle du service</h3>
+
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <a onclick="AppInterfaceInteroperabilite.demarrer_interoperabilite()" id="btn-start-service" class="btn btn-app disabled">
+                                        <i class="fa fa-play"></i> Démarrer
+                                    </a>
+
+                                    <a onclick="AppInterfaceInteroperabilite.arreter_interoperabilite()" id="btn-stop-service" class="btn btn-app disabled">
+                                        <i class="fa fa-stop"></i> Arrêter
+                                    </a>
+
+                                    <!-- /.row -->
+                                </div>
+                                <!-- ./box-body -->
+
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                        <!-- /.col -->
+
+                        <div class="col-md-4">
+                            <div data-step="2" data-intro="Vous pouvez obtenir un aperçu de ce que le moteur perçoit dans vos messages" class="box">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Assistant</h3>
+
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+
+                                    <a href="javascript:void(0);" onclick="introJs().start();" class="btn btn-app">
+                                        <i class="fa fa-question-circle"></i> Guide de l'interface
+                                    </a>
+                                    <!-- /.row -->
+                                </div>
+                                <!-- ./box-body -->
+
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                        <!-- /.col -->
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div data-step="6" data-intro="Pour pouvoir créer/modifier/supprimer des actions sur un automate, vous devez au préalable en choisir un existant depuis cette zone." class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Choisir Automate</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+
+                                    <a data-step="10" data-intro="Pour pouvoir créer/modifier/supprimer un automate et y associer un détecteur, appuyez sur ce boutton. Cela vous emmenera sur une nouvelle page." href="/admin/automate/" class="btn btn-app">
+                                        <i class="fa fa-android"></i> Modifier liste d'Automate
+                                    </a>
+
+                                    <div class="form-group">
+                                      <label for="selection-automate">Vos automates</label>
+                                      <select id="selection-automate" class="form-control">
+                                        <option value="" selected>Veuillez choisir votre automate</option>
+                                      </select>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                            <div data-step="11" data-intro="Cette checkbox permet d'activer le fonctionnement en production, à la volée, de votre automate choisis" class="onoffswitch">
+                                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="activation-automate-production" checked>
+                                                <label class="onoffswitch-label" for="activation-automate-production">
+                                                    <span class="onoffswitch-inner"></span>
+                                                    <span class="onoffswitch-switch"></span>
+                                                </label>
+                                            </div>
+
+                                    </div>
+
+                                    <!-- /.row -->
+                                </div>
+                                <!-- ./box-body -->
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+                            <div data-step="7" data-intro="Les ACTIONS effectuées par votre automate seront visuelements disponibles et éditables dans cette zone" class="box box-warning">
+                                <div class="box-header with-border">
+                                    <h3 id="visionneuse-automate-titre" class="box-title">Visionneuse Automate</h3>
+
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+
+                                    <a data-step="8" data-intro="Dans le cadre de la conception de votre automate, vous pouvez lancer un test en partant d'une source spécifique" id="btn-tester-automate" class="btn btn-app disabled">
+                                        <i class="fa fa-fire-extinguisher"></i> Tester Automate
+                                    </a>
+
+                                    <a id="btn-nouveau-noeud" class="btn btn-app disabled" onclick="AppInterfaceInteroperabilite.assistant_creation_noeud_action()">
+                                        <i class="fa fa-plus"></i> Nouvelle Action
+                                    </a>
+
+                                    <a id="btn-supprimer-noeud" class="btn btn-app disabled" onclick="AppInterfaceInteroperabilite.supprimer_noeud_action()">
+                                        <i class="fa fa-recycle"></i> Supprimer Action
+                                    </a>
+
+                                    <a id="btn-modifier-noeud" class="btn btn-app disabled" onclick="AppInterfaceInteroperabilite.assistant_modification_noeud_action()">
+                                        <i class="fa fa-pencil"></i> Modifier Action
+                                    </a>
+
+                                    <div id="visu-automate">
+                                        <h3 style="text-align: center">Veuillez choisir un automate pour commencer</h3>
+                                    </div>
+
+                                </div>
+                                <!-- ./box-body -->
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div data-step="9" data-intro="Le programme d'interopérabilité vous laissera un accès en lecture aux logs depuis cette zone" class="col-md-12">
+                            <div class="box box-danger">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Console</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <div id="terminal">
+
+                                    </div>
+                                    <!-- /.row -->
+                                </div>
+                                <!-- ./box-body -->
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-success">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Historique des exécutions</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+
+                                    <table id="table-executions" class="table table-striped table-bordered" style="width:auto">
+                                        <thead data-step="12" data-intro="Consultez dans cette table l'historique des executions de vos automates, avec la possibilité de faire des recherches dans la table.">
+                                            <tr>
+                                                <th>Numéro</th>
+                                                <th>Automate</th>
+                                                <th>Date lancement</th>
+                                                <th>Mode</th>
+                                                <th>Réussite</th>
+                                                <th data-orderable="false">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Numéro</th>
+                                                <th>Automate</th>
+                                                <th>Date lancement</th>
+                                                <th>Mode</th>
+                                                <th>Réussite</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                    <!-- /.row -->
+                                </div>
+                                <!-- ./box-body -->
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <!-- /.row (main row) -->
+
+
+        </section>
+        <!-- /.content -->
+    {% endif %}
+
+{% endblock body %}
