@@ -32,7 +32,7 @@ class AutomateView(BaseAdminView):
     def on_model_change(self, form, model, is_created):
         """
         :param form:
-        :param gie_interoperabilite_ui.models.automate.Automate model:
+        :param hermes_ui.models.automate.Automate model:
         :param bool is_created:
         :return:
         """

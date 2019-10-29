@@ -23,7 +23,7 @@ class BoiteAuxLettresImapView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.automate.Automate model:
+        :param hermes_ui.models.automate.Automate model:
         :param bool is_created:
         :return:
         """

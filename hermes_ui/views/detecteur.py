@@ -24,7 +24,7 @@ class DectecteurView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
@@ -103,7 +103,7 @@ class DateRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
@@ -157,7 +157,7 @@ class IdentificateurRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
@@ -215,7 +215,7 @@ class LocalisationExpressionRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.detecteur.LocalisationExpressionRechercheInteret model:
+        :param hermes_ui.models.detecteur.LocalisationExpressionRechercheInteret model:
         :param bool is_created:
         :return:
         """
@@ -274,7 +274,7 @@ class ExpressionCleRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
@@ -331,7 +331,7 @@ class ExpressionReguliereRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
@@ -370,7 +370,7 @@ class CleRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
@@ -409,7 +409,7 @@ class ExpressionDansCleRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
@@ -463,7 +463,7 @@ class InformationRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
@@ -501,7 +501,7 @@ class OperationLogiqueRechercheInteretView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """

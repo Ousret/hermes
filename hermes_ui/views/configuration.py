@@ -23,7 +23,7 @@ class ConfigurationView(BaseAdminView):
         """
 
         :param form:
-        :param gie_interoperabilite_ui.models.configuration.Configuration model:
+        :param hermes_ui.models.configuration.Configuration model:
         :param bool is_created:
         :return:
         """
