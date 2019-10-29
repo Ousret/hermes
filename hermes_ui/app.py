@@ -39,7 +39,8 @@ from hermes_ui.incident import NotificationIncident
 
 from hermes_ui.marshmallow.legacy import *
 from hermes_ui.marshmallow.front import *
-from flask_webpack import Webpack
+from flask_webpackext.project import WebpackTemplateProject
+from flask_webpackext import FlaskWebpackExt
 
 
 app = Flask(__name__)
@@ -52,11 +53,22 @@ security = Security(app, admins_store)
 
 babel = Babel(app)
 
-webpack = Webpack(app)
+project = WebpackTemplateProject(
+    __name__,
+    project_folder='assets',
+    config_path='config.json',
+)
+
+app.config.update(dict(
+    WEBPACKEXT_PROJECT=project,
+))
+
+# Initialize extension
+FlaskWebpackExt(app)
 
 admin = AdminLte(
     app,
-    skin='purple',
+    skin='green-light',
     name='GIE Interopérabilité',
     short_name="<b>GIE</b><sup>SV</sup>",
     long_name="<b>GIE</b><sup>SV</sup> <small>Interopérabilité</small>",

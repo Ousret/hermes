@@ -1,0 +1,10 @@
+{
+  "build": {
+    "assetsPath": "D:\\Personnel\\PdC\\interoperabilite\\hermes_ui\\static\\build",
+    "assetsURL": "/static/build/",
+    "context": "D:\\Personnel\\PdC\\interoperabilite\\hermes_ui\\assets",
+    "debug": false,
+    "staticPath": "D:\\Personnel\\PdC\\interoperabilite\\hermes_ui\\static\\",
+    "staticURL": "/static/build/"
+  }
+}

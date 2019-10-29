@@ -1,53 +1,96 @@
-var path = require('path');
-
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var ManifestRevisionPlugin = require('manifest-revision-webpack-plugin');
-
-var rootAssetPath = './assets';
+let webpack = require('webpack');
+let config = require('./assets/config');
+let ManifestPlugin = require('webpack-manifest-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
+    context: config.build.context,
     entry: {
-        app_js: [
-            rootAssetPath + '/scripts/app.js'
-        ],
-        app_css: [
-            rootAssetPath + '/styles/main.css'
-        ]
+        app: "./scripts/app.js",
+        app_help: './scripts/app_help.js',
+        app_hermes: './scripts/app_hermes.js'
     },
     output: {
-        path: './static/build',
-        publicPath: 'http://localhost:5000/',
-        filename: '[name].[chunkhash].js',
-        chunkFilename: '[id].[chunkhash].js'
+        path: config.build.assetsPath,
+        filename: 'js/[name].[chunkhash].js',
+        publicPath: config.build.assetsURL
     },
-    resolve: {
-        extensions: ['.js', '.css']
+    optimization: {
+        minimizer: [new TerserPlugin()],
     },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /\.js$/i,
-                loader: 'script-loader',
+                test: /\.css$/,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '../',
+                            hmr: process.env.NODE_ENV === 'development',
+                        },
+                    },
+                    //'style-loader',
+                    'css-loader'
+                ],
+            },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
                 exclude: /node_modules/
             },
             {
-                test: /\.css$/i,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+                test: /\.(woff2?|eot|ttf|otf|svg)(\?.*)?$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 10000,
+                    name: 'build/fonts/[name].[hash:7].[ext]'
+                }
             },
             {
-                test: /\.(jpe?g|png|gif|svg([\?]?.*))$/i,
-                loaders: [
-                    'file?context=' + rootAssetPath + '&name=[path][name].[hash].[ext]',
-                    'image?bypassOnDebug&optimizationLevel=7&interlaced=false'
-                ]
-            }
+                test: /\.(png|jpg|gif)$/i,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 8192,
+                        },
+                    },
+                ],
+            },
         ]
     },
     plugins: [
-        new ExtractTextPlugin('[name].[chunkhash].css'),
-        new ManifestRevisionPlugin(path.join('build', 'manifest.json'), {
-            rootAssetPath: rootAssetPath,
-            ignorePaths: ['/styles', '/scripts']
-        })
+        new ManifestPlugin({
+            fileName: 'manifest.json',
+            stripSrc: true,
+            publicPath: config.build.assetsURL
+        }),
+        new MiniCssExtractPlugin(
+            {
+                // Options similar to the same options in webpackOptions.output
+                // all options are optional
+                filename: '[name].css',
+                chunkFilename: '[id].css',
+                ignoreOrder: false, // Enable to remove warnings about conflicting order
+
+            }
+        ),
+        new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.css$/g,
+            cssProcessor: require('cssnano'),
+            cssProcessorPluginOptions: {
+                preset: ['default', {discardComments: {removeAll: true}}],
+            },
+            canPrint: true
+        }),
+        // new webpack.ProvidePlugin({
+        //     jQuery: 'jquery/src/jquery',
+        //     $: 'jquery/src/jquery',
+        //     jquery: 'jquery/src/jquery',
+        //     'window.jQuery': 'jquery/src/jquery'
+        // })
     ]
 };

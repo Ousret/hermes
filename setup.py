@@ -14,7 +14,7 @@ setup(
                       'marshmallow', 'flask_marshmallow', 'marshmallow-sqlalchemy', 'python-dateutil', 'jinja2',
                       'flask-emails', 'ruamel.std.zipfile', 'ics', 'olefile', 'html5lib', 'pandas', 'flask_babel',
                       'records', 'flask_babel', 'unidecode', 'pandas', 'records', 'marshmallow-oneofschema', 'loguru',
-                      'Flask-Webpack'],
+                      'Flask-Webpack', 'mysql-connector', 'werkzeug', 'sqlalchemy'],
     dependency_links=[
         'git+https://github.com/C4ptainCrunch/ics.py.git@ebe80a0e77d93dd30d6182137d813e3176a2490c#egg=ics'
     ],
