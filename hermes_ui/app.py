@@ -613,7 +613,7 @@ def lecture_action_automate(automate_id, action_noeud_id):
 
     decompose_type_action = action.mapped_class_child.split("'")  # type: list[str]
 
-    if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('gie_interoperabilite_ui.models.'):
+    if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
         return jsonify(
             {'message': 'Type d\'action illégale à la création: "{}"'.format(decompose_type_action[-2])}), 409
 
@@ -656,7 +656,7 @@ def creation_action(automate_id):
 
     decompose_type_action = type_action.split("'")  # type: list[str]
 
-    if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('gie_interoperabilite_ui.models.'):
+    if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
         return jsonify({'message': 'Type d\'action illégale à la création: "{}"'.format(decompose_type_action[-2])}), 409
 
     target_module = modules['.'.join(decompose_type_action[-2].split('.')[0:-1])]
