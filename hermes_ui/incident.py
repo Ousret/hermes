@@ -1,6 +1,6 @@
 from hermes.automate import EnvoyerMessageSmtpActionNoeud
 from hermes.source import Source
-from hermes.logger import logger
+from hermes.logger import logger, mem_handler
 
 from .models import Automate
 
@@ -11,7 +11,7 @@ class SourceLogger(Source):
         super().__init__('', '')
 
         self._destinataire = 'admin@localhost'
-        self._raw_content = '\n'.join([InteroperabiliteLogger.formatter.format(el) for el in InteroperabiliteLogger.handler_debug.buffer]).encode('utf-8')
+        self._raw_content = '\n'.join([str(el.msg) for el in mem_handler.buffer]).encode('utf-8')
 
     @property
     def raw(self):
