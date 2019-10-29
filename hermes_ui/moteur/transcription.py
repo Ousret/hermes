@@ -5,8 +5,6 @@ from hermes_ui.db import db
 
 import hermes_ui.models
 
-from json import loads
-
 
 class ServiceTranspositionModels:
 
@@ -167,7 +165,21 @@ class ServiceTranspositionModels:
         if action is None:
             return None
 
-        action = db.session.query(action.mapped_class_child).get(
+        decompose_type_action = action.mapped_class_child.split("'")  # type: list[str]
+
+        if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
+            return None
+
+        from sys import modules
+
+        target_module = modules['.'.join(decompose_type_action[-2].split('.')[0:-1])]
+
+        try:
+            target_model_class = getattr(target_module, decompose_type_action[-2].split('.')[-1])
+        except AttributeError as e:
+            return None
+
+        action = db.session.query(target_model_class).get(
             action.id)  # type: hermes_ui.models.ActionNoeud
         mon_action_noeud = action.transcription()
 
