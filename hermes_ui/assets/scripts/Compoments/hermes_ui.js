@@ -1025,8 +1025,9 @@ class AppInterfaceInteroperabilite {
             (data) => {
 
                 $('#nb-automate').html(data.automate);
-                $('#nb-execution-reussite').html(data.reussites);
-                $('#nb-execution-echec').html(data.echecs);
+                $('#nb-execution-reussite').html(data.reussites.toString()+'<sup>/'+data.executions.toString()+'</sup>');
+                $('#nb-execution-echec').html(data.echecs.toString()+'<sup>/'+data.executions.toString()+'</sup>');
+                $('#nb-critere').html(data.criteres);
 
             }
         ).fail(

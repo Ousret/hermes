@@ -256,6 +256,7 @@ def recuperation_statistique_generale():
 
     nb_automate = db.session.query(Automate).count()
     nb_execution = db.session.query(AutomateExecution).count()
+    nb_critere = db.session.query(RechercheInteret).count()
 
     nb_execution_reussite = db.session.query(AutomateExecution).filter_by(validation_automate=True).count()
     nb_execution_echec = db.session.query(AutomateExecution).filter_by(validation_automate=False).count()
@@ -265,7 +266,8 @@ def recuperation_statistique_generale():
             'automate': nb_automate,
             'executions': nb_execution,
             'reussites': nb_execution_reussite,
-            'echecs': nb_execution_echec
+            'echecs': nb_execution_echec,
+            'criteres': nb_critere
         }
     ), 200
 
