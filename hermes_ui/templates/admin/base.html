@@ -15,10 +15,6 @@
     {% block head_css %}
         {{ webpack['app.css'] }}
 
-        {% if admin_view.name=="Interopérabilité" %}
-            {{ webpack['app_hermes.css'] }}
-        {% endif %}
-
         <!-- Flask-admin admin styles -->
         <link href="{{ admin_static.url(filename='admin/css/bootstrap3/admin.css', v='1.1.1') }}" rel="stylesheet">
 
@@ -250,10 +246,6 @@
     {% endif %}
 
     {{ webpack['app_help.js'] }}
-
-    {% if admin_view.name=="Interopérabilité" %}
-        {{ webpack['app_hermes.js'] }}
-    {% endif %}
 
 {% endblock tail_js %}
 

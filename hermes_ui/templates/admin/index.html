@@ -5,6 +5,12 @@
         <meta http-equiv="refresh" content="0; url={{ url_for('security.login') }}"/>
     {% endif %}
 {% endblock %}
+
+{% block head_css %}
+    {{ super() }}
+    {{ webpack['app_hermes.css'] }}
+{% endblock %}
+
 {% block body %}
     {{ super() }}
 
@@ -288,3 +294,8 @@
     {% endif %}
 
 {% endblock body %}
+
+{% block tail_js %}
+    {{ super() }}
+    {{ webpack['app_hermes.js'] }}
+{% endblock %}
