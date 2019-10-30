@@ -152,6 +152,10 @@ class ActionNoeud(object):
         return self._designation
 
     @property
+    def est_reussite(self):
+        return self._payload is not False and self._payload is not None
+
+    @property
     def actions_lancees(self):
         if self._payload is None:
             return []
