@@ -88,27 +88,15 @@ $(function () {
 
     AppInterfaceInteroperabilite.recuperer_liste_automate();
 
-    let INTEROPERABILITE_TERMINAL_GRETTING = '\n' +
-        '\n' +
-        '   _____ _____ ______    _____                       __      ___ _        _      \n' +
-        '  / ____|_   _|  ____|  / ____|                      \\ \\    / (_) |      | |     \n' +
-        ' | |  __  | | | |__    | (___   ___  ___  __ _ _ __ __\\ \\  / / _| |_ __ _| | ___ \n' +
-        ' | | |_ | | | |  __|    \\___ \\ / _ \\/ __|/ _` | \'_ ` _ \\ \\/ / | | __/ _` | |/ _ \\\n' +
-        ' | |__| |_| |_| |____   ____) |  __/\\__ \\ (_| | | | | | \\  /  | | || (_| | |  __/\n' +
-        '  \\_____|_____|______| |_____/ \\___||___/\\__,_|_| |_| |_|\\/   |_|\\__\\__,_|_|\\___|\n' +
-        '                                                                                 \n' +
-        '                                                                                 \n' +
-        '\n\n\nInteropérabilité Coeur+UI Copyright © 2019 GIE Sesam-Vitale. All rights reserved.\n\n';
-
     AppInterfaceInteroperabilite.TERM = $('#terminal')
         .terminal('',
             {
-                greetings: INTEROPERABILITE_TERMINAL_GRETTING,
+                greetings: 'Hermes Copyright © 2019 GIE Sesam-Vitale. All rights reserved.\n\n',
                 historySize: 40,
                 outputLimit: 80,
                 height: 250,
             }
-        );
+        ).freeze(true);
 
     TABLE_EXECUTION_AUTOMATE = $('#table-executions').DataTable(
         {
