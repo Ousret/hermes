@@ -568,7 +568,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         def get_params(self):
             params = {}
             if self.common_name:
-                params.update({'CN': ["'{}'" % self.common_name]})
+                params.update({'CN': ["'{}'".format(self.common_name)]})
 
             if self.rsvp:
                 params.update({'RSVP': [self.rsvp]})
