@@ -69,9 +69,9 @@ FlaskWebpackExt(app)
 admin = AdminLte(
     app,
     skin='green-light',
-    name='GIE Interopérabilité',
-    short_name="<b>GIE</b><sup>SV</sup>",
-    long_name="<b>GIE</b><sup>SV</sup> <small>Interopérabilité</small>",
+    name='Hermes - Automates de gestion des échanges électroniques',
+    short_name="<b>H</b><sup>ermes</sup>",
+    long_name="<b>Hermes</b>",
     index_view=AdminIndexView(name="Interopérabilité", menu_icon_value='fa-pencil', menu_icon_type='fa')
 )
 
