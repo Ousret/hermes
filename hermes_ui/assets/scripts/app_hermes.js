@@ -4,7 +4,10 @@ const Swal = require('sweetalert2');
 let Dropzone = require('dropzone');
 require('datatables.net-bs');
 require('jquery.terminal');
-require('intro.js');
+
+const introJs = require('intro.js');
+global.introJs = introJs;
+
 const moment = require('moment');
 require('moment/locale/fr');
 
@@ -14,7 +17,7 @@ require('intro.js/introjs.css');
 require('intro.js/themes/introjs-modern.css');
 require('jquery.terminal/css/jquery.terminal.css');
 
-const AppInterfaceInteroperabilite = require('./Compoments/hermes_ui');
+let AppInterfaceInteroperabilite = require('./Compoments/hermes_ui');
 
 let TABLE_EXECUTION_AUTOMATE = null,
     TABLE_EXECUTION_AUTOMATE_FIRST_FETCH = false;
@@ -23,6 +26,11 @@ Dropzone.autoDiscover = false;
 
 $(function () {
 
+    $('#btn-start-service').click(AppInterfaceInteroperabilite.demarrer_interoperabilite);
+    $('#btn-stop-service').click(AppInterfaceInteroperabilite.arreter_interoperabilite);
+    $('#btn-nouveau-noeud').click(AppInterfaceInteroperabilite.assistant_creation_noeud_action);
+    $('#btn-supprimer-noeud').click(AppInterfaceInteroperabilite.supprimer_noeud_action);
+    $('#btn-modifier-noeud').click(AppInterfaceInteroperabilite.assistant_modification_noeud_action);
 
     let mise_a_jour_journal = () => {
 

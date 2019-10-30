@@ -19,10 +19,6 @@ require('./Compoments/jquery.asuggest');
 require('./Compoments/jquery.livequery');
 
 require('awesomplete');
-const introJs = require('intro.js');
-
-global.introJs = introJs;
-
 require('admin-lte/dist/js/app');
 
 require('bootstrap/dist/css/bootstrap.css');
@@ -39,7 +35,6 @@ require('../styles/hermes-surcharge.css');
 const AppInterfaceInteroperabilite = require('./Compoments/hermes_ui');
 Dropzone.autoDiscover = false;
 
-global.AppInterfaceInteroperabilite = AppInterfaceInteroperabilite;
 
 $.fn.sidebar = function(options) {
 
@@ -140,6 +135,9 @@ $.fn.sidebar = function(options) {
 $(function () {
 
     $(".sidebarh.right").sidebar({side: "right"});
+
+    $('#btn-analyse-manuelle-detecteur').click(AppInterfaceInteroperabilite.assistant_simulation_detecteur);
+    $('#btn-analyse-manuelle-raw').click(AppInterfaceInteroperabilite.assistant_simulation_extraction_interet);
 
     AppInterfaceInteroperabilite.recuperation_saisie_assistee().then(
         (suggestions) => {
