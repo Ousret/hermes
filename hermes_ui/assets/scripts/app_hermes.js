@@ -5,7 +5,8 @@ let Dropzone = require('dropzone');
 require('datatables.net-bs');
 require('jquery.terminal');
 require('intro.js');
-const hljs = require('highlight.js');
+const moment = require('moment');
+require('moment/locale/fr');
 
 require('datatables.net-bs/css/dataTables.bootstrap.css');
 require('dropzone/dist/dropzone.css');
@@ -115,12 +116,15 @@ $(function () {
                 "url": "/admin/rest/automate-execution",
                 "dataSrc": function (json) {
                     for (let i = 0; i < json.data.length; i++) {
-                        json.data[i].automate.designation = json.data[i].automate.designation.replace(/(.{70})..+/, "$1&hellip;");
+                        json.data[i].automate.designation = json.data[i].automate.designation.replace(/(.{90})..+/, "$1&hellip;");
                         json.data[i].sujet = json.data[i].sujet.replace(/(.{90})..+/, "$1&hellip;");
+
+                        json.data[i].date_creation = moment(json.data[i].date_creation).format('LLLL');
+                        json.data[i].date_finalisation = moment(json.data[i].date_finalisation).format('LLLL');
 
                         json.data[i].validation_automate = json.data[i].validation_automate ? '<span class="badge bg-green">Réussite</span>' : '<span class="badge bg-red">Echec</span>';
 
-                        json.data[i]['actions'] = '<a data-automate-execution-id="' + json.data[i].id + '" class="btn btn-app btn-automate-execution-debug"><i class="fa fa-eye"></i> Informations</a>';
+                        json.data[i]['actions'] = '<a data-automate-execution-id="' + json.data[i].id + '" class="btn btn-warning btn-flat btn-automate-execution-debug"><i class="fa fa-eye"></i></a>';
                     }
                     TABLE_EXECUTION_AUTOMATE_FIRST_FETCH = true;
                     return json.data;
@@ -134,7 +138,10 @@ $(function () {
                 {"data": "validation_automate"},
                 {"data": "actions"},
             ],
-            "order": [[0, "desc"]]
+            "order": [[0, "desc"]],
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+            }
         }
     );
 

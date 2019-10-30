@@ -358,3 +358,20 @@ pre {
 #detecteur-fichier-dropzone-floatbox {
     border: dashed 5px lightseagreen;
 }
+
+.table-dark {
+    color: #fff;
+    background-color: #212529;
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(2n+1) {
+    background-color: rgba(255,255,255,.05);
+}
+
+.select2-container--default.select2-container--focus, .select2-container--default:active, .select2-container--default:focus, .select2-selection.select2-container--focus, .select2-selection:active, .select2-selection:focus {
+    width: 100% !important;
+}
+
+.cmd [role="presentation"].cmd-cursor-line {
+    z-index: 1 !important;
+}
