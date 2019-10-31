@@ -31,6 +31,7 @@ $(function () {
     $('#btn-nouveau-noeud').click(AppInterfaceInteroperabilite.assistant_creation_noeud_action);
     $('#btn-supprimer-noeud').click(AppInterfaceInteroperabilite.supprimer_noeud_action);
     $('#btn-modifier-noeud').click(AppInterfaceInteroperabilite.assistant_modification_noeud_action);
+    $('#btn-tester-automate').click(AppInterfaceInteroperabilite.assistant_test_isolation_automate);
 
     let mise_a_jour_journal = () => {
 
@@ -266,6 +267,7 @@ ${args_debug === '' ? '<b>Aucun argument disponible en mode debug !</b>' : args_
                 $('#btn-nouveau-noeud').removeClass('disabled');
                 $('#btn-modifier-noeud').removeClass('disabled');
                 $('#btn-supprimer-noeud').removeClass('disabled');
+                $('#btn-tester-automate').removeClass('disabled');
 
                 AppInterfaceInteroperabilite.recuperation_saisie_assistee();
 

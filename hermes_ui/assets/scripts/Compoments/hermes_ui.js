@@ -216,6 +216,54 @@ class AppInterfaceInteroperabilite {
         )
     }
 
+    static creation_test_isolation_automate(automate_id) {
+        return new Promise(
+            function (resolve, reject) {
+
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        'automate_id': automate_id
+                    },
+                    url: `/admin/service/test`,
+                }).done(
+                    resolve
+                ).fail(
+                    reject
+                );
+
+            }
+        );
+    }
+
+    static assistant_test_isolation_automate() {
+        Swal.fire({
+            confirmButtonText: 'Je test &rarr;',
+            showCancelButton: true,
+            text: 'Voulez-vous créer un lancement d\'automate isolé ? Soyez sûr que le message à tester soit dans votre dossier IMAP configuré.',
+        }).then(
+            (r) => {
+                AppInterfaceInteroperabilite.creation_test_isolation_automate(
+                    AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id
+                ).then(
+                    () => {
+                        Swal.fire(
+                            'Parfait !',
+                            'Votre automate "'+AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.designation+'" est dans la file d\'attente pour être testé.',
+                            'success'
+                        );
+                    }
+                ).catch((jqXHR) => {
+                    Swal.fire(
+                        'Attention !',
+                        jqXHR.responseJSON ? jqXHR.responseJSON.message : 'Une erreur inatendue est survenue',
+                        'warning'
+                    );
+                });
+            }
+        );
+    }
+
     static assistant_modification_noeud_action() {
         let inputOptions = {},
             div_visu_actions = $("#visu-automate"),

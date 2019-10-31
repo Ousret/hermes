@@ -21,6 +21,9 @@ class InstanceInteroperabilite:
     current_thread = None
     stop_instruction = None
 
+    liste_attente_test = list()  # type: list[int]
+    liste_attente_test_lock = threading.Lock()
+
     @staticmethod
     def thread():
 
@@ -39,6 +42,12 @@ class InstanceInteroperabilite:
                 logger.error("Impossible de charger la configuration <'{}'::{}> car '{}'", configuration.designation, configuration.format, str(e))
 
         logger.info("Démarrage du service interopérabilité")
+
+        InstanceInteroperabilite.liste_attente_test_lock.acquire()
+        est_une_sequence_test = len(InstanceInteroperabilite.liste_attente_test) > 0
+
+        if not est_une_sequence_test:
+            InstanceInteroperabilite.liste_attente_test_lock.release()
 
         while InstanceInteroperabilite.stop_instruction is None:
 
@@ -64,7 +73,10 @@ class InstanceInteroperabilite:
 
             logger.debug("{} usine à production de source sont actives", len(mail_factories))
 
-            models_automates = db.session.query(Automate).filter_by(production=True).all()  # type: list[Automate]
+            if est_une_sequence_test:
+                models_automates = db.session.query(Automate).filter_by(production=False).all()  # type: list[Automate]
+            else:
+                models_automates = db.session.query(Automate).filter_by(production=True).all()  # type: list[Automate]
 
             models_automates.sort(key=lambda x: x.priorite, reverse=True)
 
@@ -94,6 +106,10 @@ class InstanceInteroperabilite:
                     if InstanceInteroperabilite.stop_instruction is not None:
                         logger.info("Arrêt du service interopérabilité, fin de boucle")
                         return
+
+                    if est_une_sequence_test and model.id not in InstanceInteroperabilite.liste_attente_test:
+                        logger.debug("Séquence de test ne conserne pas '{}'.", model.designation)
+                        continue
 
                     for source in sources:
 
@@ -264,6 +280,11 @@ class InstanceInteroperabilite:
                             db.session.commit()
 
                 db.session.flush()
+
+            if est_une_sequence_test:
+                InstanceInteroperabilite.liste_attente_test.clear()
+                InstanceInteroperabilite.liste_attente_test_lock.release()
+                break
 
             sleep(1 if len(mail_factories) > 0 else 10)
 
