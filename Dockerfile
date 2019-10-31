@@ -18,4 +18,4 @@ RUN python setup.py install --user
 RUN yarn install
 RUN yarn build
 
-CMD python main.py
+CMD python wsgi.py
