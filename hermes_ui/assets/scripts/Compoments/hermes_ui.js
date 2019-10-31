@@ -325,11 +325,9 @@ class AppInterfaceInteroperabilite {
                                         ).catch(
                                             (jqXHR) => {
 
-                                                console.log(jqXHR);
-
                                                 Swal.fire(
                                                     'Mise à jour',
-                                                    'Une erreur est survenue lors de la mise à jour',
+                                                    jqXHR.responseJSON ? jqXHR.responseJSON.message : 'Une erreur inatendue est survenue durant la mise à jour',
                                                     'error'
                                                 );
 
@@ -509,7 +507,7 @@ class AppInterfaceInteroperabilite {
                                             (jqXHR) => {
                                                 Swal.fire(
                                                     'Création action',
-                                                    'Impossible de créer votre action',
+                                                    jqXHR.responseJSON ? jqXHR.responseJSON.message : 'Une erreur inatendue est survenue durant le processus de création',
                                                     'error'
                                                 );
                                             }
@@ -565,7 +563,7 @@ class AppInterfaceInteroperabilite {
                                         (jqXHR) => {
                                             Swal.fire(
                                                 'Création action',
-                                                'Impossible de créer votre action',
+                                                jqXHR.responseJSON ? jqXHR.responseJSON.message : 'Une erreur inatendue est survenue durant le processus de création',
                                                 'error'
                                             );
                                         }
