@@ -1,7 +1,6 @@
 const $ = require('jquery');
 const Swal = require('sweetalert2');
 
-let Dropzone = require('dropzone');
 require('datatables.net-bs');
 require('jquery.terminal');
 
@@ -12,7 +11,6 @@ const moment = require('moment');
 require('moment/locale/fr');
 
 require('datatables.net-bs/css/dataTables.bootstrap.css');
-require('dropzone/dist/dropzone.css');
 require('intro.js/introjs.css');
 require('intro.js/themes/introjs-modern.css');
 require('jquery.terminal/css/jquery.terminal.css');
@@ -21,8 +19,6 @@ let AppInterfaceInteroperabilite = require('./Compoments/hermes_ui');
 
 let TABLE_EXECUTION_AUTOMATE = null,
     TABLE_EXECUTION_AUTOMATE_FIRST_FETCH = false;
-
-Dropzone.autoDiscover = false;
 
 $(function () {
 

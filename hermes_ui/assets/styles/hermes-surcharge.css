@@ -375,3 +375,11 @@ pre {
 .cmd [role="presentation"].cmd-cursor-line {
     z-index: 1 !important;
 }
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered li {
+    color: black;
+}

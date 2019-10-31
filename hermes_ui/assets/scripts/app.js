@@ -13,6 +13,7 @@ require('select2');
 const hljs = require('highlight.js');
 let Dropzone = require('dropzone');
 const Swal = require('sweetalert2');
+global.moment = require('moment');
 
 require('./Compoments/jquery.a-tools');
 require('./Compoments/jquery.asuggest');
@@ -29,12 +30,13 @@ require('font-awesome/css/font-awesome.css');
 require('select2/dist/css/select2.css');
 require('awesomplete/awesomplete.css');
 require('highlight.js/styles/atelier-lakeside-dark.css');
+require('dropzone/dist/dropzone.css');
 
 require('../styles/hermes-surcharge.css');
 
 const AppInterfaceInteroperabilite = require('./Compoments/hermes_ui');
-Dropzone.autoDiscover = false;
 
+Dropzone.autoDiscover = false;
 
 $.fn.sidebar = function(options) {
 
