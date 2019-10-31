@@ -388,15 +388,48 @@ def arreter_service():
     return jsonify({}), 204 if arret is True else 409
 
 
+@app.route("/admin/service/test", methods=['POST'])
+@login_required
+def creation_test_service():
+    automate_id = request.form.get('automate_id', type=int, default=None)
+
+    if automate_id is None:
+        return jsonify({}), 400
+
+    if InstanceInteroperabilite.current_thread is not None:
+        return jsonify({'message': "L'environnement de test nécessite que le traitement des flux soit désactivé."}), 409
+
+    automate = db.session.query(Automate).get(automate_id)  # type: Automate
+
+    if automate is None:
+        return jsonify({'message': 'Aucun automate ne correspond à ID {}'.format(automate_id)}), 404
+
+    if automate.production is True:
+        return jsonify({'message': 'Votre automate ne doit pas être en mode production.'}), 409
+
+    InstanceInteroperabilite.liste_attente_test_lock.acquire(blocking=True)
+
+    if automate_id in InstanceInteroperabilite.liste_attente_test:
+        InstanceInteroperabilite.liste_attente_test_lock.release()
+        return jsonify({'message': "Votre automate est toujours en attente d'être testé. Veuillez patienter."}), 409
+
+    InstanceInteroperabilite.liste_attente_test.append(automate_id)
+    InstanceInteroperabilite.liste_attente_test_lock.release()
+
+    demarrage = InstanceInteroperabilite.demarrer()
+
+    return jsonify({}), 201 if demarrage is True else 409
+
+
 @app.route("/admin/rest/simulation/detecteur/fichier", methods=['POST'])
 def simulation_detecteur_fichier():
-
     if 'file' not in request.files:
         return jsonify({'message': 'Aucun fichier envoyé'}), 400
 
     mon_fichier = request.files['file']  # type: FileStorage
 
-    if (mon_fichier.content_type != 'application/octet-stream' and mon_fichier.content_type != 'message/rfc822') or (mon_fichier.filename.endswith('.eml') is False and mon_fichier.filename.endswith('.msg') is False):
+    if (mon_fichier.content_type != 'application/octet-stream' and mon_fichier.content_type != 'message/rfc822') or (
+            mon_fichier.filename.endswith('.eml') is False and mon_fichier.filename.endswith('.msg') is False):
         return jsonify({'message': 'Fichier message invalide, fichier binaire *.EML ou *.MSG requis !'}), 400
 
     if mon_fichier.filename.endswith('.eml') is True:
