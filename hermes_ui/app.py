@@ -351,16 +351,17 @@ def assistance_saisie_automate(automate_id):
     automate = db.session.query(Automate).get(automate_id)
 
     if automate is None:
-        return jsonify({'message': 'Impossible de proposer la liste des variables disponibles pour un automate inexistant'})
+        return jsonify(
+            {'message': 'Impossible de proposer la liste des variables disponibles pour un automate inexistant'})
 
     propositions = list()
 
     for el in automate.detecteur.regles:  # type: RechercheInteret
-        if el.friendly_name is not None:
+        if el.friendly_name is not None and el.friendly_name != '':
             propositions.append('{{' + el.friendly_name + '}}')
 
     for el in automate.actions:  # type: ActionNoeud
-        if el.friendly_name is not None:
+        if el.friendly_name is not None and el.friendly_name != '':
             propositions.append('{{' + el.friendly_name + '}}')
 
     return jsonify(
