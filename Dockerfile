@@ -11,11 +11,24 @@ RUN npm install yarn -g
 
 EXPOSE 5000
 
-WORKDIR /
+COPY ./setup.py /app/setup.py
+COPY ./configuration.yml /app/configuration.yml
+COPY ./upgrade.sh /app/upgrade.sh
+COPY ./wsgi.py /app/wsgi.py
 
-RUN python setup.py install --user
+COPY ./hermes/ /app/hermes/
+COPY ./hermes_ui/ /app/hermes_ui/
+COPY ./msg_parser/ /app/msg_parser/
+
+WORKDIR /app
+
+RUN python setup.py install
+
+WORKDIR /app/hermes_ui
 
 RUN yarn install
 RUN yarn build
+
+WORKDIR /app
 
 CMD python wsgi.py
