@@ -1,16 +1,19 @@
 version: "2"
 services:
-  app:
+  hermes:
     build: ./
     links:
-      - db
+      - mariadb
+    environment:
+      FLASK_ENV: production
     ports:
       - "5000:5000"
-  db:
-    image: mysql:5.7
-    ports:
-      - "32000:3306"
+
+  mariadb:
+    image: mariadb:10.4
     environment:
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d/:ro
+      MYSQL_ROOT_PASSWORD: hermes
+      MYSQL_DATABASE: hermes
+      MYSQL_USER: hermes
+      MYSQL_PASSWORD: hermes
+    restart: on-failure
