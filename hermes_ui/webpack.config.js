@@ -4,18 +4,19 @@ let ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 let OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+let path = require('path');
 
 module.exports = {
-    context: config.build.context,
+    context: path.join(__dirname, config.build.context),
     entry: {
         app: "./scripts/app.js",
         app_help: './scripts/app_help.js',
         app_hermes: './scripts/app_hermes.js'
     },
     output: {
-        path: config.build.assetsPath,
+        path: path.join(__dirname, config.build.assetsPath),
         filename: 'js/[name].[chunkhash].js',
-        publicPath: config.build.assetsURL
+        publicPath: path.join(__dirname, config.build.assetsURL)
     },
     optimization: {
         minimizer: [new TerserPlugin()],
@@ -46,7 +47,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: 'build/fonts/[name].[hash:7].[ext]'
+                    name: 'fonts/[name].[hash:7].[ext]'
                 }
             },
             {
