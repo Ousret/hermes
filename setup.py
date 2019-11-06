@@ -8,16 +8,13 @@ setup(
     description='Permet la mise en oeuvre d\'une interopérabilité entre vos différents services ou fournisseurs',
     license='MIT',
     packages=['hermes', 'hermes_ui', 'msg_parser'],
-    install_requires=['Flask', 'peewee', 'requests_html', 'python-slugify', 'chardet', 'jsonpickle', 'requests',
+    install_requires=['Flask>=1.0', 'peewee', 'requests_html', 'python-slugify', 'chardet', 'jsonpickle', 'requests',
                       'prettytable', 'imapclient', 'zeep', 'tqdm', 'emails',
                       'flask_security', 'flask_admin', 'flask_sqlalchemy', 'flask_migrate', 'pyyaml',
-                      'marshmallow', 'flask_marshmallow', 'marshmallow-sqlalchemy', 'python-dateutil', 'jinja2',
-                      'flask-emails', 'ruamel.std.zipfile', 'ics', 'olefile', 'html5lib', 'pandas', 'flask_babel',
+                      'marshmallow>=2.1', 'flask_marshmallow', 'marshmallow-sqlalchemy', 'python-dateutil', 'jinja2',
+                      'flask-emails', 'ruamel.std.zipfile', 'ics>=0.5', 'olefile', 'html5lib', 'pandas', 'flask_babel',
                       'records', 'flask_babel', 'unidecode', 'pandas', 'records', 'marshmallow-oneofschema', 'loguru',
-                      'Flask-Webpack', 'mysql-connector', 'werkzeug', 'sqlalchemy'],
-    dependency_links=[
-        'git+https://github.com/C4ptainCrunch/ics.py.git@ebe80a0e77d93dd30d6182137d813e3176a2490c#egg=ics'
-    ],
+                      'Flask-Webpack', 'mysql-connector', 'werkzeug', 'sqlalchemy', 'gunicorn'],
     tests_require=[''],
     keywords=[],
     classifiers=[
@@ -30,5 +27,6 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
 )
