@@ -23,7 +23,8 @@ from os.path import realpath, dirname
 from sys import modules
 from os.path import join, basename
 
-from sqlalchemy.exc import NoReferencedTableError, NoSuchTableError, OperationalError, IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import NoReferencedTableError, NoSuchTableError, OperationalError, IntegrityError, SQLAlchemyError, \
+    ProgrammingError
 
 from hermes_ui.adminlte.admin import AdminLte, admins_store
 from hermes_ui.adminlte.models import *
@@ -886,6 +887,11 @@ except NoReferencedTableError as e:
 except NoSuchTableError as e:
     build_sample_db()
 except OperationalError as e:
+    build_sample_db()
+except ProgrammingError as e:
+    build_sample_db()
+except Exception as e:
+    logger.warning('Exception générique attrapée lors de la requête de test schéma. "{}"', str(e))
     build_sample_db()
 
 # Support des fichiers JSON

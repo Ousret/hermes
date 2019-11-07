@@ -8,13 +8,12 @@ services:
       - mariadb
     environment:
       FLASK_ENV: PRODUCTION
-      WAIT_HOSTS: mariadb-hermes:3306
     ports:
       - "5000:5000"
+    restart: on-failure
 
   mariadb:
     image: mariadb:10.4
-    hostname: mariadb-hermes
     environment:
       MYSQL_ROOT_PASSWORD: hermes
       MYSQL_DATABASE: hermes
