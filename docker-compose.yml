@@ -1,16 +1,20 @@
-version: "2"
+version: "3"
 services:
   hermes:
     build: ./
     links:
       - mariadb
+    depends_on:
+      - mariadb
     environment:
-      FLASK_ENV: production
+      FLASK_ENV: PRODUCTION
+      WAIT_HOSTS: mariadb-hermes:3306
     ports:
       - "5000:5000"
 
   mariadb:
     image: mariadb:10.4
+    hostname: mariadb-hermes
     environment:
       MYSQL_ROOT_PASSWORD: hermes
       MYSQL_DATABASE: hermes
