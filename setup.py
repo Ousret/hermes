@@ -9,7 +9,7 @@ setup(
     license='MIT',
     packages=['hermes', 'hermes_ui', 'msg_parser'],
     install_requires=['Flask>=1.0', 'peewee', 'requests_html', 'python-slugify', 'chardet', 'jsonpickle', 'requests',
-                      'prettytable', 'imapclient', 'zeep', 'tqdm', 'emails',
+                      'prettytable', 'imapclient', 'zeep', 'tqdm', 'emails', 'mysqlclient',
                       'flask_security', 'flask_admin', 'flask_sqlalchemy', 'flask_migrate', 'pyyaml',
                       'marshmallow>=2.1', 'flask_marshmallow', 'marshmallow-sqlalchemy', 'python-dateutil', 'jinja2',
                       'flask-emails', 'ruamel.std.zipfile', 'ics>=0.5', 'olefile', 'html5lib', 'pandas', 'flask_babel',
