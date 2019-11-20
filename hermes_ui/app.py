@@ -1,9 +1,6 @@
-from glob import glob
-from io import StringIO
-import yaml
-import json
+from io import StringIO, BytesIO
 
-from flask import url_for, redirect, jsonify, request, Response
+from flask import url_for, redirect, jsonify, request, Response, send_file
 from flask_sqlalchemy import Pagination
 from marshmallow.exceptions import MarshmallowError
 from werkzeug.datastructures import FileStorage
@@ -11,6 +8,7 @@ from werkzeug.datastructures import FileStorage
 from flask_babel import Babel
 
 from hermes import Mail
+from hermes.detecteur import AucuneObligationInteretException
 from hermes_ui.moteur.transcription import ServiceTranspositionModels
 from .flask_extended import Flask
 from flask_migrate import Migrate
@@ -73,7 +71,7 @@ admin = AdminLte(
     name='Hermes - Automates de gestion des échanges électroniques',
     short_name="<b>H</b><sup>ermes</sup>",
     long_name="<b>Hermes</b>",
-    index_view=AdminIndexView(name="Interopérabilité", menu_icon_value='fa-pencil', menu_icon_type='fa')
+    index_view=AdminIndexView(name="Éditeur d'Automate", menu_icon_value='fa-pencil', menu_icon_type='fa')
 )
 
 db.init_app(app)
@@ -248,7 +246,121 @@ def security_context_processor():
 
 @app.route("/", methods=['GET'])
 def index():
-    return redirect('/admin')
+    return redirect(app.config.get('SECURITY_URL_PREFIX'))
+
+
+@app.route("/admin/import/automates", methods=['GET'])
+@login_required
+def import_automates():
+    automates = db.session.query(Automate).all()
+
+    r = AutomateLegacySchema(many=True).jsonify(automates)  # type: Response
+
+    return send_file(
+        BytesIO(r.get_data() if isinstance(r.get_data(), bytes) else r.get_data().encode('utf-8')),
+        attachment_filename='automates.json',
+        mimetype='text/json; charset=utf-8',
+        as_attachment=True
+    )
+
+
+@app.route("/admin/export/automates", methods=['POST'])
+@login_required
+def export_automates():
+    if 'file' not in request.files:
+        return jsonify({'message': 'Aucun fichier envoyé'}), 400
+
+    mon_fichier = request.files['file']  # type: FileStorage
+
+    if mon_fichier.content_type != 'application/json' or mon_fichier.filename.endswith('.json') is False:
+        return jsonify({'message': 'Fichier message invalide, fichier JSON requis !'}), 400
+
+    def rec_(at, act):
+        """
+        :param Automate at:
+        :param ActionNoeud act:
+        :return:
+        """
+        act.automate_id = at.id
+        if act.action_reussite is not None:
+            rec_(at, act.action_reussite)
+        if act.action_echec is not None:
+            rec_(at, act.action_echec)
+
+    db.session.query(ActionNoeudExecution).delete()
+    db.session.query(RechercheInteretExecution).delete()
+    db.session.query(AutomateExecution).delete()
+
+    for sb in RechercheInteret.__subclasses__():
+        db.session.query(sb).delete()
+
+    db.session.query(RechercheInteret).delete()
+
+    db.session.query(Detecteur).delete()
+
+    for sb in ActionNoeud.__subclasses__():
+        db.session.query(sb).delete()
+
+    db.session.query(ActionNoeud).delete()
+
+    db.session.query(LienDetecteurRechercheInteret).delete()
+    db.session.query(LienSousRegleOperationLogique).delete()
+
+    db.session.query(Automate).delete()
+
+    db.session.commit()
+    db.session.flush()
+
+    try:
+        from json import loads
+        automates = AutomateLegacySchema(many=True).load(loads(mon_fichier.stream.read().decode('ascii')))  # type: list[Automate]
+    except MarshmallowError as e:
+        return jsonify({'message': "Impossible d'importer votre fichier '{}' car votre fichier ne respecte pas la structure JSON obligatoire ! '{}'.".format(mon_fichier.filename, str(e))}), 409
+
+    for automate in automates:
+
+        try:
+            act_r = deepcopy(automate.action_racine)
+            automate.action_racine = None
+
+            automate.createur = current_user
+            automate.responsable_derniere_modification = current_user
+
+            automate.detecteur.createur = current_user
+            automate.detecteur.responsable_derniere_modification = current_user
+
+            for rg in automate.detecteur.regles:
+
+                ri_ex = db.session.query(RechercheInteret).filter_by(designation=rg.designation, mapped_class_child=rg.mapped_class_child).first()
+
+                if ri_ex is not None:
+                    automate.detecteur.regles[automate.detecteur.regles.index(rg)] = ri_ex
+
+            db.session.add(automate)
+            db.session.commit()
+
+            if act_r is not None:
+                rec_(automate, act_r)
+                automate.action_racine = act_r
+                db.session.commit()
+
+        except SQLAlchemyError as e:
+            logger.error(
+                "Impossible d'importer votre automate '{}' car une erreur de transposition en base de données est survenue '{}'.",
+                automate.designation,
+                str(e)
+            )
+            continue
+
+    try:
+        db.session.flush()
+    except SQLAlchemyError as e:
+        logger.warning(
+            "Erreur SQL '{}'.", str(e)
+        )
+        return jsonify({'message': 'Erreur de transaction SQL : {}'.format(str(e))}), 409
+
+    return jsonify({}), 204
 
 
 @app.route("/admin/rest/statistique", methods=['GET'])
@@ -379,15 +491,13 @@ def etat_service():
 @app.route("/admin/service", methods=['POST'])
 @login_required
 def demarrer_service():
-    demarrage = InstanceInteroperabilite.demarrer()
-    return jsonify({}), 201 if demarrage is True else 409
+    return jsonify({}), 201 if InstanceInteroperabilite.demarrer() is True else 409
 
 
 @app.route("/admin/service", methods=['DELETE'])
 @login_required
 def arreter_service():
-    arret = InstanceInteroperabilite.arreter()
-    return jsonify({}), 204 if arret is True else 409
+    return jsonify({}), 204 if InstanceInteroperabilite.arreter() is True else 409
 
 
 @app.route("/admin/service/test", methods=['POST'])
@@ -470,7 +580,10 @@ def simulation_detecteur_fichier():
         ob_detecteurs.append(
             ServiceTranspositionModels.generer_detecteur(detecteur)
         )
-        ob_detecteurs[-1].lance_toi(mon_message)
+        try:
+            ob_detecteurs[-1].lance_toi(mon_message)
+        except AucuneObligationInteretException as e:
+            continue
 
         ma_reponse_html += """
 <div class="panel box {box_color}">
@@ -601,8 +714,6 @@ def lecture_journal():
                     'offset': fp.tell() if offset > 0 else max_offset
                 }
             ), 200
-    except FileNotFoundError as e:
-        pass
     except IOError as e:
         pass
 
@@ -696,11 +807,12 @@ def creation_action(automate_id):
 
     payload = request.json  # type: dict
 
-    if 'type' not in payload.keys() or 'parent' not in payload.keys() or 'formulaire' not in payload.keys():
+    if 'type' not in payload or ('parent' not in payload or 'remplacer' not in payload) or 'formulaire' not in payload:
         return jsonify({'message': 'Le JSON présent dans la requête est invalide'}), 400
 
     type_action = payload['type']
-    parent_information = payload['parent']
+    parent_information = payload['parent'] if 'parent' in payload else None
+    remplacement_action_noeud = payload['remplacement'] if 'remplacement' in payload else None
     formulaire = payload['formulaire']
 
     decompose_type_action = type_action.split("'")  # type: list[str]
@@ -741,22 +853,26 @@ def creation_action(automate_id):
     except IntegrityError as e:
         return jsonify({'message': str(e)}), 409
 
-    if parent_information is None:
-        automate.action_racine = target_model_instance
+    if remplacement_action_noeud is None:
+
+        if parent_information is None:
+            automate.action_racine = target_model_instance
+        else:
+            if len(parent_information) != 2:
+                return jsonify({'message': 'Les informations de votre action parente sont malformés'}), 400
+
+            action_parente_id, etat_reussite = tuple(parent_information)
+            action_noeud_parente = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=int(action_parente_id)).one()  # type: ActionNoeud
+
+            if action_noeud_parente is None:
+                return jsonify({'message': 'L\'action parente n\'existe pas !'}), 404
+
+            if 'ECHEC' in parent_information:
+                target_model_instance.action_echec_id = action_noeud_parente.id
+            elif 'REUSSITE' in parent_information:
+                target_model_instance.action_reussite_id = action_noeud_parente.id
     else:
-        if len(parent_information) != 2:
-            return jsonify({'message': 'Les informations de votre action parente sont malformés'}), 400
-
-        action_parente_id, etat_reussite = tuple(parent_information)
-        action_noeud_parente = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=int(action_parente_id)).one()  # type: ActionNoeud
-
-        if action_noeud_parente is None:
-            return jsonify({'message': 'L\'action parente n\'existe pas !'}), 404
-
-        if 'ECHEC' in parent_information:
-            target_model_instance.action_echec_id = action_noeud_parente.id
-        elif 'REUSSITE' in parent_information:
-            target_model_instance.action_reussite_id = action_noeud_parente.id
+        pass
 
     try:
         db.session.commit()
@@ -847,34 +963,21 @@ def build_sample_db():
 
         super_admin_role = Role(name='superadmin')
         admin_role = Role(name='admin')
-        consultation_role = Role(name='consultation')
-        maintenance_role = Role(name='maintenance')
 
         db.session.add(super_admin_role)
         db.session.add(admin_role)
-        db.session.add(consultation_role)
-        db.session.add(maintenance_role)
 
         db.session.commit()
 
         test_user = admins_store.create_user(
-            first_name='Ahmed',
-            last_name='TAHRI',
-            email='at.sii.tahri@sesam-vitale.fr',
+            first_name='admin',
+            last_name='hermes',
+            email='hermes@localhost',
             password=hash_password('admin'),
             roles=[super_admin_role, admin_role]
         )
 
-        test_user_2 = admins_store.create_user(
-            first_name='Didier',
-            last_name='JEAN-ROBERT',
-            email='djr',
-            password=hash_password('djr'),
-            roles=[super_admin_role, admin_role]
-        )
-
         db.session.add(test_user)
-        db.session.add(test_user_2)
 
         db.session.commit()
     return
@@ -894,109 +997,3 @@ except Exception as e:
     logger.warning('Exception générique attrapée lors de la requête de test schéma. "{}"', str(e))
     build_sample_db()
 
-# Support des fichiers JSON
-legacy_files = glob(app.root_path+'/../legacy/*.json') + glob(app.root_path+'/../legacy/*.yml')
-
-if len(legacy_files) > 10000:
-
-    def rec_(at, act):
-        """
-        :param Automate at:
-        :param ActionNoeud act:
-        :return:
-        """
-        act.automate_id = at.id
-        if act.action_reussite is not None:
-            rec_(at, act.action_reussite)
-        if act.action_echec is not None:
-            rec_(at, act.action_echec)
-
-    logger.warning('Attention, le répertoire LEGACY est utilisé. {} automate(s) vont être importés', len(legacy_files))
-    logger.warning('Supprime les anciennes données')
-
-    db.session.query(ActionNoeudExecution).delete()
-    db.session.query(RechercheInteretExecution).delete()
-    db.session.query(AutomateExecution).delete()
-
-    for sb in RechercheInteret.__subclasses__():
-        db.session.query(sb).delete()
-
-    db.session.query(RechercheInteret).delete()
-
-    db.session.query(Detecteur).delete()
-
-    for sb in ActionNoeud.__subclasses__():
-        db.session.query(sb).delete()
-
-    db.session.query(ActionNoeud).delete()
-
-    db.session.query(LienDetecteurRechercheInteret).delete()
-    db.session.query(LienSousRegleOperationLogique).delete()
-
-    db.session.query(Automate).delete()
-
-    db.session.commit()
-    db.session.flush()
-
-    user_ra = db.session.query(User).first()
-
-    logger.warning('Fin de suppression des anciennes données')
-
-    for legacy_file in legacy_files:
-        logger.warning('Installation du cas JSON : <{}>', legacy_file)
-
-        try:
-            with open(legacy_file, 'r', encoding='utf-8') as fp:
-
-                if basename(legacy_file).endswith('.yml'):
-
-                    new_automate = AutomateLegacySchema().loads(
-                        json.dumps(
-                            yaml.load(fp, yaml.FullLoader)
-                        )
-                    )
-
-                else:
-
-                    new_automate = AutomateLegacySchema().loads(fp.read())  # type: Automate
-
-                act_r = deepcopy(new_automate.action_racine)
-                new_automate.action_racine = None
-
-                db.session.add(new_automate)
-                db.session.commit()
-
-                if act_r is not None:
-                    rec_(new_automate, act_r)
-                    new_automate.action_racine = act_r
-                    db.session.commit()
-
-        except IOError as e:
-            logger.error(
-                "Impossible d'importer votre fichier '{}' car une erreur de lecture fichier est survenue '{}'.", legacy_file, str(e)
-            )
-            continue
-        except SQLAlchemyError as e:
-            logger.error(
-                "Impossible d'importer votre fichier '{}' car une erreur de transposition en base de données est survenue '{}'." ,
-                legacy_file, str(e)
-            )
-            continue
-        except MarshmallowError as e:
-            logger.error(
-                "Impossible d'importer votre fichier '{}' car votre fichier ne respecte pas la structure JSON obligatoire ! '{}'." ,
-                legacy_file,
-                str(e)
-            )
-            continue
-
-    try:
-        db.session.flush()
-    except SQLAlchemyError as e:
-        logger.warning(
-            "Erreur SQL '{}'.", str(e)
-        )
-
-if __name__ == '__main__':
-
-    app.run()

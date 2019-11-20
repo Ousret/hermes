@@ -6,7 +6,7 @@ import threading
 from imapclient.exceptions import LoginError, ProtocolError
 
 from hermes_ui.db import db
-from hermes_ui.models import BoiteAuxLettresImap, Automate, ActionNoeud, AutomateExecution, ActionNoeudExecution, RechercheInteretExecution, Configuration
+from hermes_ui.models import BoiteAuxLettresImap, Automate, ActionNoeud, AutomateExecution, ActionNoeudExecution, Configuration
 from hermes_ui.moteur.transcription import ServiceTranspositionModels
 
 from hermes.logger import logger
@@ -41,7 +41,7 @@ class InstanceInteroperabilite:
             except TypeError as e:
                 logger.error("Impossible de charger la configuration <'{}'::{}> car '{}'", configuration.designation, configuration.format, str(e))
 
-        logger.info("Démarrage du service interopérabilité")
+        logger.info("Démarrage de la boucle de surveillance des automates sur les boîtes IMAP4")
 
         InstanceInteroperabilite.liste_attente_test_lock.acquire()
         est_une_sequence_test = len(InstanceInteroperabilite.liste_attente_test) > 0
@@ -87,11 +87,11 @@ class InstanceInteroperabilite:
                     "Aucune automate à traitement de source n'est actif, impossible de continuer")
                 break
 
-            logger.info("{} automates en production sont actifs", len(automates))
+            logger.debug("{} automates en production sont actifs", len(automates))
 
             for mail_factory in mail_factories:
 
-                logger.info("Ouverture de la BAL '{}'@'{}'", mail_factory.nom_utilisateur, mail_factory.hote_imap)
+                logger.debug("Ouverture de la BAL '{}'@'{}'", mail_factory.nom_utilisateur, mail_factory.hote_imap)
 
                 if InstanceInteroperabilite.stop_instruction is not None:
                     logger.info("Arrêt du service interopérabilité, fin de boucle")
@@ -99,7 +99,7 @@ class InstanceInteroperabilite:
 
                 sources = mail_factory.extraire()
 
-                logger.info("{} sources ont été extraites de l'usine à production '{}'", len(sources), str(mail_factory))
+                logger.debug("{} sources ont été extraites de l'usine à production '{}'", len(sources), str(mail_factory))
 
                 for model, automate in zip(models_automates, automates):
 
@@ -116,7 +116,7 @@ class InstanceInteroperabilite:
                         logger.debug("Vérification du message électronique '{}'", source.titre)
 
                         if InstanceInteroperabilite.stop_instruction is not None:
-                            logger.info("Arrêt du service interopérabilité, fin de boucle")
+                            logger.info("Fin de surveillance continue des automates sur les boîtes IMAP4")
                             return
 
                         date_depart_automate = datetime.now()
@@ -130,17 +130,37 @@ class InstanceInteroperabilite:
                             AutomateExecution.date_creation >= (date_depart_automate - timedelta(hours=1))
                         ).count()
 
-                        if nb_execution_heure >= 100:
+                        if nb_execution_heure >= (model.limite_par_heure if model.limite_par_heure is not None else 100):
                             logger.warning(
-                                "L'automate '{}' ne va pas traiter la source '{}' car celle ci ne se termine "
-                                "pas correctement, limite de 10 (DIX) lancement par heure.",
+                                "L'automate '{}' ne va pas traiter la source '{}' car celle ci  "
+                                "dépasse la limite de {} lancement(s) par heure.",
                                 automate.designation,
-                                source.titre
+                                source.titre,
+                                (model.limite_par_heure if model.limite_par_heure is not None else 100)
+                            )
+                            continue
+
+                        nb_execution_echec_heure = db.session.query(AutomateExecution).filter(
+                            AutomateExecution.automate == model,
+                            AutomateExecution.sujet == source.titre,
+                            AutomateExecution.corps == source.corps,
+                            AutomateExecution.validation_automate == False,
+                            AutomateExecution.date_creation >= (date_depart_automate - timedelta(hours=1))
+                        ).count()
+
+                        if nb_execution_echec_heure >= (model.limite_echec_par_heure if model.limite_echec_par_heure is not None else 10):
+                            logger.warning(
+                                "L'automate '{}' ne va pas traiter la source '{}' car celle ci  "
+                                "dépasse la limite en échec de {} lancement(s) par heure.",
+                                automate.designation,
+                                source.titre,
+                                (model.limite_echec_par_heure if model.limite_echec_par_heure is not None else 10)
                             )
                             continue
 
                         try:
                             etat_final_automate = automate.lance_toi(source)
+
                             if etat_final_automate is True:
                                 logger.info(
                                     "L'automate '{}' vient de traiter avec succès la source '{}'",
@@ -261,7 +281,8 @@ class InstanceInteroperabilite:
                                 validation_detecteur=automate.detecteur.est_accomplis,
                                 validation_automate=etat_final_automate,
                                 explications_detecteur=automate.detecteur.explain(),
-                                date_finalisation=datetime.now()
+                                date_finalisation=datetime.now(),
+                                logs=automate.logs
                             )
 
                             for action_lancee in automate.actions_lancees:
@@ -279,6 +300,12 @@ class InstanceInteroperabilite:
                             db.session.add(automate_execution)
                             db.session.commit()
 
+                        automate = ServiceTranspositionModels.generer(
+                            [
+                                model
+                            ]
+                        ).pop()
+
                 db.session.flush()
 
             if est_une_sequence_test:
@@ -288,7 +315,7 @@ class InstanceInteroperabilite:
 
             sleep(1 if len(mail_factories) > 0 else 10)
 
-        logger.info("Arrêt du service interopérabilité, fin de boucle")
+        logger.info("Fin de surveillance continue des automates sur les boîtes IMAP4")
         InstanceInteroperabilite.current_thread = None
 
     @staticmethod

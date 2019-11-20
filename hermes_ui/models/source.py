@@ -11,9 +11,9 @@ class BoiteAuxLettresImap(db.Model):
     activation = db.Column(db.Boolean(), default=False)
 
     hote_distante = db.Column(db.String(255), nullable=False)
-    nom_utilisateur = db.Column(db.String(), nullable=False)
-    mot_de_passe = db.Column(db.String(), nullable=False)
-    dossier_cible = db.Column(db.String(), nullable=False, default='INBOX')
+    nom_utilisateur = db.Column(db.String(255), nullable=False)
+    mot_de_passe = db.Column(db.String(255), nullable=False)
+    dossier_cible = db.Column(db.String(255), nullable=False, default='INBOX')
 
     verification_certificat = db.Column(db.Boolean(), nullable=False, default=True)
 

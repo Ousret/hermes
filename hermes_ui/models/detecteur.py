@@ -34,7 +34,7 @@ class RechercheInteret(db.Model):
 
     est_obligatoire = db.Column(db.Boolean(), nullable=False)
 
-    focus_cle = db.Column(db.String(), nullable=True)
+    focus_cle = db.Column(db.String(255), nullable=True)
 
     createur_id = db.Column(db.ForeignKey('user.id'), nullable=True)
     createur = db.relationship(User, primaryjoin="User.id==RechercheInteret.createur_id")
@@ -48,7 +48,7 @@ class RechercheInteret(db.Model):
 
     mapped_class_child = db.Column(db.String(128), nullable=True)
 
-    friendly_name = db.Column(db.String(), nullable=True)
+    friendly_name = db.Column(db.String(255), nullable=True)
 
     __mapper_args__ = {
         'polymorphic_on': mapped_class_child,
@@ -88,8 +88,8 @@ class LocalisationExpressionRechercheInteret(RechercheInteret):
 
     id = db.Column(db.Integer, db.ForeignKey('recherche_interet.id'), primary_key=True)
 
-    expression_gauche = db.Column(db.String(), nullable=True)
-    expression_droite = db.Column(db.String(), nullable=True)
+    expression_gauche = db.Column(db.String(255), nullable=True)
+    expression_droite = db.Column(db.String(255), nullable=True)
 
     __mapper_args__ = {
         'polymorphic_identity': str(RechercheInteret).replace('RechercheInteret', 'LocalisationExpressionRechercheInteret'),

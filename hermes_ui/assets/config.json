@@ -1,10 +1,10 @@
 {
   "build": {
     "assetsPath": "static/build",
-    "assetsURL": "static/build",
+    "assetsURL": "/static/build/",
     "context": "./assets",
     "debug": false,
-    "staticPath": "static",
-    "staticURL": "static/build"
+    "staticPath": "static/build",
+    "staticURL": "/static/build/"
   }
 }

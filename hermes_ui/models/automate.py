@@ -26,10 +26,13 @@ class Automate(db.Model):
     responsable_derniere_modification = db.relationship(User,
                                                         primaryjoin="User.id==Automate.responsable_derniere_modification_id")
 
+    limite_echec_par_heure = db.Column(db.Integer(), nullable=True, default=10)
+    limite_par_heure = db.Column(db.Integer(), nullable=True, default=100)
+
     detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id), nullable=False)
     detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="save-update")
 
-    actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False)
+    actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False, cascade="delete")
 
     action_racine_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id'), nullable=True)
     action_racine = db.relation('ActionNoeud', foreign_keys='Automate.action_racine_id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete")
@@ -75,7 +78,7 @@ class ActionNoeud(db.Model):
 
     mapped_class_child = db.Column(db.String(128), nullable=True)
 
-    friendly_name = db.Column(db.String(), nullable=True)
+    friendly_name = db.Column(db.String(255), nullable=True)
 
     __mapper_args__ = {'polymorphic_on': mapped_class_child}
 
@@ -166,14 +169,14 @@ class RequeteSqlActionNoeud(ActionNoeud):
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
     hote_type_protocol = db.Column(db.Enum('mysql', 'posgres', 'mariadb', 'mssql', 'oracle'), nullable=False)
-    hote_ipv4 = db.Column(db.String(), nullable=False)
-    hote_port = db.Column(db.String(), nullable=False)
-    hote_database = db.Column(db.String(), nullable=False)
+    hote_ipv4 = db.Column(db.String(255), nullable=False)
+    hote_port = db.Column(db.String(255), nullable=False)
+    hote_database = db.Column(db.String(255), nullable=False)
 
     requete_sql = db.Column(db.Text(), nullable=False)
 
-    nom_utilisateur = db.Column(db.String(), nullable=True)
-    mot_de_passe = db.Column(db.String(), nullable=True)
+    nom_utilisateur = db.Column(db.String(255), nullable=True)
+    mot_de_passe = db.Column(db.String(255), nullable=True)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'RequeteSqlActionNoeud'),
@@ -241,15 +244,15 @@ class RequeteSoapActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    url_service = db.Column(db.String(), nullable=False)
-    methode_cible = db.Column(db.String(), nullable=False)
+    url_service = db.Column(db.String(255), nullable=False)
+    methode_cible = db.Column(db.String(255), nullable=False)
     form_data = db.Column(db.Text(), nullable=False)
 
-    authentification_basique_utilisateur = db.Column(db.String(), nullable=True)
-    authentification_basique_mot_de_passe = db.Column(db.String(), nullable=True)
+    authentification_basique_utilisateur = db.Column(db.String(255), nullable=True)
+    authentification_basique_mot_de_passe = db.Column(db.String(255), nullable=True)
 
-    proxy_http = db.Column(db.String(), nullable=True)
-    proxy_https = db.Column(db.String(), nullable=True)
+    proxy_http = db.Column(db.String(255), nullable=True)
+    proxy_https = db.Column(db.String(255), nullable=True)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'RequeteSoapActionNoeud'),
@@ -333,15 +336,15 @@ class RequeteHttpActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    url_dest = db.Column(db.String(), nullable=False)
-    methode_http = db.Column(db.Enum('GET', 'POST', 'DELETE', 'PATCH', 'DELETE'), nullable=False)
+    url_dest = db.Column(db.String(255), nullable=False)
+    methode_http = db.Column(db.Enum('GET', 'POST', 'DELETE', 'PATCH', 'PUT', 'HEAD'), nullable=False)
     form_data = db.Column(db.Text(), nullable=False)
 
-    authentification_basique_utilisateur = db.Column(db.String(), nullable=True)
-    authentification_basique_mot_de_passe = db.Column(db.String(), nullable=True)
+    authentification_basique_utilisateur = db.Column(db.String(255), nullable=True)
+    authentification_basique_mot_de_passe = db.Column(db.String(255), nullable=True)
 
-    proxy_http = db.Column(db.String(), nullable=True)
-    proxy_https = db.Column(db.String(), nullable=True)
+    proxy_http = db.Column(db.String(255), nullable=True)
+    proxy_https = db.Column(db.String(255), nullable=True)
 
     resp_code_http = db.Column(db.Integer(), nullable=True)
     verify_peer = db.Column(db.Boolean, nullable=False, default=True)
@@ -432,13 +435,13 @@ class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    destinataire = db.Column(db.String(), nullable=False)
-    sujet = db.Column(db.String(), nullable=False)
+    destinataire = db.Column(db.String(255), nullable=False)
+    sujet = db.Column(db.String(255), nullable=False)
     corps = db.Column(db.Text(), nullable=False)
-    hote_smtp = db.Column(db.String(), nullable=False)
+    hote_smtp = db.Column(db.String(255), nullable=False)
     port_smtp = db.Column(db.Integer(), nullable=False)
-    nom_utilisateur = db.Column(db.String(), nullable=True)
-    mot_de_passe = db.Column(db.String(), nullable=True)
+    nom_utilisateur = db.Column(db.String(255), nullable=True)
+    mot_de_passe = db.Column(db.String(255), nullable=True)
     enable_tls = db.Column(db.Boolean(), nullable=False, default=True)
     pj_source = db.Column(db.Boolean(), nullable=False, default=True)
 
@@ -511,12 +514,12 @@ class TransfertSmtpActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    destinataire = db.Column(db.String(), nullable=False)
-    sujet = db.Column(db.String(), nullable=False)
-    hote_smtp = db.Column(db.String(), nullable=False)
+    destinataire = db.Column(db.String(255), nullable=False)
+    sujet = db.Column(db.String(255), nullable=False)
+    hote_smtp = db.Column(db.String(255), nullable=False)
     port_smtp = db.Column(db.Integer(), nullable=False)
-    nom_utilisateur = db.Column(db.String(), nullable=True)
-    mot_de_passe = db.Column(db.String(), nullable=True)
+    nom_utilisateur = db.Column(db.String(255), nullable=True)
+    mot_de_passe = db.Column(db.String(255), nullable=True)
     enable_tls = db.Column(db.Boolean(), nullable=False, default=True)
 
     __mapper_args__ = {
@@ -592,8 +595,8 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    variable_pattern = db.Column(db.String(), nullable=False)
-    separateur = db.Column(db.String(), nullable=False)
+    variable_pattern = db.Column(db.String(255), nullable=False)
+    separateur = db.Column(db.String(255), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'ConstructionChaineCaractereSurListeActionNoeud'),
@@ -693,19 +696,19 @@ class InvitationEvenementActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    organisateur = db.Column(db.String(), nullable=False)
-    participants = db.Column(db.String(), nullable=False)
-    sujet = db.Column(db.String(), nullable=False)
+    organisateur = db.Column(db.String(255), nullable=False)
+    participants = db.Column(db.String(255), nullable=False)
+    sujet = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text(), nullable=False)
-    lieu = db.Column(db.String(), nullable=False)
+    lieu = db.Column(db.String(255), nullable=False)
     date_heure_depart = db.Column(db.Text(), nullable=False)
     date_heure_fin = db.Column(db.Text(), nullable=False)
     est_maintenu = db.Column(db.Boolean(), nullable=False, default=True)
 
-    hote_smtp = db.Column(db.String(), nullable=False)
-    port_smtp = db.Column(db.String(), nullable=False)
-    nom_utilisateur = db.Column(db.String(), nullable=False)
-    mot_de_passe = db.Column(db.String(), nullable=False)
+    hote_smtp = db.Column(db.String(255), nullable=False)
+    port_smtp = db.Column(db.String(255), nullable=False)
+    nom_utilisateur = db.Column(db.String(255), nullable=False)
+    mot_de_passe = db.Column(db.String(255), nullable=False)
     enable_tls = db.Column(db.Boolean(), nullable=False, default=True)
 
     __mapper_args__ = {
@@ -750,7 +753,7 @@ class VerifierSiVariableVraiActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    variable_cible = db.Column(db.String(), nullable=False)
+    variable_cible = db.Column(db.String(255), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'VerifierSiVariableVraiActionNoeud'),
@@ -793,9 +796,9 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    membre_gauche_variable = db.Column(db.String(), nullable=False)
+    membre_gauche_variable = db.Column(db.String(255), nullable=False)
     operande = db.Column(db.Enum('==', '>', '<', '>=', '<=', '!='), nullable=False)
-    membre_droite_variable = db.Column(db.String(), nullable=False)
+    membre_droite_variable = db.Column(db.String(255), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'ComparaisonVariableActionNoeud'),
@@ -829,7 +832,7 @@ class DeplacerMailSourceActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    dossier_destination = db.Column(db.String(), nullable=False)
+    dossier_destination = db.Column(db.String(255), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'DeplacerMailSourceActionNoeud'),
@@ -860,7 +863,7 @@ class CopierMailSourceActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    dossier_destination = db.Column(db.String(), nullable=False)
+    dossier_destination = db.Column(db.String(255), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'CopierMailSourceActionNoeud'),
@@ -925,9 +928,9 @@ class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    resultat_concerne = db.Column(db.String(), nullable=False)
-    champ_cle = db.Column(db.String(), nullable=False)
-    champ_valeur = db.Column(db.String(), nullable=False)
+    resultat_concerne = db.Column(db.String(255), nullable=False)
+    champ_cle = db.Column(db.String(255), nullable=False)
+    champ_valeur = db.Column(db.String(255), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'TransformationListeVersDictionnaireActionNoeud'),
@@ -943,5 +946,578 @@ class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
             self.resultat_concerne,
             self.champ_cle,
             self.champ_valeur,
+            self.friendly_name
+        )
+
+
+class ItopRequeteCoreGetActionNoeud(ActionNoeud):
+    DESCRIPTION = 'Requête sur iTop opération core/get REST JSON'
+    PARAMETRES = OrderedDict({
+        'url_rest_itop': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+        },
+        'auth_user': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+        },
+        'auth_pwd': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+        },
+        'requete_dql': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Votre requête DQL à utiliser dans le cadre de la requête',
+        },
+        'output_fields': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Les champs à extraire des objets iTop, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
+        },
+        'authentification_basique_utilisateur': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+        },
+        'authentification_basique_mot_de_passe': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+        },
+        'proxy_http': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'proxy_https': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'verify_peer': {
+            'format': 'CHECKBOX',
+            'required': False,
+            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+        }
+    })
+
+    __tablename__ = 'itop_requete_core_get_action_noeud'
+
+    id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
+
+    url_rest_itop = db.Column(db.String(255), nullable=False)
+
+    auth_user = db.Column(db.String(255), nullable=False)
+    auth_pwd = db.Column(db.String(255), nullable=False)
+
+    requete_dql = db.Column(db.Text(), nullable=False)
+
+    output_fields = db.Column(db.Text(), nullable=False)
+
+    authentification_basique_utilisateur = db.Column(db.String(255), nullable=True)
+    authentification_basique_mot_de_passe = db.Column(db.String(255), nullable=True)
+
+    proxy_http = db.Column(db.String(255), nullable=True)
+    proxy_https = db.Column(db.String(255), nullable=True)
+
+    verify_peer = db.Column(db.Boolean, nullable=False, default=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'ItopRequeteCoreGetActionNoeud'),
+    }
+
+    def transcription(self):
+        """
+        :rtype: hermes.automate.RequeteHttpActionNoeud
+        """
+        from hermes.automate import ItopRequeteCoreGetActionNoeud as ACTION
+        return ACTION(
+            self.designation,
+            self.url_rest_itop,
+            self.auth_user,
+            self.auth_pwd,
+            self.requete_dql,
+            self.output_fields,
+            (
+                self.authentification_basique_utilisateur,
+                self.authentification_basique_mot_de_passe
+            ) if self.authentification_basique_utilisateur is not None else None,
+            {
+                'http': self.proxy_http,
+                'https': self.proxy_https
+            } if self.proxy_http is not None else None,
+            self.verify_peer,
+            self.friendly_name
+        )
+
+
+class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
+    DESCRIPTION = 'Requête sur iTop opération core/create REST JSON'
+    PARAMETRES = OrderedDict({
+        'url_rest_itop': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+        },
+        'auth_user': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+        },
+        'auth_pwd': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+        },
+        'classe_itop_cible': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Le nom de votre classe iTop dont la création sera nécessaire',
+        },
+        'fields': {
+            'format': 'JSON',
+            'required': True,
+            'help': 'Veuillez construire votre nouvel objet à l\'aide de cet utilitaire tel que votre schéma de données le permet',
+        },
+        'output_fields': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Les champs à extraire des objets iTop, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
+        },
+        'authentification_basique_utilisateur': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+        },
+        'authentification_basique_mot_de_passe': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+        },
+        'proxy_http': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'proxy_https': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'verify_peer': {
+            'format': 'CHECKBOX',
+            'required': False,
+            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+        }
+    })
+
+    __tablename__ = 'itop_requete_core_create_action_noeud'
+
+    id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
+
+    url_rest_itop = db.Column(db.String(255), nullable=False)
+
+    auth_user = db.Column(db.String(255), nullable=False)
+    auth_pwd = db.Column(db.String(255), nullable=False)
+
+    classe_itop_cible = db.Column(db.String(255), nullable=False)
+
+    fields = db.Column(db.Text(), nullable=False)
+
+    output_fields = db.Column(db.Text(), nullable=False)
+
+    authentification_basique_utilisateur = db.Column(db.String(255), nullable=True)
+    authentification_basique_mot_de_passe = db.Column(db.String(255), nullable=True)
+
+    proxy_http = db.Column(db.String(255), nullable=True)
+    proxy_https = db.Column(db.String(255), nullable=True)
+
+    verify_peer = db.Column(db.Boolean, nullable=False, default=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'ItopRequeteCoreCreateActionNoeud'),
+    }
+
+    def transcription(self):
+        """
+        :rtype: hermes.automate.ItopRequeteCoreCreateActionNoeud
+        """
+        from hermes.automate import ItopRequeteCoreCreateActionNoeud as ACTION
+        from json import loads
+        return ACTION(
+            self.designation,
+            self.url_rest_itop,
+            self.auth_user,
+            self.auth_pwd,
+            self.classe_itop_cible,
+            loads(self.fields),
+            self.output_fields,
+            (
+                self.authentification_basique_utilisateur,
+                self.authentification_basique_mot_de_passe
+            ) if self.authentification_basique_utilisateur is not None else None,
+            {
+                'http': self.proxy_http,
+                'https': self.proxy_https
+            } if self.proxy_http is not None else None,
+            self.verify_peer,
+            self.friendly_name
+        )
+
+
+class ItopRequeteCoreUpdateActionNoeud(ActionNoeud):
+    DESCRIPTION = 'Requête sur iTop opération core/update REST JSON'
+    PARAMETRES = OrderedDict({
+        'url_rest_itop': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+        },
+        'auth_user': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+        },
+        'auth_pwd': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+        },
+        'requete_dql': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'La requête DQL permettant d\'identifier l\'objet iTop visé',
+        },
+        'fields': {
+            'format': 'JSON',
+            'required': True,
+            'help': 'Veuillez indiquez les champs à mettre à niveau à l\'aide de cet utilitaire',
+        },
+        'output_fields': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Les champs à extraire des objets iTop ensuite, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
+        },
+        'commentaire': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Explicitez brièvement la nature de votre mise à jour iTop (Journal iTop)',
+        },
+        'authentification_basique_utilisateur': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+        },
+        'authentification_basique_mot_de_passe': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+        },
+        'proxy_http': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'proxy_https': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'verify_peer': {
+            'format': 'CHECKBOX',
+            'required': False,
+            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+        }
+    })
+
+    __tablename__ = 'itop_requete_core_update_action_noeud'
+
+    id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
+
+    url_rest_itop = db.Column(db.String(255), nullable=False)
+
+    auth_user = db.Column(db.String(255), nullable=False)
+    auth_pwd = db.Column(db.String(255), nullable=False)
+
+    requete_dql = db.Column(db.Text(), nullable=False)
+    commentaire = db.Column(db.Text(), nullable=False)
+
+    fields = db.Column(db.Text(), nullable=False)
+
+    output_fields = db.Column(db.Text(), nullable=False)
+
+    authentification_basique_utilisateur = db.Column(db.String(255), nullable=True)
+    authentification_basique_mot_de_passe = db.Column(db.String(255), nullable=True)
+
+    proxy_http = db.Column(db.String(255), nullable=True)
+    proxy_https = db.Column(db.String(255), nullable=True)
+
+    verify_peer = db.Column(db.Boolean(), nullable=False, default=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'ItopRequeteCoreUpdateActionNoeud'),
+    }
+
+    def transcription(self):
+        """
+        :rtype: hermes.automate.ItopRequeteCoreUpdateActionNoeud
+        """
+        from hermes.automate import ItopRequeteCoreUpdateActionNoeud as ACTION
+        from json import loads
+        return ACTION(
+            self.designation,
+            self.url_rest_itop,
+            self.auth_user,
+            self.auth_pwd,
+            self.requete_dql,
+            loads(self.fields) if self.fields is not None and len(self.fields) > 1 else {},
+            self.output_fields,
+            self.commentaire,
+            (
+                self.authentification_basique_utilisateur,
+                self.authentification_basique_mot_de_passe
+            ) if self.authentification_basique_utilisateur is not None else None,
+            {
+                'http': self.proxy_http,
+                'https': self.proxy_https
+            } if self.proxy_http is not None else None,
+            self.verify_peer,
+            self.friendly_name
+        )
+
+
+class ItopRequeteCoreApplyStimulusActionNoeud(ActionNoeud):
+    DESCRIPTION = 'Requête sur iTop opération core/apply_stimulus REST JSON'
+    PARAMETRES = OrderedDict({
+        'url_rest_itop': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+        },
+        'auth_user': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+        },
+        'auth_pwd': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+        },
+        'requete_dql': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Le requête DQL à effectuer pour identifier l\'objet sur lequel appliquer un stimulis iTop',
+        },
+        'stimulus': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Veuillez indiquez le nom de votre stimulus. eg. "ev_xxxxx".',
+        },
+        'fields': {
+            'format': 'JSON',
+            'required': False,
+            'help': 'Veuillez indiquez les arguments nécessaires à votre stimulus. Laissez vide si aucun.',
+        },
+        'output_fields': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Les champs à extraire des objets iTop ensuite, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
+        },
+        'commentaire': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Explicitez brièvement la nature de votre mise à jour iTop (Journal iTop)',
+        },
+        'authentification_basique_utilisateur': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+        },
+        'authentification_basique_mot_de_passe': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+        },
+        'proxy_http': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'proxy_https': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'verify_peer': {
+            'format': 'CHECKBOX',
+            'required': False,
+            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+        }
+    })
+
+    __tablename__ = 'itop_requete_core_apply_stimulus_action_noeud'
+
+    id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
+
+    url_rest_itop = db.Column(db.String(255), nullable=False)
+
+    auth_user = db.Column(db.String(255), nullable=False)
+    auth_pwd = db.Column(db.String(255), nullable=False)
+
+    requete_dql = db.Column(db.Text(), nullable=False)
+    stimulus = db.Column(db.String(255), nullable=False)
+    commentaire = db.Column(db.Text(), nullable=False)
+
+    fields = db.Column(db.Text(), nullable=False)
+
+    output_fields = db.Column(db.Text(), nullable=False)
+
+    authentification_basique_utilisateur = db.Column(db.String(255), nullable=True)
+    authentification_basique_mot_de_passe = db.Column(db.String(255), nullable=True)
+
+    proxy_http = db.Column(db.String(255), nullable=True)
+    proxy_https = db.Column(db.String(255), nullable=True)
+
+    verify_peer = db.Column(db.Boolean, nullable=False, default=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'ItopRequeteCoreApplyStimulusActionNoeud'),
+    }
+
+    def transcription(self):
+        """
+        :rtype: hermes.automate.ItopRequeteCoreApplyStimulusActionNoeud
+        """
+        from hermes.automate import ItopRequeteCoreApplyStimulusActionNoeud as ACTION
+        from json import loads
+        return ACTION(
+            self.designation,
+            self.url_rest_itop,
+            self.auth_user,
+            self.auth_pwd,
+            self.requete_dql,
+            self.stimulus,
+            loads(self.fields) if self.fields is not None and len(self.fields) > 1 else {},
+            self.output_fields,
+            self.commentaire,
+            (
+                self.authentification_basique_utilisateur,
+                self.authentification_basique_mot_de_passe
+            ) if self.authentification_basique_utilisateur is not None else None,
+            {
+                'http': self.proxy_http,
+                'https': self.proxy_https
+            } if self.proxy_http is not None else None,
+            self.verify_peer,
+            self.friendly_name
+        )
+
+
+class ItopRequeteCoreDeleteActionNoeud(ActionNoeud):
+    DESCRIPTION = 'Requête sur iTop opération core/delete REST JSON'
+    PARAMETRES = OrderedDict({
+        'url_rest_itop': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+        },
+        'auth_user': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest",
+        },
+        'auth_pwd': {
+            'format': 'TEXT',
+            'required': True,
+            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest",
+        },
+        'requete_dql': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Votre requête DQL à utiliser dans le cadre de la requête',
+        },
+        'commentaire': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Explicitez brièvement la nature de votre mise à jour iTop (Journal iTop)',
+        },
+        'authentification_basique_utilisateur': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+        },
+        'authentification_basique_mot_de_passe': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+        },
+        'proxy_http': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'proxy_https': {
+            'format': 'TEXT',
+            'required': False,
+            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+        },
+        'verify_peer': {
+            'format': 'CHECKBOX',
+            'required': False,
+            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+        }
+    })
+
+    __tablename__ = 'itop_requete_core_delete_action_noeud'
+
+    id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
+
+    url_rest_itop = db.Column(db.String(255), nullable=False)
+
+    auth_user = db.Column(db.String(255), nullable=False)
+    auth_pwd = db.Column(db.String(255), nullable=False)
+
+    requete_dql = db.Column(db.Text(), nullable=False)
+
+    commentaire = db.Column(db.Text(), nullable=False)
+
+    authentification_basique_utilisateur = db.Column(db.String(255), nullable=True)
+    authentification_basique_mot_de_passe = db.Column(db.String(255), nullable=True)
+
+    proxy_http = db.Column(db.String(255), nullable=True)
+    proxy_https = db.Column(db.String(255), nullable=True)
+
+    verify_peer = db.Column(db.Boolean, nullable=False, default=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'ItopRequeteCoreDeleteActionNoeud'),
+    }
+
+    def transcription(self):
+        """
+        :rtype: hermes.automate.ItopRequeteCoreDeleteActionNoeud
+        """
+        from hermes.automate import ItopRequeteCoreDeleteActionNoeud as ACTION
+        return ACTION(
+            self.designation,
+            self.url_rest_itop,
+            self.auth_user,
+            self.auth_pwd,
+            self.requete_dql,
+            self.commentaire,
+            (
+                self.authentification_basique_utilisateur,
+                self.authentification_basique_mot_de_passe
+            ) if self.authentification_basique_utilisateur is not None else None,
+            {
+                'http': self.proxy_http,
+                'https': self.proxy_https
+            } if self.proxy_http is not None else None,
+            self.verify_peer,
             self.friendly_name
         )

@@ -99,10 +99,9 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <div data-step="1" data-intro="Cette section va vous permettre de contrôler le service d'interopérabilité, le mode production en soit." class="box">
+                            <div data-step="1" data-intro="Cette section va permettre de lancer la surveillance continue des automates sur les BAL IMAP4 inscrites" class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Contrôle du service</h3>
-
+                                    <h3 class="box-title">Surveillance Continue des BAL</h3>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
@@ -134,6 +133,14 @@
 
                                     <a href="javascript:void(0);" id="btn-introjs-start" onclick="introJs().start();" class="btn btn-app">
                                         <i class="fa fa-question-circle"></i> Guide de l'interface
+                                    </a>
+
+                                    <a href="/admin/import/automates" id="btn-export-data" class="btn btn-app">
+                                        <i class="fa fa-download"></i> Exporter
+                                    </a>
+
+                                    <a href="javascript:void(0);" id="btn-import-data" class="btn btn-app">
+                                        <i class="fa fa-upload"></i> Importer
                                     </a>
                                     <!-- /.row -->
                                 </div>
@@ -208,6 +215,10 @@
 
                                     <a id="btn-modifier-noeud" class="btn btn-app disabled">
                                         <i class="fa fa-pencil"></i> Modifier Action
+                                    </a>
+
+                                    <a id="btn-remplacer-noeud" class="btn btn-app disabled">
+                                        <i class="fa fa-recycle"></i> Remplacer Action
                                     </a>
 
                                     <div id="visu-automate">

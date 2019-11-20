@@ -383,3 +383,10 @@ pre {
 .select2-container--default .select2-selection--multiple .select2-selection__rendered li {
     color: black;
 }
+
+input[type="checkbox"] {
+    appearance: checkbox !important;
+    -moz-appearance: checkbox !important;
+    -webkit-appearance: checkbox !important;
+}
+

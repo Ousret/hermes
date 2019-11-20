@@ -4,7 +4,7 @@ FROM python:3.8
 MAINTAINER Ahmed TAHRI "ahmed.tahri@sii.fr"
 
 RUN apt-get update
-RUN apt-get -y install curl gnupg
+RUN apt-get -y install curl gnupg openssl ca-certificates
 RUN curl -sL https://deb.nodesource.com/setup_11.x  | bash -
 RUN apt-get -y install nodejs
 RUN npm install yarn -g
@@ -22,6 +22,7 @@ COPY ./msg_parser/ /app/msg_parser/
 
 WORKDIR /app
 
+RUN pip install pyopenssl
 RUN python setup.py install
 
 WORKDIR /app/hermes_ui

@@ -5,7 +5,7 @@ from hermes_ui.db import db
 
 class AutomateExecution(db.Model):
 
-    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    id = db.Column(db.BigInteger(), primary_key=True, autoincrement=True)
 
     automate_id = db.Column(db.Integer(), db.ForeignKey(Automate.id), nullable=False)
     automate = db.relationship(Automate)
@@ -23,6 +23,8 @@ class AutomateExecution(db.Model):
 
     explications_detecteur = db.Column(db.Text(), nullable=True)
 
+    logs = db.Column(db.Text(), nullable=True)
+
     date_finalisation = db.Column(db.DateTime(timezone=True), nullable=False)
 
     actions_noeuds_executions = db.relationship('ActionNoeudExecution')
@@ -31,7 +33,7 @@ class AutomateExecution(db.Model):
 
 class ActionNoeudExecution(db.Model):
 
-    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    id = db.Column(db.BigInteger(), primary_key=True, autoincrement=True)
 
     automate_execution_id = db.Column(db.BigInteger(), db.ForeignKey(AutomateExecution.id), nullable=False)
     automate_execution = db.relationship(AutomateExecution)
@@ -47,7 +49,7 @@ class ActionNoeudExecution(db.Model):
 
 class RechercheInteretExecution(db.Model):
 
-    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    id = db.Column(db.BigInteger(), primary_key=True, autoincrement=True)
 
     automate_execution_id = db.Column(db.BigInteger(), db.ForeignKey(AutomateExecution.id), nullable=False)
     automate_execution = db.relationship(AutomateExecution)

@@ -1,5 +1,7 @@
 const $ = require('jquery');
 const Swal = require('sweetalert2');
+let Dropzone = require('dropzone');
+Dropzone.autoDiscover = false;
 
 require('datatables.net-bs');
 require('jquery.terminal');
@@ -28,6 +30,53 @@ $(function () {
     $('#btn-supprimer-noeud').click(AppInterfaceInteroperabilite.supprimer_noeud_action);
     $('#btn-modifier-noeud').click(AppInterfaceInteroperabilite.assistant_modification_noeud_action);
     $('#btn-tester-automate').click(AppInterfaceInteroperabilite.assistant_test_isolation_automate);
+    $('#btn-remplacer-noeud').click(AppInterfaceInteroperabilite.assistant_remplacement_noeud_action);
+
+    $('#btn-import-data').click(
+        () => {
+            Swal.fire({
+                title: 'Import des Automates',
+                showCancelButton: false,
+                confirmButtonText: 'Fermer',
+                html: `<form id="swal-dropzone" action="/admin/export/automates" style="border-style: dashed; height: 90px;">
+            <div class="fallback">
+                <input name="file" type="file" />
+            </div>
+        </form>`,
+                onOpen: () => {
+                    new Dropzone(
+                        "#swal-dropzone",
+                        {
+                            url: "/admin/export/automates",
+                            uploadMultiple: false,
+                            dictDefaultMessage: 'Déposez un fichier JSON',
+                            complete: function (a) {
+
+                                let import_resp = JSON.parse(a.xhr.response === '' ? '{}' : a.xhr.response);
+
+                                Swal.fire(
+                                    {
+                                        title: '<strong>Import des <u>Automates</u></strong>',
+                                        type: import_resp.message === undefined ? 'info' : 'error',
+                                        text: import_resp.message === undefined ? 'Vos automates ont été importés avec succès.' : import_resp.message,
+                                        showCloseButton: true,
+                                        showCancelButton: false
+                                    }
+                                ).then(
+                                    () => {
+                                        location.reload(true);
+                                    }
+                                );
+
+                                this.removeAllFiles(true);
+                            }
+                        },
+                    );
+                }
+
+            });
+        }
+    );
 
     let mise_a_jour_journal = () => {
 
@@ -157,7 +206,9 @@ $(function () {
 <br><br>Cet assistant va expliciter le lancement de votre automate.
 <br>Sujet : <b>${data.sujet}</b>
 <br>Date de lancement : <b>${data.date_creation}</b>
-<br>Date de finalisation : <b>${data.date_finalisation}</b>`,
+<br>Date de finalisation : <b>${data.date_finalisation}</b><br><br>
+<b><u>Logs :</u></b><br>
+<pre><code>${data.logs}</code></pre>`,
                                 confirmButtonText: 'Critères &rarr;'
                             },
                             {
@@ -168,17 +219,15 @@ $(function () {
                             },
                         ];
 
-                        for (let action_exec of data.actions_noeuds_executions)
-                        {
+                        for (let action_exec of data.actions_noeuds_executions) {
                             let args_debug = '';
 
-                            if (action_exec.args_payload !== undefined && action_exec.args_payload !== '')
-                            {
+                            if (action_exec.args_payload !== undefined && action_exec.args_payload !== '') {
                                 let action_args = JSON.parse(action_exec.args_payload);
 
                                 for (let k in action_args) {
                                     if (action_args.hasOwnProperty(k)) {
-                                       args_debug += `<br>${k} : <b>${action_args[k]}</b>`
+                                        args_debug += `<br>${k} : <b>${action_args[k]}</b>`
                                     }
                                 }
 
@@ -195,7 +244,7 @@ ${args_debug === '' ? '<b>Aucun argument disponible en mode debug !</b>' : args_
                                     confirmButtonText: 'Suivant &rarr;'
                                 }
                             );
-                            progress_steps.push((progress_steps.length+1).toString());
+                            progress_steps.push((progress_steps.length + 1).toString());
                         }
 
                         Swal.mixin({
