@@ -63,6 +63,11 @@ class Mail(Source):
         )
 
         self._extraction_interet.injecter_interet(
+            'corps',
+            self.extract_body('plain')
+        )
+
+        self._extraction_interet.injecter_interet(
             'pieces-jointes',
             [el.filename for el in self._attachements]
         )

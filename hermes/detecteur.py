@@ -106,8 +106,7 @@ class Detecteur(object):
 
     def lance_toi(self, source):
         """
-
-        :param gie_interoperabilite.Source source:
+        :param hermes.source.Source source:
         :return:
         """
         if self.est_contraignant is False:

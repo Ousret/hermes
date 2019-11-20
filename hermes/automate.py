@@ -7,7 +7,7 @@ from os.path import exists
 
 from emails.backend.smtp.exceptions import SMTPConnectNetworkError
 from prettytable import PrettyTable
-from requests import request, RequestException, Session
+from requests import request, RequestException, Session, post
 from slugify import slugify
 
 from hermes.logger import logger, __path__
@@ -24,6 +24,8 @@ from ics import Calendar, Event, Attendee, Organizer
 from uuid import uuid4
 from hashlib import sha512
 import ruamel.std.zipfile as zipfile
+from logging.handlers import BufferingHandler
+from loguru import _defaults
 
 import records
 
@@ -41,6 +43,9 @@ class Automate(object):
 
         self._designation = designation
         self._detecteur = detecteur
+
+        self._handler = BufferingHandler(capacity=1024)
+        self._logger_handler_id = None
 
         self._action_racine = None  # type: ActionNoeud
 
@@ -69,9 +74,21 @@ class Automate(object):
     def detecteur(self):
         return self._detecteur
 
+    def __del__(self):
+        if self._logger_handler_id is not None:
+            logger.remove(self._logger_handler_id)
+            self._logger_handler_id = None
+
+    @property
+    def logs(self):
+        """
+        Transforme le buffer logs en mémoire en string
+        :rtype: str
+        """
+        return '\n'.join([str(el.msg) for el in self._handler.buffer])
+
     def explain(self):
-        my_table = PrettyTable()
-        my_table.field_names = ["Type", "Action", "Réussite", "Valeur"]
+        my_table = PrettyTable(["Type", "Action", "Réussite", "Valeur"])
 
         for el in self.actions_lancees:
             my_table.add_row(
@@ -98,6 +115,8 @@ class Automate(object):
         :rtype: bool
         """
 
+        self._logger_handler_id = logger.add(self._handler, colorize=_defaults.LOGURU_COLORIZE, level='INFO')
+
         logger.debug(
             "Initialisation de l'automate '{}' avec la source '{}'.", self.designation, source.titre
         )
@@ -120,10 +139,17 @@ class Automate(object):
             for k in source.extraction_interet.interets.keys():
                 source.session.sauver(k, source.extraction_interet.interets[k])
 
-            return self._action_racine.je_realise(source) if self._action_racine is not None else False
+            final_leaf_bool = self._action_racine.je_realise(source) if self._action_racine is not None else False
+
+            logger.remove(self._logger_handler_id)
+            self._logger_handler_id = None
+
+            return final_leaf_bool
         else:
             logger.debug("L'automate ne semble pas concerné par la source '{}'", str(self._detecteur))
 
+        logger.remove(self._logger_handler_id)
+        self._logger_handler_id = None
         return False
 
 
@@ -137,6 +163,7 @@ class ActionNoeud(object):
         self._noeud_echec = None  # type: ActionNoeud
 
         self._payload = None
+        self._success = None
 
         self._maximum_retries = 0
         self._n_retries = 0
@@ -153,7 +180,7 @@ class ActionNoeud(object):
 
     @property
     def est_reussite(self):
-        return self._payload is not False and self._payload is not None
+        return self._success is True
 
     @property
     def actions_lancees(self):
@@ -162,6 +189,28 @@ class ActionNoeud(object):
         return [self] + \
                (self._noeud_reussite.actions_lancees if self._noeud_reussite is not None else []) + \
                (self._noeud_echec.actions_lancees if self._noeud_echec is not None else [])
+
+    def _jai_echouee(self, source, new_payload=None):
+        """
+        Prendre le chemin en cas d'échec
+        :param hermes.source.Source source:
+        :rtype: bool
+        """
+        logger.warning("Échec de l'action '{}' sur '{}'", self._designation, source.titre)
+        self._payload = new_payload
+        self._success = False
+        return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+
+    def _jai_reussi(self, source, new_payload=None):
+        """
+        Prendre le chemin en cas de réussite
+        :param hermes.source.Source source:
+        :rtype: bool
+        """
+        logger.info("Fin de l'action '{}' sur '{}'", self._designation, source.titre)
+        self._payload = new_payload
+        self._success = True
+        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
 
     def raz(self):
         self._payload = None
@@ -224,15 +273,16 @@ class ActionNoeud(object):
 
     def _surcouche_session(self, source):
         """
-        :param gie_interoperabilite.Source source:
+        :param hermes.source.Source source:
         :return:
         """
         members = [attr for attr in dir(self) if not callable(getattr(self, attr)) and not attr.startswith("__") and not attr.startswith('_init_args')]
 
         for member in members:
-            mon_attr = deepcopy(getattr(self, member))
+            mon_attr = getattr(self, member)
             if member.startswith('_') and isinstance(mon_attr, str) or isinstance(mon_attr, dict) or isinstance(
                     mon_attr, list) or isinstance(mon_attr, tuple):
+                mon_attr_b = deepcopy(mon_attr)
                 try:
                     retr = source.session.retranscrire(mon_attr)
                     setattr(
@@ -240,8 +290,8 @@ class ActionNoeud(object):
                         member,
                         retr
                     )
-                    if retr != mon_attr:
-                        self._init_args[member] = mon_attr
+                    if retr != mon_attr_b:
+                        self._init_args[member] = mon_attr_b
                 except AttributeError:
                     pass
                 except TypeError:
@@ -282,7 +332,7 @@ class RequeteSqlActionNoeud(ActionNoeud):
         if self._hote_type_protocol not in ['mysql', 'posgres', 'mariadb', 'mssql', 'oracle']:
             logger.error("L'action '{}' sur la source '{}' est en échec car '{}'",
                                                 self._designation, source.titre, 'Le protocol SGDB {} n\'est pas encore supporté !'.format(self._hote_type_protocol))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         try:
             db = records.Database(
@@ -298,7 +348,7 @@ class RequeteSqlActionNoeud(ActionNoeud):
         except Exception as e:
             logger.error("L'action '{}' sur la source '{}' est en échec car '{}'",
                                                 self._designation, source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         bind_param_secure = dict()
 
@@ -310,11 +360,9 @@ class RequeteSqlActionNoeud(ActionNoeud):
             rows = db.query(requete_sql_originale, fetchall=False, **bind_param_secure)
         except Exception as e:
             logger.error("L'action '{}' sur la source '{}' est en échec car '{}'", self._designation, source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
-        self._payload = rows.as_dict()
-
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source, rows.as_dict())
 
 
 class RequeteSoapActionNoeud(ActionNoeud):
@@ -359,15 +407,15 @@ class RequeteSoapActionNoeud(ActionNoeud):
         except TransportError as e:
             logger.error("L'action '{}' sur '{}' est en échec : {}", self._designation,
                                                 source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
         except Fault as e:
             logger.error("L'action '{}' sur '{}' est en échec : '{}' '{}'", self._designation,
                                                 source.titre, str(e), str(e.detail))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
         except TypeError as e:
             logger.error("L'action '{}' sur '{}' est en échec : {}", self._designation,
                                                 source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         if isinstance(response, dict):
             if self._friendly_name is not None:
@@ -382,8 +430,7 @@ class RequeteSoapActionNoeud(ActionNoeud):
                 response
             )
 
-        self._payload = response if response is not None else True
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source, response)
 
 
 class RequeteHttpActionNoeud(ActionNoeud):
@@ -412,9 +459,7 @@ class RequeteHttpActionNoeud(ActionNoeud):
         except RequestException as e:
             logger.error("L'action '{}' est en échec pour la raison suivante : '{}'",
                                                 self._designation, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
-
-        self._payload = response.content
+            return self._jai_echouee(source)
 
         if response.status_code == self._resp_code_http or self._resp_code_http is None and response.ok:
 
@@ -434,13 +479,344 @@ class RequeteHttpActionNoeud(ActionNoeud):
                 logger.warning("L'action '{}' n'a pas réussi à exploiter le résultat : '{}'",
                                                       self._designation, str(e))
 
-            return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+            return self._jai_reussi(source, response.content)
 
         logger.error("L'action '{}' est en échec pour la raison suivante : '{}'",
                                             self._designation,
                                             'La requête HTTP a retournée un code erreur ou différent de celui attendu')
 
-        return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+        return self._jai_echouee(source, response.content)
+
+
+class ItopRequeteCoreGetActionNoeud(ActionNoeud):
+    def __init__(self, designation, url_rest_itop, auth_user, auth_pwd, requete_dql, output_fields, basic_auth=None,
+                 proxies=None, verify_peer=True, friendly_name=None):
+        super().__init__(designation, friendly_name)
+        self._url_rest_itop = url_rest_itop
+        self._auth_user = auth_user
+        self._auth_pwd = auth_pwd
+        self._requete_dql = requete_dql  # type: str
+        self._output_fields = output_fields
+        self._basic_auth = basic_auth
+        self._proxies = proxies
+        self._verify_peer = verify_peer
+
+    def je_realise(self, source):
+
+        super().je_realise(source)
+
+        ma_classe_itop_cible = self._requete_dql.split(' ')[1]
+
+        try:
+            response = post(
+                self._url_rest_itop,
+                {
+                    'auth_user': self._auth_user,
+                    'auth_pwd': self._auth_pwd,
+                    'json_data': dumps(
+                        {
+                            'operation': 'core/get',
+                            'class': ma_classe_itop_cible,
+                            'key': self._requete_dql,
+                            'output_fields': self._output_fields
+                        }
+                    )
+                },
+                proxies=self._proxies,
+                verify=self._verify_peer
+            )
+        except RequestException as e:
+            logger.error("L'action '{}' est en échec pour la raison suivante : '{}'",
+                         self._designation, str(e))
+            return self._jai_echouee(source)
+
+        if not response.ok:
+            logger.error("Le module REST JSON d'iTop ne semble pas fonctionner correctement. Une réponse a été capturée sous le code HTTP/{}.", response.status_code)
+            return self._jai_echouee(source, response.content)
+
+        my_payload = response.json()
+
+        if 'code' not in my_payload or 'message' not in my_payload:
+            return self._jai_echouee(source, response.content)
+
+        if my_payload['code'] != 0:
+            logger.error("La requête core/get iTop REST '{}' n'a pas aboutie correctement. Une erreur a été soulevée (code {}) : {}", self._requete_dql, my_payload['code'], my_payload['message'])
+            return self._jai_echouee(source, response.content)
+
+        if self._friendly_name is not None:
+            source.session.sauver(self._friendly_name, my_payload)
+        else:
+            for key in my_payload:
+                source.session.sauver(key, my_payload[key])
+
+        return self._jai_reussi(source, my_payload)
+
+
+class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
+    def __init__(self, designation, url_rest_itop, auth_user, auth_pwd, classe_itop_cible, fields, output_fields, commentaire, basic_auth=None,
+                 proxies=None, verify_peer=True, friendly_name=None):
+        super().__init__(designation, friendly_name)
+        self._url_rest_itop = url_rest_itop
+        self._auth_user = auth_user
+        self._auth_pwd = auth_pwd
+        self._classe_itop_cible = classe_itop_cible
+        self._fields = fields
+        self._output_fields = output_fields
+        self._commentaire = commentaire
+        self._basic_auth = basic_auth
+        self._proxies = proxies
+        self._verify_peer = verify_peer
+
+    def je_realise(self, source):
+
+        super().je_realise(source)
+
+        try:
+            response = post(
+                self._url_rest_itop,
+                {
+                    'auth_user': self._auth_user,
+                    'auth_pwd': self._auth_pwd,
+                    'json_data': dumps(
+                        {
+                            'operation': 'core/create',
+                            'class': self._classe_itop_cible,
+                            'fields': self._fields,
+                            'output_fields': self._output_fields,
+                            'comment': self._commentaire
+                        }
+                    )
+                },
+                proxies=self._proxies,
+                verify=self._verify_peer
+            )
+        except RequestException as e:
+            logger.error("L'action '{}' est en échec pour la raison suivante : '{}'",
+                         self._designation, str(e))
+            return self._jai_echouee(source)
+
+        if not response.ok:
+            logger.error("Le module REST JSON d'iTop ne semble pas fonctionner correctement. Une réponse a été capturée sous le code HTTP/{}.", response.status_code)
+            return self._jai_echouee(source, response.content)
+
+        my_payload = response.json()
+
+        if 'code' not in my_payload or 'message' not in my_payload:
+            return self._jai_echouee(source, response.content)
+
+        if my_payload['code'] != 0:
+            logger.error("La requête core/create iTop REST '{}' n'a pas aboutie correctement. Une erreur a été soulevée (code {}) : {}", self._classe_itop_cible, my_payload['code'], my_payload['message'])
+            return self._jai_echouee(source, response.content)
+
+        if self._friendly_name is not None:
+            source.session.sauver(self._friendly_name, my_payload)
+        else:
+            for key in my_payload:
+                source.session.sauver(key, my_payload[key])
+
+        return self._jai_reussi(source, my_payload)
+
+
+class ItopRequeteCoreUpdateActionNoeud(ActionNoeud):
+    def __init__(self, designation, url_rest_itop, auth_user, auth_pwd, requete_dql, fields, output_fields, commentaire, basic_auth=None,
+                 proxies=None, verify_peer=True, friendly_name=None):
+        super().__init__(designation, friendly_name)
+        self._url_rest_itop = url_rest_itop
+        self._auth_user = auth_user
+        self._auth_pwd = auth_pwd
+        self._requete_dql = requete_dql
+        self._fields = fields
+        self._output_fields = output_fields
+        self._commentaire = commentaire
+        self._basic_auth = basic_auth
+        self._proxies = proxies
+        self._verify_peer = verify_peer
+
+    def je_realise(self, source):
+
+        super().je_realise(source)
+
+        ma_classe_itop_cible = self._requete_dql.split(' ')[1]
+
+        try:
+            response = post(
+                self._url_rest_itop,
+                {
+                    'auth_user': self._auth_user,
+                    'auth_pwd': self._auth_pwd,
+                    'json_data': dumps(
+                        {
+                            'operation': 'core/update',
+                            'class': ma_classe_itop_cible,
+                            'key': self._requete_dql,
+                            'fields': self._fields,
+                            'output_fields': self._output_fields,
+                            'comment': self._commentaire
+                        }
+                    )
+                },
+                proxies=self._proxies,
+                verify=self._verify_peer
+            )
+        except RequestException as e:
+            logger.error("L'action '{}' est en échec pour la raison suivante : '{}'",
+                         self._designation, str(e))
+            return self._jai_echouee(source)
+
+        if not response.ok:
+            logger.error("Le module REST JSON d'iTop ne semble pas fonctionner correctement. Une réponse a été capturée sous le code HTTP/{}.", response.status_code)
+            return self._jai_echouee(source, response.content)
+
+        my_payload = response.json()
+
+        if 'code' not in my_payload or 'message' not in my_payload:
+            return self._jai_echouee(source, response.content)
+
+        if my_payload['code'] != 0:
+            logger.error("La requête core/update iTop REST '{}' n'a pas aboutie correctement. Une erreur a été soulevée (code {}) : {}", self._requete_dql, my_payload['code'], my_payload['message'])
+            return self._jai_echouee(source, response.content)
+
+        if self._friendly_name is not None:
+            source.session.sauver(self._friendly_name, my_payload)
+        else:
+            for key in my_payload:
+                source.session.sauver(key, my_payload[key])
+
+        return self._jai_reussi(source, my_payload)
+
+
+class ItopRequeteCoreApplyStimulusActionNoeud(ActionNoeud):
+    def __init__(self, designation, url_rest_itop, auth_user, auth_pwd, requete_dql, stimulus, fields, output_fields, commentaire, basic_auth=None,
+                 proxies=None, verify_peer=True, friendly_name=None):
+        super().__init__(designation, friendly_name)
+        self._url_rest_itop = url_rest_itop
+        self._auth_user = auth_user
+        self._auth_pwd = auth_pwd
+        self._requete_dql = requete_dql
+        self._stimulus = stimulus
+        self._fields = fields
+        self._output_fields = output_fields
+        self._commentaire = commentaire
+        self._basic_auth = basic_auth
+        self._proxies = proxies
+        self._verify_peer = verify_peer
+
+    def je_realise(self, source):
+
+        super().je_realise(source)
+
+        ma_classe_itop_cible = self._requete_dql.split(' ')[1]
+
+        try:
+            response = post(
+                self._url_rest_itop,
+                {
+                    'auth_user': self._auth_user,
+                    'auth_pwd': self._auth_pwd,
+                    'json_data': dumps(
+                        {
+                            'operation': 'core/apply_stimulus',
+                            'class': ma_classe_itop_cible,
+                            'key': self._requete_dql,
+                            'fields': self._fields,
+                            'output_fields': self._output_fields,
+                            'stimulus': self._stimulus,
+                            'comment': self._commentaire
+                        }
+                    )
+                },
+                proxies=self._proxies,
+                verify=self._verify_peer
+            )
+        except RequestException as e:
+            logger.error("L'action '{}' est en échec pour la raison suivante : '{}'",
+                         self._designation, str(e))
+            return self._jai_echouee(source, str(e))
+
+        if not response.ok:
+            logger.error("Le module REST JSON d'iTop ne semble pas fonctionner correctement. Une réponse a été capturée sous le code HTTP/{}.", response.status_code)
+            return self._jai_echouee(source, response.content)
+
+        my_payload = response.json()
+
+        if 'code' not in my_payload or 'message' not in my_payload:
+            return self._jai_echouee(source, response.content)
+
+        if my_payload['code'] != 0:
+            logger.error("La requête core/apply_stimulus iTop REST '{}' n'a pas aboutie correctement. Une erreur a été soulevée (code {}) : {}", self._requete_dql, my_payload['code'], my_payload['message'])
+            return self._jai_echouee(source, response.content)
+
+        if self._friendly_name is not None:
+            source.session.sauver(self._friendly_name, my_payload)
+        else:
+            for key in my_payload:
+                source.session.sauver(key, my_payload[key])
+
+        return self._jai_reussi(source, my_payload)
+
+
+class ItopRequeteCoreDeleteActionNoeud(ActionNoeud):
+    def __init__(self, designation, url_rest_itop, auth_user, auth_pwd, requete_dql, commentaire, basic_auth=None,
+                 proxies=None, verify_peer=True, friendly_name=None):
+        super().__init__(designation, friendly_name)
+        self._url_rest_itop = url_rest_itop
+        self._auth_user = auth_user
+        self._auth_pwd = auth_pwd
+        self._requete_dql = requete_dql
+        self._commentaire = commentaire
+        self._basic_auth = basic_auth
+        self._proxies = proxies
+        self._verify_peer = verify_peer
+
+    def je_realise(self, source):
+
+        super().je_realise(source)
+
+        ma_classe_itop_cible = self._requete_dql.split(' ')[1]
+
+        try:
+            response = post(
+                self._url_rest_itop,
+                {
+                    'auth_user': self._auth_user,
+                    'auth_pwd': self._auth_pwd,
+                    'json_data': dumps(
+                        {
+                            'operation': 'core/delete',
+                            'class': ma_classe_itop_cible,
+                            'key': self._requete_dql,
+                            'comment': self._commentaire
+                        }
+                    )
+                },
+                proxies=self._proxies,
+                verify=self._verify_peer
+            )
+        except RequestException as e:
+            logger.error("L'action '{}' est en échec pour la raison suivante : '{}'",
+                         self._designation, str(e))
+            return self._jai_echouee(source, str(e))
+
+        if not response.ok:
+            logger.error("Le module REST JSON d'iTop ne semble pas fonctionner correctement. Une réponse a été capturée sous le code HTTP/{}.", response.status_code)
+            return self._jai_echouee(source, response.content)
+
+        my_payload = response.json()
+
+        if 'code' not in my_payload or 'message' not in my_payload:
+            return self._jai_echouee(source, response.content)
+
+        if my_payload['code'] != 0:
+            logger.error("La requête core/delete iTop REST '{}' n'a pas aboutie correctement. Une erreur a été soulevée (code {}) : {}", self._requete_dql, my_payload['code'], my_payload['message'])
+            return self._jai_echouee(source, response.content)
+
+        if self._friendly_name is not None:
+            source.session.sauver(self._friendly_name, my_payload)
+        else:
+            for key in my_payload:
+                source.session.sauver(key, my_payload[key])
+
+        return self._jai_reussi(source, my_payload)
 
 
 class VerifierSiVariableVraiActionNoeud(ActionNoeud):
@@ -454,17 +830,17 @@ class VerifierSiVariableVraiActionNoeud(ActionNoeud):
         super().je_realise(source)
 
         if self._variable_cible is False or self._variable_cible == 'False':
+            self._payload = True
             return True and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else True
 
         self._payload = True
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source)
 
 
 class ComparaisonVariableActionNoeud(ActionNoeud):
 
     def __init__(self, designation, membre_gauche_variable, operande, membre_droite_variable, friendly_name):
         """
-
         :param str designation:
         :param str membre_gauche_variable:
         :param str operande:
@@ -482,21 +858,20 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
 
         if self._operande.upper() not in ['==', '>', '<', '>=', '<=', '!=', 'IN']:
             logger.warning("L'opérateur '{}' n'est pas reconnu pour effectuer une comparaison entre deux membres", self._operande)
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         if self._membre_droite.isdigit() or self._membre_gauche.isdigit() and self._membre_droite.isdigit() != self._membre_gauche.isdigit():
             logger.warning(
                 "Impossible de comparer un nombre avec un autre type de donnée. ({} AVEC {})", self._membre_gauche, self._membre_droite)
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
         elif self._membre_droite.isdigit() and self._membre_gauche.isdigit():
             self._membre_droite = int(self._membre_droite)
             self._membre_gauche = int(self._membre_gauche)
 
             if eval('{membre_gauche} {operande} {membre_droite}'.format(membre_gauche=self._membre_gauche, operande=self._operande, membre_droite=self._membre_droite)) is True:
-                self._payload = True
-                return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+                return self._jai_reussi(source)
 
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
         elif all([el.isdigit() for el in self._membre_droite.split('.')+self._membre_gauche.split('.')]) is True:
             self._membre_droite = float(self._membre_droite)
             self._membre_gauche = float(self._membre_gauche)
@@ -504,19 +879,17 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
             if eval('{membre_gauche} {operande} {membre_droite}'.format(membre_gauche=self._membre_gauche,
                                                                         operande=self._operande,
                                                                         membre_droite=self._membre_droite)) is True:
-                self._payload = True
-                return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+                return self._jai_reussi(source)
 
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
         try:
             membre_date_droite = parse(self._membre_droite)
             membre_date_gauche = parse(self._membre_gauche)
 
             if eval('{membre_gauche} {operande} {membre_droite}'.format(membre_gauche=membre_date_gauche.timestamp(), operande=self._operande, membre_droite=membre_date_droite.timestamp())) is True:
-                self._payload = True
-                return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+                return self._jai_reussi(source)
 
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         except ValueError as e:
             if self._operande == '==':
@@ -537,10 +910,9 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
                 expr_ret = False
 
             if expr_ret is True:
-                self._payload = True
-                return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+                return self._jai_reussi(source)
 
-        return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+        return self._jai_echouee(source)
 
 
 class InvitationEvenementActionNoeud(ActionNoeud):
@@ -632,7 +1004,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
                 'Les dates de départ et de fin, ('+str(self._date_heure_depart)+', '+str(self._date_heure_fin)+'), '
                 'ne sont pas dans un format facilement reconnaissable !'
             )
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         if self._date_heure_depart.timestamp() >= self._date_heure_fin.timestamp():
             logger.error(
@@ -640,7 +1012,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
                 self._designation,
                 'La date de départ est supérieure ou égale à la date de fin'
             )
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         cached_ics_hash = sha512(
             dumps(
@@ -668,8 +1040,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
                     'Une erreur est survenue lors de la récupération du fichier ICS en cache. '
                     'Chemin: "{}", Erreur: "{}"'.format(cached_ics_path, str(e))
                 )
-
-                return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+                return self._jai_echouee(source)
 
         if self._est_maintenu is False and my_cached_uid is None:
             logger.error(
@@ -677,8 +1048,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
                 self._designation,
                 'Impossible d\'annuler un évènement sans l\'avoir créer au préalable'
             )
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         my_calendar = Calendar(creator='Microsoft Exchange Server 2010')
 
@@ -699,7 +1069,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             ),
         )
 
-        for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp='TRUE') for el in self._participants.split(',')]:
+        for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp=True) for el in self._participants.split(',')]:
             my_event.add_attendee(attendee)
 
         my_calendar.events.add(my_event)
@@ -758,10 +1128,9 @@ Nous vous remercions de votre attention.""".format(
                 self._designation,
                 'Impossible d\'envoyer le fichier invitation ICS par le biais serveur SMTP'
             )
-            self._payload = False
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source)
 
 
 class ManipulationSmtpActionNoeud(ActionNoeud):
@@ -912,7 +1281,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 "au sens du RFC 5322",
                 self.designation
             )
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         try:
 
@@ -935,6 +1304,8 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 smtp=smtp_kwargs
             )
 
+            logger.debug(response)
+
         except SMTPConnectNetworkError as e:
             logger.error(
                 "L'action '{}' est en échec car il est impossible de se connecter au serveur SMTP '{}' distant. "
@@ -943,8 +1314,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 self._hote_smtp+':'+str(self._port_smtp),
                 str(e)
             )
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source, str(e))
         except ValueError as e:
             logger.error(
                 "L'action '{}' est en échec car il est impossible de se lire les adresses destinataires "
@@ -953,8 +1323,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 str(e),
                 str(destinaires_adresses_valides[0] if len(destinaires_adresses_valides) == 1 else destinaires_adresses_valides)
             )
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source, str(e))
 
         if response.status_code not in [250, ]:
 
@@ -966,11 +1335,9 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 str(response.status_code),
                 response.error
             )
+            return self._jai_echouee(source, str(e))
 
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
-
-        self._payload = True
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source, response)
 
 
 class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
@@ -1019,8 +1386,7 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 "au sens du RFC 5322",
                 self.designation
             )
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         try:
 
@@ -1050,6 +1416,8 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 smtp=smtp_kwargs
             )
 
+            logger.debug(response)
+
         except SMTPConnectNetworkError as e:
             logger.error(
                 "L'action '{}' est en échec car il est impossible de se connecter au serveur SMTP distant. "
@@ -1057,8 +1425,7 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 self.designation,
                 str(e)
             )
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source, str(e))
 
         if response.status_code not in [250, ]:
             logger.warning(
@@ -1067,11 +1434,9 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 self.designation,
                 str(response.status_code)
             )
+            return self._jai_echouee(source)
 
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
-
-        self._payload = True
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source, response)
 
 
 class ConstructionInteretActionNoeud(ActionNoeud):
@@ -1092,12 +1457,11 @@ class ConstructionInteretActionNoeud(ActionNoeud):
                 str(e)
             )
             source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name, None)
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name, self._interet)
-        self._payload = str(self._interet)
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+
+        return self._jai_reussi(source, str(self._interet))
 
 
 class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
@@ -1113,8 +1477,7 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
                 "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre,
                 'Argument variable avec pattern liste identifiable non précisé, '
                 'une variable est forcement de la forme suivante : {{ ma_variable }}')
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         sous_niveau_index_regex = re.compile(r'.[\d]+')
 
@@ -1125,8 +1488,7 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
                 'aucun entier ne peut être découvert pour itérer '
                 'sur une liste tel que : {{ ma_variable.0.adresse_mail }}, '
                 'alors que vous donnez: {}'.format(self._variable_pattern))
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         mes_decouvertes = list()
 
@@ -1141,15 +1503,19 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
                 "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre,
                 'Argument variable avec pattern liste identifiable mais non résolvable, '
                 'le premier niveau ne donne pas de résolution : '+str(e))
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
         except TypeError as e:
             logger.error(
                 "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre,
                 'Argument variable avec pattern liste identifiable mais le type de sortie est inconnu, '
                 'le premier niveau ne donne pas de résolution avec type identifiable : '+str(e))
-
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
+        except IndexError as e:
+            logger.error(
+                "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre,
+                'Argument variable avec pattern liste identifiable mais non résolvable, '
+                'le premier niveau ne donne pas de résolution : ' + str(e))
+            return self._jai_echouee(source)
 
         while True:
             correspondance = re.findall(sous_niveau_index_regex, self._variable_pattern)[-1]
@@ -1171,10 +1537,9 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
             except IndexError:
                 break
 
-        self._payload = self._separateur.join(mes_decouvertes)
         source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name, self._payload)
 
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source, self._separateur.join(mes_decouvertes))
 
 
 class ManipulationRudimentaireSourceActionNoeud(ActionNoeud):
@@ -1199,7 +1564,7 @@ class DeplacerMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
             logger.error(
                 "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre,
                 'Aucune usine à production n\'est associée à la source')
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         try:
             source.factory.deplacer(
@@ -1209,7 +1574,7 @@ class DeplacerMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
         except FileNotFoundError as e:
             logger.error(
                 "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
         except ManipulationSourceException as e:
 
             if self._maximum_retries > 0 and self._n_retries < self._maximum_retries:
@@ -1226,11 +1591,9 @@ class DeplacerMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
                 "L'action '{}' sur la source '{}' est en échec, "
                 "l'usine ayant produit la source n'a pas pu effectuer "
                 "un changement sur la source : {}", self._designation, source.titre, str(e))
+            return self._jai_echouee(source)
 
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
-
-        self._payload = True
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source)
 
 
 class CopierMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
@@ -1247,7 +1610,7 @@ class CopierMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
             logger.error(
                 "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre,
                 'Aucune usine à production n\'est associée à la source')
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         try:
             source.factory.copier(
@@ -1257,7 +1620,7 @@ class CopierMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
         except FileNotFoundError as e:
             logger.error(
                 "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
         except ManipulationSourceException as e:
 
             if self._maximum_retries > 0 and self._n_retries < self._maximum_retries:
@@ -1274,10 +1637,9 @@ class CopierMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
                 "L'action '{}' sur la source '{}' est en échec, "
                 "l'usine ayant produit la source n'a pas pu effectuer "
                 "un changement sur la source : {}", self._designation, source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
-        self._payload = True
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source)
 
 
 class SupprimerMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
@@ -1292,7 +1654,7 @@ class SupprimerMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
         if source.factory is None:
             logger.error(
                 "L'action '{}' sur la source '{}' est en échec : {}", self._designation, source.titre, 'Aucune usine à production n\'est associée à la source')
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         try:
             source.factory.supprimer(
@@ -1314,10 +1676,9 @@ class SupprimerMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
                 "L'action '{}' sur la source '{}' est en échec, "
                 "l'usine ayant produit la source n'a pas pu effectuer "
                 "un changement sur la source : {}", self._designation, source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
-        self._payload = True
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source)
 
 
 class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
@@ -1337,7 +1698,7 @@ class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
             logger.error(
                 "L'action '{}' sur '{}' est en échec car votre cible '{}' n'existe pas (1)", self._designation,
                 source.titre, self._resultat_concerne)
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         try:
             ma_retranscription = source.session.retranscrire('{{ ' + self._resultat_concerne + ' }}')
@@ -1345,7 +1706,7 @@ class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
             logger.error(
                 "L'action '{}' sur '{}' est en échec car votre cible '{}' n'existe pas : {}", self._designation,
                 source.titre, self._resultat_concerne, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         resultat_transformation = dict()
 
@@ -1355,26 +1716,25 @@ class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
             logger.error(
                 "L'action '{}' sur '{}' est en échec car votre cible n'est pas un objet serializable : {}",
                 self._designation, source.titre, str(e))
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         if isinstance(ma_retranscription, list) is False:
             logger.error(
                 "L'action '{}' sur '{}' est en échec car votre cible n'est pas une liste", self._designation,
                 source.titre)
-            return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+            return self._jai_echouee(source)
 
         for mon_element in ma_retranscription:
 
             if isinstance(mon_element, dict) is False:
-                return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+                return self._jai_echouee(source)
 
             if self._champ_cle not in mon_element.keys() or self._champ_valeur not in mon_element.keys():
-                return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+                return self._jai_echouee(source)
 
             resultat_transformation[mon_element[self._champ_cle]] = mon_element[self._champ_valeur]
 
         source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name,
                               resultat_transformation)
 
-        self._payload = str(resultat_transformation)
-        return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
+        return self._jai_reussi(source, str(resultat_transformation))
