@@ -14,8 +14,10 @@ RUN ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl && make
 
 RUN apt-get -y install curl gnupg wget
 RUN curl -sL https://deb.nodesource.com/setup_11.x  | bash -
-RUN apt-get -y install nodejs npm
+RUN apt-get -y install nodejs ca-certificates npm
 RUN npm install yarn -g
+
+RUN pip install certifi pyopenssl
 
 EXPOSE 5000
 
@@ -29,8 +31,6 @@ COPY ./hermes_ui/ /app/hermes_ui/
 COPY ./msg_parser/ /app/msg_parser/
 
 WORKDIR /app
-
-RUN pip install certifi pyopenssl
 
 RUN python setup.py install
 
