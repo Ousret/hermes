@@ -32,10 +32,10 @@ class Automate(db.Model):
     detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id), nullable=False)
     detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="save-update")
 
-    actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False, cascade="delete")
+    actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete, delete-orphan")
 
     action_racine_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id'), nullable=True)
-    action_racine = db.relation('ActionNoeud', foreign_keys='Automate.action_racine_id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete")
+    action_racine = db.relation('ActionNoeud', foreign_keys='Automate.action_racine_id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete, delete-orphan")
 
 
 class ActionNoeud(db.Model):

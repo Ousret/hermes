@@ -25,7 +25,6 @@ from uuid import uuid4
 from hashlib import sha512
 import ruamel.std.zipfile as zipfile
 from logging.handlers import BufferingHandler
-from loguru import _defaults
 
 import records
 
@@ -115,7 +114,7 @@ class Automate(object):
         :rtype: bool
         """
 
-        self._logger_handler_id = logger.add(self._handler, colorize=_defaults.LOGURU_COLORIZE, level='INFO')
+        self._logger_handler_id = logger.add(self._handler, level='DEBUG')
 
         logger.debug(
             "Initialisation de l'automate '{}' avec la source '{}'.", self.designation, source.titre
@@ -150,6 +149,7 @@ class Automate(object):
 
         logger.remove(self._logger_handler_id)
         self._logger_handler_id = None
+
         return False
 
 
@@ -184,7 +184,7 @@ class ActionNoeud(object):
 
     @property
     def actions_lancees(self):
-        if self._payload is None:
+        if self._success is None:
             return []
         return [self] + \
                (self._noeud_reussite.actions_lancees if self._noeud_reussite is not None else []) + \
@@ -198,7 +198,6 @@ class ActionNoeud(object):
         """
         logger.warning("Échec de l'action '{}' sur '{}'", self._designation, source.titre)
         self._payload = new_payload
-        self._success = False
         return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
 
     def _jai_reussi(self, source, new_payload=None):
@@ -306,7 +305,7 @@ class ActionNoeud(object):
         """
         logger.info("Démarrage de l'action '{}' sur '{}'", self._designation, source.titre)
         self._surcouche_session(source)
-        self._payload = False
+        self._success = False
 
 
 class RequeteSqlActionNoeud(ActionNoeud):
@@ -1335,7 +1334,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 str(response.status_code),
                 response.error
             )
-            return self._jai_echouee(source, str(e))
+            return self._jai_echouee(source)
 
         return self._jai_reussi(source, response)
 
