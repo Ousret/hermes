@@ -4,7 +4,7 @@ from datetime import datetime
 from email.mime.base import MIMEBase
 from io import BytesIO
 from os.path import exists
-from ssl import SSLContext, PROTOCOL_TLSv1_2, PROTOCOL_TLSv1, OP_NO_TLSv1
+from ssl import SSLContext, OP_NO_TLSv1, PROTOCOL_TLSv1_1
 
 from emails.backend.smtp.exceptions import SMTPConnectNetworkError
 from prettytable import PrettyTable
@@ -1296,7 +1296,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
             }
 
             if self._legacy_tls_support and self._activation_tls:
-                smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLSv1)
+                smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLSv1_1)
                 smtp_kwargs['context'].options &= ~OP_NO_TLSv1
 
             if self._nom_utilisateur is not None and self._mot_de_passe is not None:
@@ -1406,7 +1406,7 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
             }
 
             if self._legacy_tls_support and self._activation_tls:
-                smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLSv1)
+                smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLSv1_1)
                 smtp_kwargs['context'].options &= ~OP_NO_TLSv1
 
             if self._nom_utilisateur is not None and self._mot_de_passe is not None:

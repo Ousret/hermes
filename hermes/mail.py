@@ -5,7 +5,7 @@ from imapclient import IMAPClient
 from imapclient.exceptions import CapabilityError, IMAPClientError, IMAPClientAbortError, IMAPClientReadOnlyError
 from base64 import b64decode
 import email
-from ssl import create_default_context, CERT_NONE, PROTOCOL_TLSv1, SSLContext, PROTOCOL_TLSv1_2, OP_NO_TLSv1
+from ssl import CERT_NONE, SSLContext, PROTOCOL_TLSv1_2, OP_NO_TLSv1, PROTOCOL_TLSv1_1
 from email.header import decode_header
 from quopri import decodestring
 from email.parser import HeaderParser
@@ -426,11 +426,11 @@ class MailAttachement:
 
 class MailToolbox(SourceFactory):
 
-    def __init__(self, hote_imap, nom_utilisateur, mot_de_passe, dossier_cible='INBOX', verify_peer=False, use_secure_socket=True, legacy_secure_protocol=False):
+    def __init__(self, hote_imap, nom_utilisateur, mot_de_passe, dossier_cible='INBOX', verify_peer=True, use_secure_socket=True, legacy_secure_protocol=False):
 
         super().__init__('IMAPFactory via {}'.format(hote_imap))
 
-        self._ssl_context = SSLContext(protocol=PROTOCOL_TLSv1 if legacy_secure_protocol else PROTOCOL_TLSv1_2) if use_secure_socket else None
+        self._ssl_context = SSLContext(protocol=PROTOCOL_TLSv1_1 if legacy_secure_protocol else PROTOCOL_TLSv1_2) if use_secure_socket else None
         self._use_secure_socket = use_secure_socket
 
         if verify_peer is False and use_secure_socket is True:
@@ -439,7 +439,7 @@ class MailToolbox(SourceFactory):
             # don't check if the certificate is trusted by a certificate authority
             self._ssl_context.verify_mode = CERT_NONE
 
-        if legacy_secure_protocol:
+        if legacy_secure_protocol and use_secure_socket:
             self._ssl_context.options &= ~OP_NO_TLSv1
 
         self._hote_imap = Session.UNIVERSELLE.retranscrire(hote_imap)
