@@ -15,7 +15,9 @@ class BoiteAuxLettresImap(db.Model):
     mot_de_passe = db.Column(db.String(255), nullable=False)
     dossier_cible = db.Column(db.String(255), nullable=False, default='INBOX')
 
+    enable_tls = db.Column(db.Boolean(), nullable=False, default=True)
     verification_certificat = db.Column(db.Boolean(), nullable=False, default=True)
+    legacy_tls_support = db.Column(db.Boolean(), nullable=False, default=False)
 
     createur_id = db.Column(db.ForeignKey('user.id'), nullable=False)
     createur = db.relationship(User, primaryjoin="User.id==BoiteAuxLettresImap.createur_id")
@@ -39,6 +41,8 @@ class BoiteAuxLettresImap(db.Model):
                 self.nom_utilisateur,
                 self.mot_de_passe,
                 dossier_cible=self.dossier_cible,
-                verify_peer=self.verification_certificat
+                verify_peer=self.verification_certificat,
+                use_secure_socket=self.enable_tls,
+                legacy_secure_protocol=self.legacy_tls_support
             )
         return existant

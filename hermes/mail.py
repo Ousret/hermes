@@ -5,7 +5,7 @@ from imapclient import IMAPClient
 from imapclient.exceptions import CapabilityError, IMAPClientError, IMAPClientAbortError, IMAPClientReadOnlyError
 from base64 import b64decode
 import email
-from ssl import create_default_context, CERT_NONE
+from ssl import create_default_context, CERT_NONE, PROTOCOL_TLSv1, SSLContext, PROTOCOL_TLSv1_2, OP_NO_TLSv1
 from email.header import decode_header
 from quopri import decodestring
 from email.parser import HeaderParser
@@ -426,19 +426,21 @@ class MailAttachement:
 
 class MailToolbox(SourceFactory):
 
-    def __init__(self, hote_imap, nom_utilisateur, mot_de_passe, dossier_cible='INBOX', verify_peer=False, use_secure_socket=True):
+    def __init__(self, hote_imap, nom_utilisateur, mot_de_passe, dossier_cible='INBOX', verify_peer=False, use_secure_socket=True, legacy_secure_protocol=False):
 
         super().__init__('IMAPFactory via {}'.format(hote_imap))
 
-        self._ssl_context = None
+        self._ssl_context = SSLContext(protocol=PROTOCOL_TLSv1 if legacy_secure_protocol else PROTOCOL_TLSv1_2) if use_secure_socket else None
         self._use_secure_socket = use_secure_socket
 
         if verify_peer is False and use_secure_socket is True:
-            self._ssl_context = create_default_context()
             # don't check if certificate hostname doesn't match target hostname
             self._ssl_context.check_hostname = False
             # don't check if the certificate is trusted by a certificate authority
             self._ssl_context.verify_mode = CERT_NONE
+
+        if legacy_secure_protocol:
+            self._ssl_context.options &= ~OP_NO_TLSv1
 
         self._hote_imap = Session.UNIVERSELLE.retranscrire(hote_imap)
         self._client = IMAPClient(host=self._hote_imap, ssl=self._use_secure_socket, ssl_context=self._ssl_context)

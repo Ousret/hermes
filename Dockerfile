@@ -4,15 +4,7 @@ FROM python:3.8
 MAINTAINER Ahmed TAHRI "ahmed.tahri@sii.fr"
 
 RUN apt-get update
-
-RUN apt-get remove -y openssl
-RUN apt-get install -y build-essential cmake zlib1g-dev libcppunit-dev git subversion wget
-
-RUN wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz -O - | tar -xz
-WORKDIR /openssl-1.0.2g
-RUN ./config --prefix=/usr/local/openssl --openssldir=/usr/local/openssl && make && make install
-
-RUN apt-get -y install curl gnupg wget
+RUN apt-get -y install curl gnupg wget git
 RUN curl -sL https://deb.nodesource.com/setup_11.x  | bash -
 RUN apt-get -y install nodejs ca-certificates npm
 RUN npm install yarn -g

@@ -4,6 +4,7 @@ from datetime import datetime
 from email.mime.base import MIMEBase
 from io import BytesIO
 from os.path import exists
+from ssl import SSLContext, PROTOCOL_TLSv1_2, PROTOCOL_TLSv1, OP_NO_TLSv1
 
 from emails.backend.smtp.exceptions import SMTPConnectNetworkError
 from prettytable import PrettyTable
@@ -971,7 +972,8 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             port_smtp,
             nom_utilisateur,
             mot_de_passe,
-            enable_tls=False,
+            enable_tls=True,
+            legacy_tls_support=False,
             friendly_name=None):
         super().__init__(designation, friendly_name)
 
@@ -989,6 +991,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         self._nom_utilisateur_smtp = nom_utilisateur
         self._mot_de_passe_smtp = mot_de_passe
         self._enable_tls_smtp = enable_tls
+        self._legacy_tls_support = legacy_tls_support
 
     def je_realise(self, source):
         super().je_realise(source)
@@ -1118,7 +1121,8 @@ Nous vous remercions de votre attention.""".format(
             self._enable_tls_smtp,
             pj_source=False,
             source_pj_complementaire=ma_source_ics_invitation,
-            force_keep_template=True
+            force_keep_template=True,
+            legacy_tls_support=self._legacy_tls_support
         )
 
         if mon_action_envoyer_notification_smtp.je_realise(source) is False:
@@ -1148,7 +1152,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
         'eml'
     ]
 
-    def __init__(self, designation, destinataire, sujet, corps, hote_smtp, port_smtp, nom_utilisateur, mot_de_passe, enable_tls=False, pj_source=False, source_pj_complementaire=None, force_keep_template=False):
+    def __init__(self, designation, destinataire, sujet, corps, hote_smtp, port_smtp, nom_utilisateur, mot_de_passe, enable_tls=False, pj_source=False, source_pj_complementaire=None, force_keep_template=False, legacy_tls_support=False):
         super().__init__(designation, hote_smtp, nom_utilisateur, mot_de_passe)
 
         self._destinataire = destinataire
@@ -1161,6 +1165,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
         self._source_pj_complementaire = source_pj_complementaire
 
         self._force_keep_template = force_keep_template
+        self._legacy_tls_support = legacy_tls_support
 
     def je_realise(self, source):
         """
@@ -1290,6 +1295,10 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 'tls': self._activation_tls
             }
 
+            if self._legacy_tls_support and self._activation_tls:
+                smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLSv1)
+                smtp_kwargs['context'].options &= ~OP_NO_TLSv1
+
             if self._nom_utilisateur is not None and self._mot_de_passe is not None:
                 smtp_kwargs.update(
                     {
@@ -1341,13 +1350,14 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
 class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
-    def __init__(self, designation, destinataire, sujet, hote_smtp, port_smtp, nom_utilisateur, mot_de_passe, enable_tls=False):
+    def __init__(self, designation, destinataire, sujet, hote_smtp, port_smtp, nom_utilisateur, mot_de_passe, enable_tls=True, legacy_tls_support=False):
         super().__init__(designation, hote_smtp, nom_utilisateur, mot_de_passe)
 
         self._destinataire = destinataire
         self._sujet = sujet
         self._activation_tls = enable_tls
         self._port_smtp = port_smtp
+        self._legacy_tls_support = legacy_tls_support
 
     def je_realise(self, source):
         """
@@ -1394,6 +1404,10 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 "port": self._port_smtp,
                 'tls': self._activation_tls
             }
+
+            if self._legacy_tls_support and self._activation_tls:
+                smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLSv1)
+                smtp_kwargs['context'].options &= ~OP_NO_TLSv1
 
             if self._nom_utilisateur is not None and self._mot_de_passe is not None:
                 smtp_kwargs.update(

@@ -429,6 +429,11 @@ class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
             'required': False,
             'help': 'Cochez cette case pour transférer le message source en pièce jointe si la source le permet',
         },
+        'legacy_tls_support': {
+            'format': 'CHECKBOX',
+            'required': False,
+            'help': "Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2."
+        }
     })
 
     __tablename__ = 'envoyer_message_smtp_action_noeud'
@@ -444,6 +449,7 @@ class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
     mot_de_passe = db.Column(db.String(255), nullable=True)
     enable_tls = db.Column(db.Boolean(), nullable=False, default=True)
     pj_source = db.Column(db.Boolean(), nullable=False, default=True)
+    legacy_tls_support = db.Column(db.Boolean(), nullable=False, default=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'EnvoyerMessageSmtpActionNoeud'),
@@ -464,7 +470,8 @@ class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
             self.nom_utilisateur,
             self.mot_de_passe,
             self.enable_tls,
-            self.pj_source
+            self.pj_source,
+            self.legacy_tls_support
         )
 
 
@@ -508,6 +515,11 @@ class TransfertSmtpActionNoeud(ActionNoeud):
             'help': 'Cochez cette case pour utiliser la connexion SMTP via un port sécurisé, '
                     'dans le doute laissez cette case cochée',
         },
+        'legacy_tls_support': {
+            'format': 'CHECKBOX',
+            'required': False,
+            'help': "Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2."
+        }
     })
 
     __tablename__ = 'transfert_smtp_action_noeud'
@@ -521,6 +533,7 @@ class TransfertSmtpActionNoeud(ActionNoeud):
     nom_utilisateur = db.Column(db.String(255), nullable=True)
     mot_de_passe = db.Column(db.String(255), nullable=True)
     enable_tls = db.Column(db.Boolean(), nullable=False, default=True)
+    legacy_tls_support = db.Column(db.Boolean(), nullable=False, default=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'TransfertSmtpActionNoeud'),
@@ -690,6 +703,11 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             'help': 'Cochez cette case pour utiliser la connexion SMTP via un port sécurisé, '
                     'dans le doute laissez cette case cochée',
         },
+        'legacy_tls_support': {
+            'format': 'CHECKBOX',
+            'required': False,
+            'help': "Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2."
+        }
     })
 
     __tablename__ = 'invitation_evenement_action_noeud'
@@ -710,6 +728,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
     nom_utilisateur = db.Column(db.String(255), nullable=False)
     mot_de_passe = db.Column(db.String(255), nullable=False)
     enable_tls = db.Column(db.Boolean(), nullable=False, default=True)
+    legacy_tls_support = db.Column(db.Boolean(), nullable=False, default=False)
 
     __mapper_args__ = {
         'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'InvitationEvenementActionNoeud'),
@@ -717,7 +736,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.InvitationEvenementActionNoeud
+        :rtype: hermes.automate.InvitationEvenementActionNoeud
         """
         from hermes.automate import InvitationEvenementActionNoeud as Action
         return Action(
@@ -735,6 +754,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             self.nom_utilisateur,
             self.mot_de_passe,
             self.enable_tls,
+            self.legacy_tls_support,
             self.friendly_name
         )
 
