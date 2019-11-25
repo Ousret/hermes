@@ -218,7 +218,7 @@ Session.UNIVERSELLE = Session()
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'escapeQuote',
-        lambda ma_variable: str(ma_variable).replace('"', '\\"').replace("'", "\\'").replace('`', "\\'")
+        lambda ma_variable: dumps(str(ma_variable))[1:-1]
     )
 )
 
