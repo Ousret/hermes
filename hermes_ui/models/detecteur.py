@@ -82,6 +82,23 @@ class IdentificateurRechercheInteret(RechercheInteret):
         return '<Recherche Identifiant \'{}\'>'.format(self.prefixe)
 
 
+class ExpressionXPathRechercheInteret(RechercheInteret):
+
+    __tablename__ = 'expression_xpath_recherche_interet'
+
+    id = db.Column(db.Integer, db.ForeignKey('recherche_interet.id'), primary_key=True)
+
+    expression_xpath = db.Column(db.String(255), nullable=False)
+
+    __mapper_args__ = {
+        'polymorphic_identity': str(RechercheInteret).replace('RechercheInteret',
+                                                              'ExpressionXPathRechercheInteret'),
+    }
+
+    def __repr__(self):
+        return '<Recherche XPath \'{}\'>'.format(self.expression_xpath)
+
+
 class LocalisationExpressionRechercheInteret(RechercheInteret):
 
     __tablename__ = 'localisation_expression_recherche_interet'

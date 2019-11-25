@@ -123,6 +123,19 @@ class ExtractionInteret(object):
     def sentences(self):
         return self._sentences
 
+    def retrieve_xpath(self, expression_xpath):
+        """
+        Découverte d'un chemin xpath
+        :param str expression_xpath:
+        :return:
+        """
+        if self._may_html is None:
+            return None
+
+        r = self._dom.xpath(expression_xpath, first=True)
+
+        return r.full_text if r is not None else None
+
     def retrive_informations_balisees(self, focus=None):
 
         def extract(my_string):

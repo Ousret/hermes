@@ -61,6 +61,42 @@ class RechercheInteretView(BaseAdminView):
     }
 
 
+class ExpressionXPathInteretView(BaseAdminView):
+
+    column_editable_list = ['est_obligatoire']
+    column_searchable_list = ['designation', 'prefixe', 'est_obligatoire', 'expression_xpath']
+    column_exclude_list = ['mapped_class_child']
+    column_details_exclude_list = None
+    column_filters = ['designation', 'prefixe', 'est_obligatoire']
+    form_excluded_columns = ['createur', 'date_creation', 'date_modification', 'responsable_derniere_modification',
+                             'mapped_class_child']
+    can_export = True
+    can_view_details = False
+    can_create = True
+    can_edit = True
+    can_delete = True
+    edit_modal = True
+    create_modal = True
+    details_modal = True
+    column_labels = dict(friendly_name='Résultat dans variable')
+
+    def on_model_change(self, form, model, is_created):
+        """
+
+        :param form:
+        :param hermes_ui.models.configuration.Configuration model:
+        :param bool is_created:
+        :return:
+        """
+        if is_created is True:
+            model.createur = current_user
+            model.date_creation = datetime.now()
+            model.mapped_class_child = str(model.__class__)
+
+        model.date_modification = datetime.now()
+        model.responsable_derniere_modification = current_user
+
+
 class DateRechercheInteretView(BaseAdminView):
     column_editable_list = ['est_obligatoire']
     column_searchable_list = ['designation', 'prefixe', 'est_obligatoire']

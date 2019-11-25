@@ -50,6 +50,17 @@ class ServiceTranspositionModels:
                 focus_cle=regle.focus_cle
             )
 
+        elif '.ExpressionXPathRechercheInteret' in regle.mapped_class_child:
+
+            regle = db.session.query(hermes_ui.models.ExpressionXPathRechercheInteret).get(regle.id)
+
+            ma_recherche_interet = ExpressionXPathRechercheInteret(
+                regle.designation,
+                regle.expression_xpath,
+                est_obligatoire=regle.est_obligatoire,
+                friendly_name=regle.friendly_name
+            )
+
         elif '.DateRechercheInteret' in regle.mapped_class_child:
 
             regle = db.session.query(hermes_ui.models.DateRechercheInteret).get(regle.id)

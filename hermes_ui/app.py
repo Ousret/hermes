@@ -147,6 +147,16 @@ admin.add_view(
 )
 
 admin.add_view(
+    ExpressionXPathInteretView(
+        ExpressionXPathRechercheInteret,
+        db.session,
+        name="XPath (HTML)",
+        menu_icon_value="fa-code",
+        category="Critères de recherche"
+    )
+)
+
+admin.add_view(
     ExpressionCleRechercheInteretView(
         ExpressionCleRechercheInteret,
         db.session,

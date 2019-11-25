@@ -472,6 +472,27 @@ class ExpressionDansCleRechercheInteret(CleRechercheInteret):
         return self.est_accomplis
 
 
+class ExpressionXPathRechercheInteret(RechercheInteret):
+
+    def __init__(self, titre, expression_xpath, est_obligatoire=True, friendly_name=None):
+        super().__init__(titre, est_obligatoire, friendly_name)
+
+        self._expression_xpath = expression_xpath
+
+    @property
+    def expression_xpath(self):
+        return self._expression_xpath
+
+    def tester_sur(self, extraction_interet):
+        """
+        :param hermes.analysis.ExtractionInteret extraction_interet:
+        :return:
+        """
+        self.value = extraction_interet.retrieve_xpath(self.expression_xpath)
+
+        return self.est_accomplis
+
+
 class LocalisationExpressionRechercheInteret(RechercheInteret):
 
     def __init__(self, titre, expression_droite, expression_gauche, focus_cle=None, est_obligatoire=True, friendly_name=None):
@@ -502,7 +523,7 @@ class LocalisationExpressionRechercheInteret(RechercheInteret):
 
     def tester_sur(self, extraction_interet):
         """
-        :param gie_interoperabilite.analysis.ExtractionInteret extraction_interet:
+        :param hermes.analysis.ExtractionInteret extraction_interet:
         :return:
         """
         self.value = extraction_interet.retrieve_inner_expression(
