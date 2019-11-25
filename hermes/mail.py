@@ -5,7 +5,7 @@ from imapclient import IMAPClient
 from imapclient.exceptions import CapabilityError, IMAPClientError, IMAPClientAbortError, IMAPClientReadOnlyError
 from base64 import b64decode
 import email
-from ssl import CERT_NONE, SSLContext, PROTOCOL_TLSv1_2, OP_NO_TLSv1, PROTOCOL_TLSv1_1
+from ssl import CERT_NONE, SSLContext, PROTOCOL_TLS, OP_ALL
 from email.header import decode_header
 from quopri import decodestring
 from email.parser import HeaderParser
@@ -430,7 +430,7 @@ class MailToolbox(SourceFactory):
 
         super().__init__('IMAPFactory via {}'.format(hote_imap))
 
-        self._ssl_context = SSLContext(protocol=PROTOCOL_TLSv1_1 if legacy_secure_protocol else PROTOCOL_TLSv1_2) if use_secure_socket else None
+        self._ssl_context = SSLContext(protocol=PROTOCOL_TLS) if use_secure_socket else None
         self._use_secure_socket = use_secure_socket
 
         if verify_peer is False and use_secure_socket is True:
@@ -440,10 +440,10 @@ class MailToolbox(SourceFactory):
             self._ssl_context.verify_mode = CERT_NONE
 
         if legacy_secure_protocol and use_secure_socket:
-            self._ssl_context.options &= ~OP_NO_TLSv1
+            self._ssl_context.options = OP_ALL
 
         self._hote_imap = Session.UNIVERSELLE.retranscrire(hote_imap)
-        self._client = IMAPClient(host=self._hote_imap, ssl=self._use_secure_socket, ssl_context=self._ssl_context)
+        self._client = IMAPClient(host=self._hote_imap, port=993 if self._use_secure_socket else 143, ssl=self._use_secure_socket, ssl_context=self._ssl_context)
         self._nom_utilisateur = Session.UNIVERSELLE.retranscrire(nom_utilisateur)
         self._verify_peer = verify_peer
         self._dossier_cible = dossier_cible
@@ -468,7 +468,7 @@ class MailToolbox(SourceFactory):
         except OSError as e:
             pass
 
-        self._client = IMAPClient(host=self._hote_imap, ssl=self._use_secure_socket, ssl_context=self._ssl_context)
+        self._client = IMAPClient(host=self._hote_imap, port=993 if self._use_secure_socket else 143, ssl=self._use_secure_socket, ssl_context=self._ssl_context)
         self._client.login(self._nom_utilisateur, Session.UNIVERSELLE.retranscrire(self._mot_de_passe))
 
         self._echec = False

@@ -4,7 +4,7 @@ from datetime import datetime
 from email.mime.base import MIMEBase
 from io import BytesIO
 from os.path import exists
-from ssl import SSLContext, OP_NO_TLSv1, PROTOCOL_TLSv1_1
+from ssl import SSLContext, OP_ALL, PROTOCOL_TLS
 
 from emails.backend.smtp.exceptions import SMTPConnectNetworkError
 from prettytable import PrettyTable
@@ -1071,7 +1071,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             ),
         )
 
-        for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp=True) for el in self._participants.split(',')]:
+        for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp="TRUE") for el in self._participants.split(',')]:
             my_event.add_attendee(attendee)
 
         my_calendar.events.add(my_event)
@@ -1295,9 +1295,9 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 'tls': self._activation_tls
             }
 
-            if self._legacy_tls_support and self._activation_tls:
-                smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLSv1_1)
-                smtp_kwargs['context'].options &= ~OP_NO_TLSv1
+            # if self._legacy_tls_support and self._activation_tls:
+            #    smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLS)
+            #    smtp_kwargs['context'].options = OP_ALL
 
             if self._nom_utilisateur is not None and self._mot_de_passe is not None:
                 smtp_kwargs.update(
@@ -1343,7 +1343,8 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 str(response.status_code),
                 response.error
             )
-            return self._jai_echouee(source)
+
+            return self._jai_echouee(source, response)
 
         return self._jai_reussi(source, response)
 
@@ -1373,7 +1374,7 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                            mail_from=source.destinataire[0] if isinstance(source.destinataire, list) else source.destinataire)
 
         for attachement in source.attachements:
-            m.attach(filename=attachement.filename, data=BytesIO(attachement.content))
+            m.attach(filename=attachement.filename, data=BytesIO(attachement.content), content_disposition='attachment')
 
         destinaires_adresses_valides = list()
 
@@ -1405,9 +1406,9 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 'tls': self._activation_tls
             }
 
-            if self._legacy_tls_support and self._activation_tls:
-                smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLSv1_1)
-                smtp_kwargs['context'].options &= ~OP_NO_TLSv1
+            # if self._legacy_tls_support and self._activation_tls:
+            #     smtp_kwargs["context"] = SSLContext(protocol=PROTOCOL_TLS)
+            #     smtp_kwargs['context'].options = OP_ALL
 
             if self._nom_utilisateur is not None and self._mot_de_passe is not None:
                 smtp_kwargs.update(
