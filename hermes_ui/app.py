@@ -882,7 +882,27 @@ def creation_action(automate_id):
             elif 'REUSSITE' in parent_information:
                 target_model_instance.action_reussite_id = action_noeud_parente.id
     else:
-        pass
+        noeud_a_remplacer = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=int(remplacement_action_noeud)).one()  # type: ActionNoeud
+
+        if noeud_a_remplacer is None:
+            return jsonify({'message': "Le noeud que vous souhaitez remplacer est inexistant"}), 404
+
+        target_model_instance.action_echec_id = noeud_a_remplacer.action_echec_id
+        target_model_instance.action_reussite_id = noeud_a_remplacer.action_reussite_id
+
+        noeud_a_remplacer.action_echec_id = None
+        noeud_a_remplacer.action_reussite_id = None
+
+        noeud_a_mettre_niveau_r = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, action_reussite_id=noeud_a_remplacer.id).one()  # type: ActionNoeud
+        noeud_a_mettre_niveau_f = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, action_echec_id=noeud_a_remplacer.id).one()  # type: ActionNoeud
+
+        if noeud_a_mettre_niveau_r is not None:
+            noeud_a_mettre_niveau_r.action_reussite_id = target_model_instance.id
+
+        if noeud_a_mettre_niveau_f is not None:
+            noeud_a_mettre_niveau_f.action_echec_id = target_model_instance.id
+
+        db.session.delete(noeud_a_remplacer)
 
     try:
         db.session.commit()

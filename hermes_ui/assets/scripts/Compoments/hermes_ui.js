@@ -56,6 +56,31 @@ class AppInterfaceInteroperabilite {
         );
     }
 
+    static remplacer_action_noeud(automate_id, choix_type, information_cible_remplace, formulaire) {
+
+        return new Promise(
+            function (resolve, reject) {
+
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({
+                        'type': choix_type,
+                        'remplacement': information_cible_remplace,
+                        'formulaire': formulaire
+                    }),
+                    url: `/admin/rest/automate/${automate_id}/action_noeud`,
+                    contentType: "application/json"
+                }).done(
+                    resolve
+                ).fail(
+                    reject
+                );
+
+            }
+        );
+
+    }
+
     /**
      *
      * @param automate_execution_id
@@ -262,6 +287,88 @@ class AppInterfaceInteroperabilite {
                 });
             }
         );
+    }
+
+    static assistant_remplacement_noeud_action() {
+        let inputOptions = {},
+            div_visu_actions = $("#visu-automate"),
+            noeud_action_selection = div_visu_actions.jstree("get_selected", true).length === 1 ? div_visu_actions.jstree("get_selected", true)[0]['li_attr']['data-action-noeud-id'] : null;
+
+        if (noeud_action_selection === null)
+        {
+            Swal.fire(
+                {
+                    title: 'Aucune action selectionnée',
+                    text: "Vous devez choisir une action pour pouvoir effectuer un remplacement",
+                    type: "warning"
+                }
+            );
+
+            return;
+        }
+
+        AppInterfaceInteroperabilite.choisir_action_noeud_type().then(
+            (choix) => {
+                if (!choix.value) {
+                    return;
+                }
+
+
+                for (let i = 0; i < AppInterfaceInteroperabilite.ACTIONS_DESCRIPTIFS.length; i++) {
+                        let descriptif = AppInterfaceInteroperabilite.ACTIONS_DESCRIPTIFS[i];
+
+                        if (descriptif.type === choix.value) {
+                            AppInterfaceInteroperabilite.generer_assistant_swal_queue(
+                                AppInterfaceInteroperabilite.ACTIONS_DESCRIPTIFS[i]
+                            ).then(
+                                (result) => {
+
+                                    let formulaireOptions = {},
+                                        i = 0;
+
+                                    for (let nom_champ_formulaire in descriptif.formulaire) {
+                                        if (descriptif.formulaire.hasOwnProperty(nom_champ_formulaire)) {
+                                            formulaireOptions[nom_champ_formulaire] = result.value[i];
+                                            i += 1;
+                                        }
+                                    }
+
+                                    AppInterfaceInteroperabilite.remplacer_action_noeud(
+                                        AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id,
+                                        choix.value,
+                                        noeud_action_selection,
+                                        formulaireOptions
+                                    ).then(
+                                        () => {
+                                            Swal.fire(
+                                                'Parfait!',
+                                                'Votre nouvelle action a été créée en remplacement',
+                                                'success'
+                                            ).then(
+                                                () => {
+                                                    AppInterfaceInteroperabilite.automate_vers_ui(
+                                                        AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id
+                                                    );
+                                                }
+                                            )
+                                        }
+                                    ).catch(
+                                        (jqXHR) => {
+                                            Swal.fire(
+                                                'Remplacement action',
+                                                jqXHR.responseJSON ? jqXHR.responseJSON.message : 'Une erreur inatendue est survenue durant le processus de remplacement',
+                                                'error'
+                                            );
+                                        }
+                                    )
+                                }
+                            );
+                            break;
+                        }
+                    }
+
+            }
+        )
     }
 
     static assistant_modification_noeud_action() {

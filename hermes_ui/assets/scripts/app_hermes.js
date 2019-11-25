@@ -313,6 +313,7 @@ ${args_debug === '' ? '<b>Aucun argument disponible en mode debug !</b>' : args_
                 $('#btn-modifier-noeud').removeClass('disabled');
                 $('#btn-supprimer-noeud').removeClass('disabled');
                 $('#btn-tester-automate').removeClass('disabled');
+                $('#btn-remplacer-noeud').removeClass('disabled');
 
                 AppInterfaceInteroperabilite.recuperation_saisie_assistee();
 
