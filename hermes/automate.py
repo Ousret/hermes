@@ -1551,7 +1551,7 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
             except IndexError:
                 break
 
-        source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name, self._payload)
+        source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name, self._separateur.join(mes_decouvertes))
 
         return self._jai_reussi(source, self._separateur.join(mes_decouvertes))
 
