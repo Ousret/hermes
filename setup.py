@@ -14,7 +14,8 @@ setup(
                       'marshmallow>=2.1', 'flask_marshmallow', 'marshmallow-sqlalchemy', 'python-dateutil', 'jinja2',
                       'flask-emails', 'ruamel.std.zipfile', 'ics>=0.5', 'olefile', 'html5lib', 'pandas', 'flask_babel',
                       'records', 'flask_babel', 'unidecode', 'pandas', 'records', 'marshmallow-oneofschema', 'loguru',
-                      'Flask-Webpack', 'mysql-connector', 'werkzeug', 'sqlalchemy', 'gunicorn', 'flask_webpackext'],
+                      'Flask-Webpack', 'mysql-connector', 'werkzeug', 'sqlalchemy', 'gunicorn', 'flask_webpackext',
+                      'pyopenssl'],
     tests_require=[''],
     keywords=[],
     classifiers=[
