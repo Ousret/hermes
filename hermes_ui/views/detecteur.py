@@ -64,12 +64,12 @@ class RechercheInteretView(BaseAdminView):
 class ExpressionXPathInteretView(BaseAdminView):
 
     column_editable_list = ['est_obligatoire']
-    column_searchable_list = ['designation', 'prefixe', 'est_obligatoire', 'expression_xpath']
-    column_exclude_list = ['mapped_class_child']
+    column_searchable_list = ['designation', 'est_obligatoire', 'expression_xpath']
+    column_exclude_list = ['mapped_class_child', 'focus_cle']
     column_details_exclude_list = None
-    column_filters = ['designation', 'prefixe', 'est_obligatoire']
+    column_filters = ['designation', 'expression_xpath', 'est_obligatoire']
     form_excluded_columns = ['createur', 'date_creation', 'date_modification', 'responsable_derniere_modification',
-                             'mapped_class_child']
+                             'mapped_class_child', 'focus_cle']
     can_export = True
     can_view_details = False
     can_create = True
