@@ -129,7 +129,7 @@ class ExtractionInteret(object):
         :param str expression_xpath:
         :return:
         """
-        if self._may_html is None:
+        if self._may_html is False:
             return None
 
         r = self._dom.xpath(expression_xpath, first=True)
