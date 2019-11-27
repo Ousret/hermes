@@ -113,9 +113,13 @@ $(function () {
         AppInterfaceInteroperabilite.etat_statistique_globale();
 
         if (TABLE_EXECUTION_AUTOMATE !== null && TABLE_EXECUTION_AUTOMATE_FIRST_FETCH === true) {
-            TABLE_EXECUTION_AUTOMATE.ajax.reload(null, false);
+            TABLE_EXECUTION_AUTOMATE.ajax.reload(
+                (data) => {
+                    data = null;
+                },
+                false
+            );
         }
-
 
         setTimeout(
             mise_a_jour_stats_globales,
