@@ -158,15 +158,7 @@ $(function () {
                 "url": "/admin/rest/automate-execution",
                 "dataSrc": function (json) {
                     for (let i = 0; i < json.data.length; i++) {
-                        json.data[i].automate.designation = json.data[i].automate.designation.replace(/(.{90})..+/, "$1&hellip;");
-                        json.data[i].sujet = json.data[i].sujet.replace(/(.{90})..+/, "$1&hellip;");
-
-                        json.data[i].date_creation = moment(json.data[i].date_creation).format('LLLL');
-                        json.data[i].date_finalisation = moment(json.data[i].date_finalisation).format('LLLL');
-
-                        json.data[i].validation_automate = json.data[i].validation_automate ? '<span class="badge bg-green">Réussite</span>' : '<span class="badge bg-red">Echec</span>';
-
-                        json.data[i]['actions'] = '<a data-automate-execution-id="' + json.data[i].id + '" class="btn btn-warning btn-flat btn-automate-execution-debug"><i class="fa fa-eye"></i></a>';
+                        json.data[i]['actions'] = '<a data-automate-execution-id="' + json.data[i].id.toString() + '" class="btn btn-warning btn-flat btn-automate-execution-debug"><i class="fa fa-eye"></i></a>';
                     }
                     TABLE_EXECUTION_AUTOMATE_FIRST_FETCH = true;
                     return json.data;
@@ -174,11 +166,33 @@ $(function () {
             },
             "columns": [
                 {"data": "id"},
-                {"data": "automate.designation"},
-                {"data": "date_creation"},
-                {"data": "sujet"},
-                {"data": "validation_automate"},
-                {"data": "actions"},
+                {
+                    "data": "automate.designation",
+                    render: function (data, type, row) {
+                        return data.replace(/(.{90})..+/, "$1&hellip;");
+                    }
+                },
+                {
+                    "data": "date_creation",
+                    render: function (data, type, row) {
+                        return moment(data).format('LLLL');
+                    }
+                },
+                {
+                    "data": "sujet",
+                    render: function (data, type, row) {
+                        return data.replace(/(.{90})..+/, "$1&hellip;");
+                    }
+                },
+                {
+                    "data": "validation_automate",
+                    render: function (data, type, row) {
+                        return data === true ? '<span class="badge bg-green">Réussite</span>' : '<span class="badge bg-red">Echec</span>';
+                    }
+                },
+                {
+                    "data": "actions",
+                },
             ],
             "order": [[0, "desc"]],
             "language": {
