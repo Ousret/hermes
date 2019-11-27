@@ -58,6 +58,13 @@ class RechercheInteret(db.Model):
     def __repr__(self):
         return '<Recherche Intêret \'{}\'>'.format(self.designation)
 
+    def transcription(self):
+        """
+        Transforme un critère "RechercheInteret < db.Model" en objet "RechercheInteret < hermes"
+        :rtype: hermes.detecteur.RechercheInteret
+        """
+        raise NotImplemented
+
 
 class LienDetecteurRechercheInteret(db.Model):
 
@@ -81,6 +88,20 @@ class IdentificateurRechercheInteret(RechercheInteret):
     def __repr__(self):
         return '<Recherche Identifiant \'{}\'>'.format(self.prefixe)
 
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.IdentificateurRechercheInteret
+        """
+        from hermes.detecteur import IdentificateurRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.prefixe,
+            taille_stricte=None,
+            focus_cle=self.focus_cle,
+            est_obligatoire=self.est_obligatoire,
+            friendly_name=self.friendly_name
+        )
+
 
 class ExpressionXPathRechercheInteret(RechercheInteret):
 
@@ -97,6 +118,18 @@ class ExpressionXPathRechercheInteret(RechercheInteret):
 
     def __repr__(self):
         return '<Recherche XPath \'{}\'>'.format(self.expression_xpath)
+
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.ExpressionXPathRechercheInteret
+        """
+        from hermes.detecteur import ExpressionXPathRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.expression_xpath,
+            self.est_obligatoire,
+            self.friendly_name
+        )
 
 
 class LocalisationExpressionRechercheInteret(RechercheInteret):
@@ -115,6 +148,20 @@ class LocalisationExpressionRechercheInteret(RechercheInteret):
     def __repr__(self):
         return '<Recherche Expression ENTRE \'{}\' ET \'{}\'>'.format(self.expression_gauche, self.expression_droite)
 
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.LocalisationExpressionRechercheInteret
+        """
+        from hermes.detecteur import LocalisationExpressionRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.expression_droite,
+            self.expression_gauche,
+            self.focus_cle,
+            self.est_obligatoire,
+            self.friendly_name
+        )
+
 
 class ExpressionCleRechercheInteret(RechercheInteret):
     __tablename__ = 'expression_cle_recherche_interet'
@@ -128,6 +175,19 @@ class ExpressionCleRechercheInteret(RechercheInteret):
 
     def __repr__(self):
         return '<Recherche Exactement \'{}\'>'.format(self.expression_cle)
+
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.ExpressionCleRechercheInteret
+        """
+        from hermes.detecteur import ExpressionCleRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.expression_cle,
+            self.focus_cle,
+            self.est_obligatoire,
+            self.friendly_name
+        )
 
 
 class ExpressionReguliereRechercheInteret(RechercheInteret):
@@ -144,6 +204,19 @@ class ExpressionReguliereRechercheInteret(RechercheInteret):
     def __repr__(self):
         return '<Recherche REGEX \'{}\'>'.format(self.expression_reguliere)
 
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.ExpressionReguliereRechercheInteret
+        """
+        from hermes.detecteur import ExpressionReguliereRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.expression_reguliere,
+            self.focus_cle,
+            self.est_obligatoire,
+            self.friendly_name
+        )
+
 
 class CleRechercheInteret(RechercheInteret):
     __tablename__ = 'cle_recherche_interet'
@@ -158,6 +231,18 @@ class CleRechercheInteret(RechercheInteret):
     def __repr__(self):
         return '<Recherche Clé \'{}\'>'.format(self.cle_recherchee)
 
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.CleRechercheInteret
+        """
+        from hermes.detecteur import CleRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.cle_recherchee,
+            self.est_obligatoire,
+            self.friendly_name
+        )
+
 
 class DateRechercheInteret(RechercheInteret):
     __tablename__ = 'date_recherche_interet'
@@ -171,6 +256,19 @@ class DateRechercheInteret(RechercheInteret):
 
     def __repr__(self):
         return '<Recherche Date \'{}\'>'.format(self.prefixe)
+
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.DateRechercheInteret
+        """
+        from hermes.detecteur import DateRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.prefixe,
+            self.focus_cle,
+            self.est_obligatoire,
+            self.friendly_name
+        )
 
 
 class ExpressionDansCleRechercheInteret(RechercheInteret):
@@ -188,6 +286,19 @@ class ExpressionDansCleRechercheInteret(RechercheInteret):
     def __repr__(self):
         return '<Recherche Exactement \'{} IN "{}"\'>'.format(self.expression_recherchee, self.cle_recherchee)
 
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.ExpressionDansCleRechercheInteret
+        """
+        from hermes.detecteur import ExpressionDansCleRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.cle_recherchee,
+            self.expression_recherchee,
+            self.est_obligatoire,
+            self.friendly_name
+        )
+
 
 class InformationRechercheInteret(RechercheInteret):
     __tablename__ = 'information_recherche_interet'
@@ -198,6 +309,19 @@ class InformationRechercheInteret(RechercheInteret):
     __mapper_args__ = {
         'polymorphic_identity': str(RechercheInteret).replace('RechercheInteret', 'InformationRechercheInteret'),
     }
+
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.InformationRechercheInteret
+        """
+        from hermes.detecteur import InformationRechercheInteret as Critere
+        return Critere(
+            self.designation,
+            self.information_cible,
+            self.focus_cle,
+            self.est_obligatoire,
+            self.friendly_name
+        )
 
 
 class LienSousRegleOperationLogique(db.Model):
@@ -227,3 +351,22 @@ class OperationLogiqueRechercheInteret(RechercheInteret):
     __mapper_args__ = {
         'polymorphic_identity': str(RechercheInteret).replace('RechercheInteret', 'OperationLogiqueRechercheInteret'),
     }
+
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.OperationLogiqueRechercheInteret
+        """
+        from hermes.detecteur import OperationLogiqueRechercheInteret as Critere
+
+        kwargs = dict()
+
+        for sous_regle in self.sous_regles:
+            kwargs['ma_cond_{}'.format(sous_regle.id)] = sous_regle.transcription()
+
+        kwargs['friendly_name'] = self.friendly_name
+
+        return Critere(
+            self.designation,
+            self.operande,
+            **kwargs
+        )

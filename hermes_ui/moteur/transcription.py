@@ -32,137 +32,30 @@ class ServiceTranspositionModels:
     @staticmethod
     def generer_recherche_interet(regle):
         """
-
+        Transformation générique d'un critère db.Model vers un objet moteur Hermes
         :param hermes_ui.models.detecteur.RechercheInteret regle:
         :return:
         """
+        decompose_type_action = regle.mapped_class_child.split("'")  # type: list[str]
 
-        ma_recherche_interet = None
+        if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
+            return None
 
-        if '.IdentificateurRechercheInteret' in regle.mapped_class_child:
-            regle = db.session.query(hermes_ui.models.IdentificateurRechercheInteret).get(regle.id)
+        from sys import modules
 
-            ma_recherche_interet = IdentificateurRechercheInteret(
-                regle.designation,
-                regle.prefixe,
-                est_obligatoire=regle.est_obligatoire,
-                friendly_name=regle.friendly_name,
-                focus_cle=regle.focus_cle
-            )
+        target_module = modules['.'.join(decompose_type_action[-2].split('.')[0:-1])]
 
-        elif '.ExpressionXPathRechercheInteret' in regle.mapped_class_child:
+        try:
+            target_model_class = getattr(target_module, decompose_type_action[-2].split('.')[-1])
+        except AttributeError as e:
+            return None
 
-            regle = db.session.query(hermes_ui.models.ExpressionXPathRechercheInteret).get(regle.id)
+        mon_critere = db.session.query(target_model_class).get(regle.id)  # type: hermes_ui.models.RechercheInteret
 
-            ma_recherche_interet = ExpressionXPathRechercheInteret(
-                regle.designation,
-                regle.expression_xpath,
-                est_obligatoire=regle.est_obligatoire,
-                friendly_name=regle.friendly_name
-            )
+        if mon_critere is None:
+            return None
 
-        elif '.DateRechercheInteret' in regle.mapped_class_child:
-
-            regle = db.session.query(hermes_ui.models.DateRechercheInteret).get(regle.id)
-
-            ma_recherche_interet = DateRechercheInteret(
-                regle.designation,
-                regle.prefixe,
-                est_obligatoire=regle.est_obligatoire,
-                friendly_name=regle.friendly_name,
-                focus_cle=regle.focus_cle
-            )
-
-        elif '.LocalisationExpressionRechercheInteret' in regle.mapped_class_child:
-
-            regle = db.session.query(hermes_ui.models.LocalisationExpressionRechercheInteret).get(regle.id)
-
-            ma_recherche_interet = LocalisationExpressionRechercheInteret(
-                regle.designation,
-                regle.expression_droite,
-                regle.expression_gauche,
-                est_obligatoire=regle.est_obligatoire,
-                friendly_name=regle.friendly_name,
-                focus_cle=regle.focus_cle
-            )
-
-        elif '.ExpressionCleRechercheInteret' in regle.mapped_class_child:
-
-            regle = db.session.query(hermes_ui.models.ExpressionCleRechercheInteret).get(regle.id)
-
-            ma_recherche_interet = ExpressionCleRechercheInteret(
-                regle.designation,
-                regle.expression_cle,
-                est_obligatoire=regle.est_obligatoire,
-                friendly_name=regle.friendly_name,
-                focus_cle=regle.focus_cle
-            )
-
-        elif '.CleRechercheInteret' in regle.mapped_class_child:
-
-            regle = db.session.query(hermes_ui.models.CleRechercheInteret).get(regle.id)
-
-            ma_recherche_interet = CleRechercheInteret(
-                regle.designation,
-                regle.cle_recherchee,
-                est_obligatoire=regle.est_obligatoire,
-                friendly_name=regle.friendly_name
-            )
-
-        elif '.ExpressionDansCleRechercheInteret' in regle.mapped_class_child:
-
-            regle = db.session.query(hermes_ui.models.ExpressionDansCleRechercheInteret).get(regle.id)
-
-            ma_recherche_interet = ExpressionDansCleRechercheInteret(
-                regle.designation,
-                regle.cle_recherchee,
-                regle.expression_recherchee,
-                est_obligatoire=regle.est_obligatoire,
-                friendly_name=regle.friendly_name
-            )
-
-        elif '.InformationRechercheInteret' in regle.mapped_class_child:
-
-            regle = db.session.query(hermes_ui.models.InformationRechercheInteret).get(regle.id)
-
-            ma_recherche_interet = InformationRechercheInteret(
-                regle.designation,
-                regle.information_cible,
-                est_obligatoire=regle.est_obligatoire,
-                friendly_name=regle.friendly_name,
-                focus_cle=regle.focus_cle
-            )
-
-        elif '.ExpressionReguliereRechercheInteret' in regle.mapped_class_child:
-
-            regle = db.session.query(hermes_ui.models.ExpressionReguliereRechercheInteret).get(regle.id)
-
-            ma_recherche_interet = ExpressionReguliereRechercheInteret(
-                regle.designation,
-                regle.expression_reguliere,
-                regle.focus_cle,
-                regle.est_obligatoire,
-                regle.friendly_name
-            )
-
-        elif '.OperationLogiqueRechercheInteret' in regle.mapped_class_child:
-
-            regle = db.session.query(hermes_ui.models.OperationLogiqueRechercheInteret).get(regle.id)
-
-            kwargs = dict()
-
-            for sous_regle in regle.sous_regles:
-                kwargs['ma_cond_{}'.format(sous_regle.id)] = ServiceTranspositionModels.generer_recherche_interet(
-                    sous_regle
-                )
-
-            kwargs['friendly_name'] = regle.friendly_name
-
-            ma_recherche_interet = OperationLogiqueRechercheInteret(
-                regle.designation,
-                regle.operande,
-                **kwargs
-            )
+        ma_recherche_interet = mon_critere.transcription()
 
         return ma_recherche_interet
 
