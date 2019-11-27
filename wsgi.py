@@ -3,6 +3,9 @@ from hermes_ui.app import app
 from ssl import SSLContext, PROTOCOL_TLS, CERT_REQUIRED, Purpose
 
 if __name__ == '__main__':
+    """
+    Départ du serveur générique WSGI Flask
+    """
 
     context = None
 
@@ -21,9 +24,11 @@ if __name__ == '__main__':
         if app.config.get('HERMES_CERTIFICAT_CA'):
             context.load_verify_locations(app.config.get('HERMES_CERTIFICAT_CA'))
 
+    adhoc_request = app.config.get('HERMES_CERTIFICAT_TLS') is False and app.config.get('HERMES_CLE_PRIVEE_TLS') is False and app.config.get('HERMES_CERTIFICAT_CA') is False
+
     app.run(
         host='0.0.0.0',
         port=5000,
         threaded=True,
-        ssl_context=context
+        ssl_context=context if not adhoc_request else 'adhoc'
     )
