@@ -817,7 +817,7 @@ def creation_action(automate_id):
 
     payload = request.json  # type: dict
 
-    if 'type' not in payload or ('parent' not in payload or 'remplacer' not in payload) or 'formulaire' not in payload:
+    if 'type' not in payload or ('parent' not in payload and 'remplacer' not in payload) or 'formulaire' not in payload:
         return jsonify({'message': 'Le JSON présent dans la requête est invalide'}), 400
 
     type_action = payload['type']
@@ -975,8 +975,14 @@ def supprimer_action(automate_id, action_noeud_id):
     if action_noeud is None:
         return jsonify({'message': 'Aucun action noeud ne correspond à ID {} pour l\'automate ID {}'.format(action_noeud_id, automate_id)}), 404
 
+    if automate.action_racine_id == action_noeud.id:
+        automate.action_racine_id = None
+        automate.action_racine = None
+
     db.session.delete(action_noeud)
+
     db.session.commit()
+    db.session.flush()
 
     return jsonify({}), 204
 
