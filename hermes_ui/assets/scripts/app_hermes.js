@@ -160,7 +160,6 @@ $(function () {
         {
             "ajax": {
                 "url": "/admin/rest/automate-execution",
-                // TABLE_EXECUTION_AUTOMATE_FIRST_FETCH = true;
             },
             "columns": [
                 {"data": "id"},
@@ -191,10 +190,7 @@ $(function () {
                 {
                     "data": null, // "actions"
                     render: function (data, type, row) {
-                        console.log(data);
-                        console.log(type);
-                        console.log(row);
-                        return '<a data-automate-execution-id="' + 0 + '" class="btn btn-warning btn-flat btn-automate-execution-debug"><i class="fa fa-eye"></i></a>'
+                        return '<a data-automate-execution-id="' + data.id.toString() + '" class="btn btn-warning btn-flat btn-automate-execution-debug"><i class="fa fa-eye"></i></a>'
                     }
                 },
             ],
@@ -206,7 +202,9 @@ $(function () {
     );
 
     TABLE_EXECUTION_AUTOMATE.on('draw', function () {
-        $('.btn-automate-execution-debug').each(function () {
+        let btns_debug = $('.btn-automate-execution-debug');
+
+        btns_debug.each(function () {
             let my_input = $(this),
                 automate_execution_id = my_input.attr('data-automate-execution-id');
 
@@ -278,6 +276,11 @@ ${args_debug === '' ? '<b>Aucun argument disponible en mode debug !</b>' : args_
                 )
             });
         });
+
+        if (TABLE_EXECUTION_AUTOMATE_FIRST_FETCH === false && btns_debug.length > 0)
+        {
+            TABLE_EXECUTION_AUTOMATE_FIRST_FETCH = true;
+        }
     });
 
     $('#activation-automate-production').on('change', function () {
