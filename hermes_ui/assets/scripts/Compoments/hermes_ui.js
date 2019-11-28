@@ -4,9 +4,12 @@ const JSONEditor = require('jsoneditor');
 const ClipboardJS = require('clipboard');
 const Swal = require('sweetalert2');
 
+const Awesomplete = require('awesomplete');
+
 require('jstree');
 require('../../styles/jstree/proton/style.css');
 require('jsoneditor/dist/jsoneditor.css');
+require('awesomplete/awesomplete.css');
 
 class AppInterfaceInteroperabilite {
 

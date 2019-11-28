@@ -146,12 +146,8 @@ $(function () {
 
             AppInterfaceInteroperabilite.assistant_saisie_assistee();
 
-            $('input[type="text"]').livequery(function () {
-                AppInterfaceInteroperabilite.assistant_saisie_assistee();
-            });
-            $('textarea').livequery(function () {
-                AppInterfaceInteroperabilite.assistant_saisie_assistee();
-            });
+            $('input[type="text"]').livequery(AppInterfaceInteroperabilite.assistant_saisie_assistee);
+            $('textarea').livequery(AppInterfaceInteroperabilite.assistant_saisie_assistee);
         }
     );
 
