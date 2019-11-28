@@ -160,13 +160,7 @@ $(function () {
         {
             "ajax": {
                 "url": "/admin/rest/automate-execution",
-                "dataSrc": function (json) {
-                    for (let i = 0; i < json.data.length; i++) {
-                        json.data[i]['actions'] = '<a data-automate-execution-id="' + json.data[i].id.toString() + '" class="btn btn-warning btn-flat btn-automate-execution-debug"><i class="fa fa-eye"></i></a>';
-                    }
-                    TABLE_EXECUTION_AUTOMATE_FIRST_FETCH = true;
-                    return json.data;
-                }
+                // TABLE_EXECUTION_AUTOMATE_FIRST_FETCH = true;
             },
             "columns": [
                 {"data": "id"},
@@ -195,7 +189,13 @@ $(function () {
                     }
                 },
                 {
-                    "data": "actions",
+                    "data": null, // "actions"
+                    render: function (data, type, row) {
+                        console.log(data);
+                        console.log(type);
+                        console.log(row);
+                        return '<a data-automate-execution-id="' + 0 + '" class="btn btn-warning btn-flat btn-automate-execution-debug"><i class="fa fa-eye"></i></a>'
+                    }
                 },
             ],
             "order": [[0, "desc"]],
