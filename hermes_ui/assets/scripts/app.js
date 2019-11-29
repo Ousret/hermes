@@ -17,9 +17,8 @@ global.moment = require('moment');
 
 require('./Compoments/jquery.a-tools');
 require('./Compoments/jquery.asuggest');
-require('./Compoments/jquery.livequery');
 
-require('awesomplete');
+//require('awesomplete');
 require('admin-lte/dist/js/app');
 
 require('bootstrap/dist/css/bootstrap.css');
@@ -141,15 +140,7 @@ $(function () {
     $('#btn-analyse-manuelle-detecteur').click(AppInterfaceInteroperabilite.assistant_simulation_detecteur);
     $('#btn-analyse-manuelle-raw').click(AppInterfaceInteroperabilite.assistant_simulation_extraction_interet);
 
-    AppInterfaceInteroperabilite.recuperation_saisie_assistee().then(
-        (suggestions) => {
-
-            AppInterfaceInteroperabilite.assistant_saisie_assistee();
-
-            $('input[type="text"]').livequery(AppInterfaceInteroperabilite.assistant_saisie_assistee);
-            $('textarea').livequery(AppInterfaceInteroperabilite.assistant_saisie_assistee);
-        }
-    );
+    AppInterfaceInteroperabilite.recuperation_saisie_assistee().then(AppInterfaceInteroperabilite.assistant_saisie_assistee);
 
     let $chatbox = $('.chatbox'),
         $chatboxTitle = $('.chatbox__title'),

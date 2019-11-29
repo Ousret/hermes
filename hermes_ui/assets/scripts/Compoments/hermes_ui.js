@@ -9,7 +9,6 @@ const Awesomplete = require('awesomplete');
 require('jstree');
 require('../../styles/jstree/proton/style.css');
 require('jsoneditor/dist/jsoneditor.css');
-require('awesomplete/awesomplete.css');
 
 class AppInterfaceInteroperabilite {
 
@@ -1391,35 +1390,45 @@ class AppInterfaceInteroperabilite {
     }
 
     static assistant_saisie_assistee() {
-        $('input[type=text]').each(function () {
 
-            new Awesomplete(this, {
+        let all_text_input = $('input[type=text]'),
+            all_text_area = $('textarea');
 
-                list: AppInterfaceInteroperabilite.SUGGESTIONS_SAISIE,
+        all_text_input.each(
+            function () {
+                if ($(this).parent().hasClass('awesomplete') === false)
+                {
+                    new Awesomplete(this, {
 
-                item: function(text, input) {
-                    return Awesomplete.ITEM(text, input.match(/[^\s]*$/)[0]);
-                },
+                        list: AppInterfaceInteroperabilite.SUGGESTIONS_SAISIE,
 
-                replace: function(text) {
+                        item: function(text, input) {
+                            return Awesomplete.ITEM(text, input.match(/[^\s]*$/)[0]);
+                        },
 
-                    let before_match = this.input.value.match(/.*\s/);
-                    let before = before_match ? before_match[0]: '';
+                        replace: function(text) {
 
-                    this.input.value = before + text;
-                },
+                            let before_match = this.input.value.match(/.*\s/);
+                            let before = before_match ? before_match[0]: '';
 
-                filter: function(text, input) {
-                    return Awesomplete.FILTER_CONTAINS(text, input.match(/[^\s]*$/)[0]);
-                },
-            });
+                            this.input.value = before + text;
+                        },
 
-        });
+                        filter: function(text, input) {
+                            return Awesomplete.FILTER_CONTAINS(text, input.match(/[^\s]*$/)[0]);
+                        },
+                    });
+                }
 
-        $('textarea').each(function () {
+            }
+        );
+
+        all_text_area.each(function () {
             let my_input = $(this);
             my_input.asuggest(AppInterfaceInteroperabilite.SUGGESTIONS_SAISIE);
         });
+
+        setTimeout(AppInterfaceInteroperabilite.assistant_saisie_assistee, 1000);
     }
 }
 
@@ -1429,5 +1438,7 @@ AppInterfaceInteroperabilite.SUGGESTIONS_SAISIE = [];
 AppInterfaceInteroperabilite.AUTOMATE_EDITEUR = null;
 AppInterfaceInteroperabilite.LAST_SEEK_LOGS = -1;
 AppInterfaceInteroperabilite.TERM = null;
+AppInterfaceInteroperabilite.N_INPUT_AWESOMPLETE = null;
+AppInterfaceInteroperabilite.N_TEXTAREA_ASUGGEST = null;
 
 module.exports = AppInterfaceInteroperabilite;
