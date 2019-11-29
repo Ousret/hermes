@@ -3,6 +3,7 @@ import datetime
 from hermes_ui.adminlte.models import User
 from hermes_ui.models.detecteur import Detecteur
 from hermes_ui.db import db
+from hermes_ui.db.polymorphic import get_child_polymorphic
 from copy import deepcopy
 from collections import OrderedDict
 
@@ -36,6 +37,18 @@ class Automate(db.Model):
 
     action_racine_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id'), nullable=True)
     action_racine = db.relation('ActionNoeud', foreign_keys='Automate.action_racine_id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete")
+
+    def transcription(self):
+        from hermes.automate import Automate as NoModelAutomate
+
+        automate = NoModelAutomate(
+            self.designation,
+            self.detecteur.transcription() if self.detecteur is not None else None
+        )
+
+        automate.action_racine = self.action_racine.transcription()
+
+        return automate
 
 
 class ActionNoeud(db.Model):
@@ -83,7 +96,26 @@ class ActionNoeud(db.Model):
     __mapper_args__ = {'polymorphic_on': mapped_class_child}
 
     def transcription(self):
+        """
+        Création d'une instance hermes.ActionNoeud depuis un db.Model hermes_ui.models.ActionNoeud
+        :rtype: hermes.automate.ActionNoeud
+        """
         raise NotImplemented
+
+    def transcription_fils(self, action_noeud):
+        """
+        :param hermes.automate.ActionNoeud action_noeud:
+        :return:
+        """
+        if self.action_reussite_id is not None:
+            action_noeud.je_realise_en_cas_reussite(
+                get_child_polymorphic(self.action_reussite).transcription()
+            )
+        if self.action_echec_id is not None:
+            action_noeud.je_realise_en_cas_echec(
+                get_child_polymorphic(self.action_echec).transcription()
+            )
+        return action_noeud
 
     @staticmethod
     def descriptifs(ma_classe=None, ancetres_parametres=None):
@@ -187,16 +219,18 @@ class RequeteSqlActionNoeud(ActionNoeud):
         :rtype: gie_interoperabilite.automate.RequeteSqlActionNoeud
         """
         from hermes.automate import RequeteSqlActionNoeud as Action
-        return Action(
-            self.designation,
-            self.hote_type_protocol,
-            self.hote_ipv4,
-            self.hote_port,
-            self.hote_database,
-            self.requete_sql,
-            self.nom_utilisateur,
-            self.mot_de_passe,
-            self.friendly_name
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.hote_type_protocol,
+                self.hote_ipv4,
+                self.hote_port,
+                self.hote_database,
+                self.requete_sql,
+                self.nom_utilisateur,
+                self.mot_de_passe,
+                self.friendly_name
+            )
         )
 
 
@@ -264,20 +298,22 @@ class RequeteSoapActionNoeud(ActionNoeud):
         """
         from hermes.automate import RequeteSoapActionNoeud as Action
         from json import loads
-        return Action(
-            self.designation,
-            self.url_service,
-            self.methode_cible,
-            loads(self.form_data) if self.form_data is not None and len(self.form_data) >= 1 else {},
-            (
-                self.authentification_basique_utilisateur,
-                self.authentification_basique_mot_de_passe
-            ) if self.authentification_basique_utilisateur is not None else None,
-            {
-                'http': self.proxy_http,
-                'https': self.proxy_https
-            } if self.proxy_http is not None else None,
-            self.friendly_name
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.url_service,
+                self.methode_cible,
+                loads(self.form_data) if self.form_data is not None and len(self.form_data) >= 1 else {},
+                (
+                    self.authentification_basique_utilisateur,
+                    self.authentification_basique_mot_de_passe
+                ) if self.authentification_basique_utilisateur is not None else None,
+                {
+                    'http': self.proxy_http,
+                    'https': self.proxy_https
+                } if self.proxy_http is not None else None,
+                self.friendly_name
+            )
         )
 
 
@@ -359,22 +395,24 @@ class RequeteHttpActionNoeud(ActionNoeud):
         """
         from hermes.automate import RequeteHttpActionNoeud as ACTION
         from json import loads
-        return ACTION(
-            self.designation,
-            self.url_dest,
-            self.methode_http,
-            loads(self.form_data) if self.form_data is not None and len(self.form_data) >= 1 else {},
-            (
-                self.authentification_basique_utilisateur,
-                self.authentification_basique_mot_de_passe
-            ) if self.authentification_basique_utilisateur is not None else None,
-            {
-                'http': self.proxy_http,
-                'https': self.proxy_https
-            } if self.proxy_http is not None else None,
-            self.resp_code_http,
-            self.verify_peer,
-            self.friendly_name
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.url_dest,
+                self.methode_http,
+                loads(self.form_data) if self.form_data is not None and len(self.form_data) >= 1 else {},
+                (
+                    self.authentification_basique_utilisateur,
+                    self.authentification_basique_mot_de_passe
+                ) if self.authentification_basique_utilisateur is not None else None,
+                {
+                    'http': self.proxy_http,
+                    'https': self.proxy_https
+                } if self.proxy_http is not None else None,
+                self.resp_code_http,
+                self.verify_peer,
+                self.friendly_name
+            )
         )
 
 
@@ -460,18 +498,20 @@ class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
         :rtype: gie_interoperabilite.automate.EnvoyerMessageSmtpActionNoeud
         """
         from hermes.automate import EnvoyerMessageSmtpActionNoeud as ACTION
-        return ACTION(
-            self.designation,
-            self.destinataire,
-            self.sujet,
-            self.corps,
-            self.hote_smtp,
-            self.port_smtp,
-            self.nom_utilisateur,
-            self.mot_de_passe,
-            self.enable_tls,
-            self.pj_source,
-            self.legacy_tls_support
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.destinataire,
+                self.sujet,
+                self.corps,
+                self.hote_smtp,
+                self.port_smtp,
+                self.nom_utilisateur,
+                self.mot_de_passe,
+                self.enable_tls,
+                self.pj_source,
+                self.legacy_tls_support
+            )
         )
 
 
@@ -544,15 +584,17 @@ class TransfertSmtpActionNoeud(ActionNoeud):
         :rtype: gie_interoperabilite.automate.EnvoyerMessageSmtpActionNoeud
         """
         from hermes.automate import TransfertSmtpActionNoeud as ACTION
-        return ACTION(
-            self.designation,
-            self.destinataire,
-            self.sujet,
-            self.hote_smtp,
-            self.port_smtp,
-            self.nom_utilisateur,
-            self.mot_de_passe,
-            self.enable_tls
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.destinataire,
+                self.sujet,
+                self.hote_smtp,
+                self.port_smtp,
+                self.nom_utilisateur,
+                self.mot_de_passe,
+                self.enable_tls
+            )
         )
 
 
@@ -578,14 +620,16 @@ class ConstructionInteretActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.ConstructionInteretActionNoeud
+        :rtype: hermes.automate.ConstructionInteretActionNoeud
         """
         from hermes.automate import ConstructionInteretActionNoeud as ACTION
         from json import loads
-        return ACTION(
-            self.designation,
-            loads(self.interet),
-            self.friendly_name
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                loads(self.interet),
+                self.friendly_name
+            )
         )
 
 
@@ -617,14 +661,16 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.ConstructionChaineCaractereSurListeActionNoeud
+        :rtype: hermes.automate.ConstructionChaineCaractereSurListeActionNoeud
         """
         from hermes.automate import ConstructionChaineCaractereSurListeActionNoeud as ACTION
-        return ACTION(
-            self.designation,
-            self.variable_pattern,
-            self.separateur,
-            self.friendly_name
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.variable_pattern,
+                self.separateur,
+                self.friendly_name
+            )
         )
 
 
@@ -739,23 +785,25 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         :rtype: hermes.automate.InvitationEvenementActionNoeud
         """
         from hermes.automate import InvitationEvenementActionNoeud as Action
-        return Action(
-            self.designation,
-            self.organisateur,
-            self.participants,
-            self.sujet,
-            self.description,
-            self.lieu,
-            self.date_heure_depart,
-            self.date_heure_fin,
-            self.est_maintenu,
-            self.hote_smtp,
-            self.port_smtp,
-            self.nom_utilisateur,
-            self.mot_de_passe,
-            self.enable_tls,
-            self.legacy_tls_support,
-            self.friendly_name
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.organisateur,
+                self.participants,
+                self.sujet,
+                self.description,
+                self.lieu,
+                self.date_heure_depart,
+                self.date_heure_fin,
+                self.est_maintenu,
+                self.hote_smtp,
+                self.port_smtp,
+                self.nom_utilisateur,
+                self.mot_de_passe,
+                self.enable_tls,
+                self.legacy_tls_support,
+                self.friendly_name
+            )
         )
 
 
@@ -781,14 +829,17 @@ class VerifierSiVariableVraiActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.VerifierSiVariableVraiActionNoeud
+        :rtype: hermes.automate.VerifierSiVariableVraiActionNoeud
         """
         from hermes.automate import VerifierSiVariableVraiActionNoeud as Action
-        return Action(
-            self.designation,
-            self.variable_cible,
-            self.friendly_name
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.variable_cible,
+                self.friendly_name
+            )
         )
+
 
 
 class ComparaisonVariableActionNoeud(ActionNoeud):
@@ -826,15 +877,17 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.ComparaisonVariableActionNoeud
+        :rtype: hermes.automate.ComparaisonVariableActionNoeud
         """
         from hermes.automate import ComparaisonVariableActionNoeud as Action
-        return Action(
-            self.designation,
-            self.membre_gauche_variable,
-            self.operande,
-            self.membre_droite_variable,
-            self.friendly_name
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.membre_gauche_variable,
+                self.operande,
+                self.membre_droite_variable,
+                self.friendly_name
+            )
         )
 
 
@@ -860,12 +913,14 @@ class DeplacerMailSourceActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.DeplacerMailSourceActionNoeud
+        :rtype: hermes.automate.DeplacerMailSourceActionNoeud
         """
         from hermes.automate import DeplacerMailSourceActionNoeud as Action
-        return Action(
-            self.designation,
-            self.dossier_destination
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.dossier_destination
+            )
         )
 
 
@@ -891,12 +946,14 @@ class CopierMailSourceActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.CopierMailSourceActionNoeud
+        :rtype: hermes.automate.CopierMailSourceActionNoeud
         """
         from hermes.automate import CopierMailSourceActionNoeud as Action
-        return Action(
-            self.designation,
-            self.dossier_destination
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.dossier_destination
+            )
         )
 
 
@@ -914,11 +971,13 @@ class SupprimerMailSourceActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.SupprimerMailSourceActionNoeud
+        :rtype: hermes.automate.SupprimerMailSourceActionNoeud
         """
         from hermes.automate import SupprimerMailSourceActionNoeud as Action
-        return Action(
-            self.designation
+        return self.transcription_fils(
+            Action(
+                self.designation
+            )
         )
 
 
@@ -958,15 +1017,17 @@ class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.TransformationListeVersDictionnaireActionNoeud
+        :rtype: hermes.automate.TransformationListeVersDictionnaireActionNoeud
         """
         from hermes.automate import TransformationListeVersDictionnaireActionNoeud as Action
-        return Action(
-            self.designation,
-            self.resultat_concerne,
-            self.champ_cle,
-            self.champ_valeur,
-            self.friendly_name
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.resultat_concerne,
+                self.champ_cle,
+                self.champ_valeur,
+                self.friendly_name
+            )
         )
 
 
@@ -1055,23 +1116,25 @@ class ItopRequeteCoreGetActionNoeud(ActionNoeud):
         :rtype: hermes.automate.RequeteHttpActionNoeud
         """
         from hermes.automate import ItopRequeteCoreGetActionNoeud as ACTION
-        return ACTION(
-            self.designation,
-            self.url_rest_itop,
-            self.auth_user,
-            self.auth_pwd,
-            self.requete_dql,
-            self.output_fields,
-            (
-                self.authentification_basique_utilisateur,
-                self.authentification_basique_mot_de_passe
-            ) if self.authentification_basique_utilisateur is not None else None,
-            {
-                'http': self.proxy_http,
-                'https': self.proxy_https
-            } if self.proxy_http is not None else None,
-            self.verify_peer,
-            self.friendly_name
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.url_rest_itop,
+                self.auth_user,
+                self.auth_pwd,
+                self.requete_dql,
+                self.output_fields,
+                (
+                    self.authentification_basique_utilisateur,
+                    self.authentification_basique_mot_de_passe
+                ) if self.authentification_basique_utilisateur is not None else None,
+                {
+                    'http': self.proxy_http,
+                    'https': self.proxy_https
+                } if self.proxy_http is not None else None,
+                self.verify_peer,
+                self.friendly_name
+            )
         )
 
 
@@ -1168,24 +1231,26 @@ class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
         """
         from hermes.automate import ItopRequeteCoreCreateActionNoeud as ACTION
         from json import loads
-        return ACTION(
-            self.designation,
-            self.url_rest_itop,
-            self.auth_user,
-            self.auth_pwd,
-            self.classe_itop_cible,
-            loads(self.fields),
-            self.output_fields,
-            (
-                self.authentification_basique_utilisateur,
-                self.authentification_basique_mot_de_passe
-            ) if self.authentification_basique_utilisateur is not None else None,
-            {
-                'http': self.proxy_http,
-                'https': self.proxy_https
-            } if self.proxy_http is not None else None,
-            self.verify_peer,
-            self.friendly_name
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.url_rest_itop,
+                self.auth_user,
+                self.auth_pwd,
+                self.classe_itop_cible,
+                loads(self.fields),
+                self.output_fields,
+                (
+                    self.authentification_basique_utilisateur,
+                    self.authentification_basique_mot_de_passe
+                ) if self.authentification_basique_utilisateur is not None else None,
+                {
+                    'http': self.proxy_http,
+                    'https': self.proxy_https
+                } if self.proxy_http is not None else None,
+                self.verify_peer,
+                self.friendly_name
+            )
         )
 
 
@@ -1288,25 +1353,27 @@ class ItopRequeteCoreUpdateActionNoeud(ActionNoeud):
         """
         from hermes.automate import ItopRequeteCoreUpdateActionNoeud as ACTION
         from json import loads
-        return ACTION(
-            self.designation,
-            self.url_rest_itop,
-            self.auth_user,
-            self.auth_pwd,
-            self.requete_dql,
-            loads(self.fields) if self.fields is not None and len(self.fields) > 1 else {},
-            self.output_fields,
-            self.commentaire,
-            (
-                self.authentification_basique_utilisateur,
-                self.authentification_basique_mot_de_passe
-            ) if self.authentification_basique_utilisateur is not None else None,
-            {
-                'http': self.proxy_http,
-                'https': self.proxy_https
-            } if self.proxy_http is not None else None,
-            self.verify_peer,
-            self.friendly_name
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.url_rest_itop,
+                self.auth_user,
+                self.auth_pwd,
+                self.requete_dql,
+                loads(self.fields) if self.fields is not None and len(self.fields) > 1 else {},
+                self.output_fields,
+                self.commentaire,
+                (
+                    self.authentification_basique_utilisateur,
+                    self.authentification_basique_mot_de_passe
+                ) if self.authentification_basique_utilisateur is not None else None,
+                {
+                    'http': self.proxy_http,
+                    'https': self.proxy_https
+                } if self.proxy_http is not None else None,
+                self.verify_peer,
+                self.friendly_name
+            )
         )
 
 
@@ -1415,26 +1482,28 @@ class ItopRequeteCoreApplyStimulusActionNoeud(ActionNoeud):
         """
         from hermes.automate import ItopRequeteCoreApplyStimulusActionNoeud as ACTION
         from json import loads
-        return ACTION(
-            self.designation,
-            self.url_rest_itop,
-            self.auth_user,
-            self.auth_pwd,
-            self.requete_dql,
-            self.stimulus,
-            loads(self.fields) if self.fields is not None and len(self.fields) > 1 else {},
-            self.output_fields,
-            self.commentaire,
-            (
-                self.authentification_basique_utilisateur,
-                self.authentification_basique_mot_de_passe
-            ) if self.authentification_basique_utilisateur is not None else None,
-            {
-                'http': self.proxy_http,
-                'https': self.proxy_https
-            } if self.proxy_http is not None else None,
-            self.verify_peer,
-            self.friendly_name
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.url_rest_itop,
+                self.auth_user,
+                self.auth_pwd,
+                self.requete_dql,
+                self.stimulus,
+                loads(self.fields) if self.fields is not None and len(self.fields) > 1 else {},
+                self.output_fields,
+                self.commentaire,
+                (
+                    self.authentification_basique_utilisateur,
+                    self.authentification_basique_mot_de_passe
+                ) if self.authentification_basique_utilisateur is not None else None,
+                {
+                    'http': self.proxy_http,
+                    'https': self.proxy_https
+                } if self.proxy_http is not None else None,
+                self.verify_peer,
+                self.friendly_name
+            )
         )
 
 
@@ -1523,21 +1592,23 @@ class ItopRequeteCoreDeleteActionNoeud(ActionNoeud):
         :rtype: hermes.automate.ItopRequeteCoreDeleteActionNoeud
         """
         from hermes.automate import ItopRequeteCoreDeleteActionNoeud as ACTION
-        return ACTION(
-            self.designation,
-            self.url_rest_itop,
-            self.auth_user,
-            self.auth_pwd,
-            self.requete_dql,
-            self.commentaire,
-            (
-                self.authentification_basique_utilisateur,
-                self.authentification_basique_mot_de_passe
-            ) if self.authentification_basique_utilisateur is not None else None,
-            {
-                'http': self.proxy_http,
-                'https': self.proxy_https
-            } if self.proxy_http is not None else None,
-            self.verify_peer,
-            self.friendly_name
+        return self.transcription_fils(
+            ACTION(
+                self.designation,
+                self.url_rest_itop,
+                self.auth_user,
+                self.auth_pwd,
+                self.requete_dql,
+                self.commentaire,
+                (
+                    self.authentification_basique_utilisateur,
+                    self.authentification_basique_mot_de_passe
+                ) if self.authentification_basique_utilisateur is not None else None,
+                {
+                    'http': self.proxy_http,
+                    'https': self.proxy_https
+                } if self.proxy_http is not None else None,
+                self.verify_peer,
+                self.friendly_name
+            )
         )

@@ -9,7 +9,6 @@ from flask_babel import Babel
 
 from hermes import Mail
 from hermes.detecteur import AucuneObligationInteretException
-from hermes_ui.moteur.transcription import ServiceTranspositionModels
 from .flask_extended import Flask
 from flask_migrate import Migrate
 from flask_security import Security, login_required
@@ -588,7 +587,7 @@ def simulation_detecteur_fichier():
 
     for detecteur, i in zip(detecteurs, range(0, len(detecteurs))):
         ob_detecteurs.append(
-            ServiceTranspositionModels.generer_detecteur(detecteur)
+            detecteur.transcription()
         )
         try:
             ob_detecteurs[-1].lance_toi(mon_message)
@@ -649,19 +648,9 @@ def simulation_detecteur():
     if detecteur is None:
         return jsonify({'message': 'Impossible de trouver le detecteur n°'+str(detecteur_id)}), 404
 
-    from hermes_ui.moteur.transcription import ServiceTranspositionModels
-
-    from hermes.detecteur import Detecteur as DetecteurNatif
     from hermes.source import Source as SourceNatif
 
-    k = DetecteurNatif(
-        detecteur.designation
-    )
-
-    for regle in detecteur.regles:
-        k.je_veux(
-            ServiceTranspositionModels.generer_recherche_interet(regle)
-        )
+    k = detecteur.transcription()
 
     d = SourceNatif(
         sujet,

@@ -2,6 +2,7 @@ import datetime
 
 from hermes_ui.adminlte.models import User
 from hermes_ui.db import db
+from hermes_ui.db.polymorphic import get_child_polymorphic
 
 
 class Detecteur(db.Model):
@@ -22,6 +23,23 @@ class Detecteur(db.Model):
 
     def __repr__(self):
         return '<Détecteur \'{}\'>'.format(self.designation)
+
+    def transcription(self):
+        """
+        :rtype: hermes.detecteur.Detecteur
+        """
+        from hermes.detecteur import Detecteur as HermesDetecteur
+
+        mon_detecteur = HermesDetecteur(
+            self.designation
+        )
+
+        for regle in self.regles:
+            mon_detecteur.je_veux(
+                get_child_polymorphic(regle).transcription()
+            )
+
+        return mon_detecteur
 
 
 class RechercheInteret(db.Model):

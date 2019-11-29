@@ -7,7 +7,6 @@ from imapclient.exceptions import LoginError, ProtocolError
 
 from hermes_ui.db import db
 from hermes_ui.models import BoiteAuxLettresImap, Automate, ActionNoeud, AutomateExecution, ActionNoeudExecution, Configuration
-from hermes_ui.moteur.transcription import ServiceTranspositionModels
 
 from hermes.logger import logger
 from hermes.session import Session
@@ -80,14 +79,12 @@ class InstanceInteroperabilite:
 
             models_automates.sort(key=lambda x: x.priorite, reverse=True)
 
-            automates = ServiceTranspositionModels.generer(models_automates)
-
-            if len(automates) == 0:
+            if len(models_automates) == 0:
                 logger.warning(
                     "Aucune automate à traitement de source n'est actif, impossible de continuer")
                 break
 
-            logger.debug("{} automates en production sont actifs", len(automates))
+            logger.debug("{} automates en production sont actifs", len(models_automates))
 
             for mail_factory in mail_factories:
 
@@ -101,23 +98,21 @@ class InstanceInteroperabilite:
 
                 logger.debug("{} sources ont été extraites de l'usine à production '{}'", len(sources), str(mail_factory))
 
-                for model, automate in zip(models_automates, automates):
+                for source in sources:
 
-                    if InstanceInteroperabilite.stop_instruction is not None:
-                        logger.info("Arrêt du service interopérabilité, fin de boucle")
-                        return
+                    logger.debug("Vérification du message électronique '{}'", source.titre)
 
-                    if est_une_sequence_test and model.id not in InstanceInteroperabilite.liste_attente_test:
-                        logger.debug("Séquence de test ne conserne pas '{}'.", model.designation)
-                        continue
+                    for model in models_automates:
 
-                    for source in sources:
-
-                        logger.debug("Vérification du message électronique '{}'", source.titre)
+                        automate = model.transcription()
 
                         if InstanceInteroperabilite.stop_instruction is not None:
-                            logger.info("Fin de surveillance continue des automates sur les boîtes IMAP4")
+                            logger.info("Arrêt du service interopérabilité, fin de boucle")
                             return
+
+                        if est_une_sequence_test and model.id not in InstanceInteroperabilite.liste_attente_test:
+                            logger.debug("Séquence de test ne conserne pas '{}'.", model.designation)
+                            continue
 
                         date_depart_automate = datetime.now()
 
@@ -300,11 +295,7 @@ class InstanceInteroperabilite:
                             db.session.add(automate_execution)
                             db.session.commit()
 
-                        automate = ServiceTranspositionModels.generer(
-                            [
-                                model
-                            ]
-                        ).pop()
+                            break  # La source a été traitée. Pas besoin d'y appliquer un autre automate.
 
                 db.session.flush()
 
