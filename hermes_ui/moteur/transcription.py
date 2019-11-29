@@ -9,6 +9,26 @@ import hermes_ui.models
 class ServiceTranspositionModels:
 
     @staticmethod
+    def get_model_class(mapped_class_child):
+        """
+        Charger la classe correspondant à un chemin complet (dot package) str
+        Orienté pour le champs mapped class child SQLAlchemy
+        :param str mapped_class_child:
+        :rtype: type
+        :raise AttributeError:
+        """
+        decompose_type_action = mapped_class_child.split("'")  # type: list[str]
+
+        if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
+            return None
+
+        from sys import modules
+
+        target_module = modules['.'.join(decompose_type_action[-2].split('.')[0:-1])]
+
+        return getattr(target_module, decompose_type_action[-2].split('.')[-1])
+
+    @staticmethod
     def generer_detecteur(detecteur):
         """
         :param hermes_ui.models.detecteur.Detecteur detecteur:
@@ -36,17 +56,8 @@ class ServiceTranspositionModels:
         :param hermes_ui.models.detecteur.RechercheInteret regle:
         :return:
         """
-        decompose_type_action = regle.mapped_class_child.split("'")  # type: list[str]
-
-        if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
-            return None
-
-        from sys import modules
-
-        target_module = modules['.'.join(decompose_type_action[-2].split('.')[0:-1])]
-
         try:
-            target_model_class = getattr(target_module, decompose_type_action[-2].split('.')[-1])
+            target_model_class = ServiceTranspositionModels.get_model_class(regle.mapped_class_child)
         except AttributeError as e:
             return None
 
@@ -69,17 +80,8 @@ class ServiceTranspositionModels:
         if action is None:
             return None
 
-        decompose_type_action = action.mapped_class_child.split("'")  # type: list[str]
-
-        if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
-            return None
-
-        from sys import modules
-
-        target_module = modules['.'.join(decompose_type_action[-2].split('.')[0:-1])]
-
         try:
-            target_model_class = getattr(target_module, decompose_type_action[-2].split('.')[-1])
+            target_model_class = ServiceTranspositionModels.get_model_class(action.mapped_class_child)
         except AttributeError as e:
             return None
 
