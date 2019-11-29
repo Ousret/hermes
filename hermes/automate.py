@@ -199,6 +199,8 @@ class ActionNoeud(object):
         """
         logger.warning("Échec de l'action '{}' sur '{}'", self._designation, source.titre)
         self._payload = new_payload
+        if self._friendly_name is not None:
+            source.session.sauver(self._friendly_name, self._payload)
         return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
 
     def _jai_reussi(self, source, new_payload=None):
@@ -210,6 +212,8 @@ class ActionNoeud(object):
         logger.info("Fin de l'action '{}' sur '{}'", self._designation, source.titre)
         self._payload = new_payload
         self._success = True
+        if self._friendly_name is not None:
+            source.session.sauver(self._friendly_name, self._payload)
         return True and self._noeud_reussite.je_realise(source) if self._noeud_reussite is not None else True
 
     def raz(self):
