@@ -36,9 +36,8 @@ class Automate(object):
 
     def __init__(self, designation, detecteur):
         """
-
         :param str designation:
-        :param gie_interoperabilite.Detecteur detecteur:
+        :param hermes.Detecteur detecteur:
         """
 
         self._designation = designation
@@ -64,6 +63,13 @@ class Automate(object):
         :rtype: list[ActionNoeud]
         """
         return self._action_racine.actions_lancees if self._action_racine is not None else list()
+
+    @property
+    def derniere_action_lancee(self):
+        """
+        :rtype: ActionNoeud
+        """
+        return self._action_racine.derniere_action_lancee if self._action_racine is not None else None
 
     @action_racine.setter
     def action_racine(self, action_noeud):
@@ -95,7 +101,7 @@ class Automate(object):
                 [
                     str(type(el)).split('.')[-1][0:-1],
                     el.designation,
-                    el.payload is not None,
+                    el.est_reussite,
                     str(el.payload) if el.payload is not None else 'Aucune'
                 ]
             )
@@ -103,19 +109,21 @@ class Automate(object):
         return my_table.get_string()
 
     def raz(self):
-        self._detecteur.raz()
+        if self._detecteur:
+            self._detecteur.raz()
         if self._action_racine is not None:
             self._action_racine.raz()
 
-    def lance_toi(self, source):
+    def lance_toi(self, source, bypass_detecteur=False):
         """
         Exécution de la suite d'actions tel un arbre binaire
-        :param gie_interoperabilite.Source source:
+        :param bool bypass_detecteur:
+        :param hermes.source.Source source:
         :return: Etat final sous la forme d'un boolean
         :rtype: bool
         """
 
-        self._logger_handler_id = logger.add(self._handler, level='DEBUG')
+        self._logger_handler_id = logger.add(self._handler, level='DEBUG', enqueue=True, colorize=False)
 
         logger.debug(
             "Initialisation de l'automate '{}' avec la source '{}'.", self.designation, source.titre
@@ -123,21 +131,23 @@ class Automate(object):
 
         self.raz()
 
-        self._detecteur.lance_toi(source)
+        if not bypass_detecteur:
+            self._detecteur.lance_toi(source)
 
-        if self._detecteur.est_accomplis:
+        if self._detecteur.est_accomplis or bypass_detecteur:
 
             logger.info(
                 "Démarrage de l'automate '{}' avec la source '{}'.", self.designation, source.titre
             )
 
-            exp_dict_detecteur = self._detecteur.to_dict()
+            if not bypass_detecteur:
+                exp_dict_detecteur = self._detecteur.to_dict()
 
-            for k in exp_dict_detecteur.keys():
-                source.session.sauver(k, exp_dict_detecteur[k])
+                for k in exp_dict_detecteur.keys():
+                    source.session.sauver(k, exp_dict_detecteur[k])
 
-            for k in source.extraction_interet.interets.keys():
-                source.session.sauver(k, source.extraction_interet.interets[k])
+                for k in source.extraction_interet.interets.keys():
+                    source.session.sauver(k, source.extraction_interet.interets[k])
 
             final_leaf_bool = self._action_racine.je_realise(source) if self._action_racine is not None else False
 
@@ -190,6 +200,18 @@ class ActionNoeud(object):
         return [self] + \
                (self._noeud_reussite.actions_lancees if self._noeud_reussite is not None else []) + \
                (self._noeud_echec.actions_lancees if self._noeud_echec is not None else [])
+
+    @property
+    def derniere_action_lancee(self):
+        """
+        Récupération de la dernière action lancée dans l'arbre binaire à partir du noeud self
+        :rtype: ActionNoeud
+        """
+        if self._noeud_reussite is not None and self._noeud_reussite._success is not None:
+            return self._noeud_reussite.derniere_action_lancee
+        if self._noeud_echec is not None and self._noeud_echec._success is not None:
+            return self._noeud_echec.derniere_action_lancee
+        return self if self._success is not None else None
 
     def _jai_echouee(self, source, new_payload=None):
         """
@@ -1558,6 +1580,35 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
         source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name, self._separateur.join(mes_decouvertes))
 
         return self._jai_reussi(source, self._separateur.join(mes_decouvertes))
+
+
+class ExecutionAutomateActionNoeud(ActionNoeud):
+
+    def __init__(self, designation, mon_automate, friendly_name=None):
+        """
+        :param str designation:
+        :param Automate mon_automate:
+        :param str friendly_name:
+        """
+        super().__init__(designation, friendly_name)
+        self._automate = mon_automate
+
+    def je_realise(self, source):
+        super().je_realise(source)
+
+        try:
+            r = self._automate.lance_toi(source, bypass_detecteur=True)
+        except KeyError as e:
+            return self._jai_echouee(source, str(e))
+        except ValueError as e:
+            return self._jai_echouee(source, str(e))
+        except Exception as e:
+            return self._jai_echouee(source, str(e))
+
+        if r:
+            return self._jai_reussi(source, self._automate.derniere_action_lancee.payload)
+
+        return self._jai_echouee(source, self._automate.derniere_action_lancee.payload)
 
 
 class ManipulationRudimentaireSourceActionNoeud(ActionNoeud):

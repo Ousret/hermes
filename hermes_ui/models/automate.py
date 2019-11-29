@@ -841,6 +841,43 @@ class VerifierSiVariableVraiActionNoeud(ActionNoeud):
         )
 
 
+class ExecutionAutomateActionNoeud(ActionNoeud):
+    DESCRIPTION = "Execution d'une routine en ce basant sur un automate existant"
+    PARAMETRES = OrderedDict({
+        'sous_automate': {
+            'format': 'REST_SELECT',
+            'required': True,
+            'help': "Nom de l'automate à executer sur la source. "
+                    "Le résultat final est celui donnée par la dernière action. "
+                    "Priere de ne pas jouer à Inception. À vos risques et périls",
+            'route': '/rest/admin/automates'
+        }
+    })
+
+    __tablename__ = 'execution_automate_action_noeud'
+
+    id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
+
+    sous_automate_id = db.Column(db.Integer(), db.ForeignKey('automate.id'), nullable=False)
+    sous_automate = db.relation(Automate, foreign_keys="ExecutionAutomateActionNoeud.sous_automate_id")
+
+    __mapper_args__ = {
+        'polymorphic_identity': str(ActionNoeud).replace('ActionNoeud', 'ExecutionAutomateActionNoeud'),
+    }
+
+    def transcription(self):
+        """
+        :rtype: hermes.automate.ExecutionAutomateActionNoeud
+        """
+        from hermes.automate import ExecutionAutomateActionNoeud as Action
+        return self.transcription_fils(
+            Action(
+                self.designation,
+                self.sous_automate.transcription(),
+                self.friendly_name
+            )
+        )
+
 
 class ComparaisonVariableActionNoeud(ActionNoeud):
     DESCRIPTION = "Effectue une comparaison entre deux variables de votre choix, nombres, dates, etc.."
