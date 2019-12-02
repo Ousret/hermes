@@ -219,7 +219,7 @@ admin.add_view(
     RechercheInteretView(
         RechercheInteret,
         db.session,
-        name="Vue globales règles",
+        name="Vue globales critères",
         menu_icon_value="fa-list"
     )
 )
