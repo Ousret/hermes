@@ -300,6 +300,10 @@ def export_automates():
     db.session.query(RechercheInteretExecution).delete()
     db.session.query(AutomateExecution).delete()
 
+    db.session.query(LienDetecteurRechercheInteret).delete()
+
+    db.session.query(LienSousRegleOperationLogique).delete()
+
     for sb in RechercheInteret.__subclasses__():
         db.session.query(sb).delete()
 
@@ -311,9 +315,6 @@ def export_automates():
         db.session.query(sb).delete()
 
     db.session.query(ActionNoeud).delete()
-
-    db.session.query(LienDetecteurRechercheInteret).delete()
-    db.session.query(LienSousRegleOperationLogique).delete()
 
     db.session.query(Automate).delete()
 
