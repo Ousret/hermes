@@ -543,6 +543,7 @@ def creation_test_service():
 
 
 @app.route("/admin/rest/simulation/detecteur/fichier", methods=['POST'])
+@login_required
 def simulation_detecteur_fichier():
     if 'file' not in request.files:
         return jsonify({'message': 'Aucun fichier envoyé'}), 400
@@ -720,6 +721,7 @@ def lecture_journal():
 
 
 @app.route("/admin/rest/detecteur", methods=['GET'])
+@login_required
 def lecture_detecteurs():
     detecteurs = db.session.query(Detecteur).all()
 
@@ -727,6 +729,7 @@ def lecture_detecteurs():
 
 
 @app.route("/admin/rest/automate", methods=['GET'])
+@login_required
 def lecture_automates():
     automates = db.session.query(Automate).all()
 
@@ -734,6 +737,7 @@ def lecture_automates():
 
 
 @app.route("/admin/rest/legacy/automate/<automate_id>", methods=['GET'])
+@login_required
 def lecture_legacy_automate(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
     if automate is None:
@@ -742,6 +746,7 @@ def lecture_legacy_automate(automate_id):
 
 
 @app.route("/admin/rest/type/action_noeud", methods=['GET'])
+@login_required
 def lecture_liste_action_noeud_type():
 
     return jsonify(
@@ -750,6 +755,7 @@ def lecture_liste_action_noeud_type():
 
 
 @app.route("/admin/rest/automate/<automate_id>", methods=['GET'])
+@login_required
 def lecture_automate(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
     if automate is None:
@@ -758,12 +764,14 @@ def lecture_automate(automate_id):
 
 
 @app.route("/admin/rest/automate/<automate_id>/action_noeud", methods=['GET'])
+@login_required
 def lecture_actions_automate(automate_id):
     actions = db.session.query(ActionNoeud).filter_by(automate_id=automate_id).options().all()  # type: list[ActionNoeud]
     return ActionNoeudSchema(many=True).jsonify(actions), 200
 
 
 @app.route("/admin/rest/automate/<automate_id>/action_noeud/<action_noeud_id>", methods=['GET'])
+@login_required
 def lecture_action_automate(automate_id, action_noeud_id):
     action = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=action_noeud_id).one()  # type: ActionNoeud
 
@@ -795,6 +803,7 @@ def lecture_action_automate(automate_id, action_noeud_id):
 
 
 @app.route("/admin/rest/automate/<automate_id>/action_noeud", methods=['POST'])
+@login_required
 def creation_action(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
 
@@ -903,6 +912,7 @@ def creation_action(automate_id):
 
 
 @app.route("/admin/rest/automate/<automate_id>/action_noeud/<action_noeud_id>", methods=['PUT', 'PATCH'])
+@login_required
 def modification_action(automate_id, action_noeud_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
     action_noeud = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=action_noeud_id).first()  # type: ActionNoeud
@@ -954,6 +964,7 @@ def modification_action(automate_id, action_noeud_id):
 
 
 @app.route("/admin/rest/automate/<automate_id>/action_noeud/<action_noeud_id>", methods=['DELETE'])
+@login_required
 def supprimer_action(automate_id, action_noeud_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
     action_noeud = db.session.query(ActionNoeud).filter_by(automate_id=automate_id,
