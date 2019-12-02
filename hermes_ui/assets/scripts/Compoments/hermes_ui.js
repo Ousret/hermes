@@ -1438,7 +1438,5 @@ AppInterfaceInteroperabilite.SUGGESTIONS_SAISIE = [];
 AppInterfaceInteroperabilite.AUTOMATE_EDITEUR = null;
 AppInterfaceInteroperabilite.LAST_SEEK_LOGS = -1;
 AppInterfaceInteroperabilite.TERM = null;
-AppInterfaceInteroperabilite.N_INPUT_AWESOMPLETE = null;
-AppInterfaceInteroperabilite.N_TEXTAREA_ASUGGEST = null;
 
 module.exports = AppInterfaceInteroperabilite;
