@@ -19,12 +19,23 @@ class ActionNoeudLegacySchema(ma.ModelSchema):
 
 
 for my_class in ActionNoeud.__subclasses__():
-    exec(
-        """class {class_name}LegacySchema(ActionNoeudLegacySchema):
-    class Meta:
-        model = {class_name}
-        exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'mapped_class_child', 'id', 'friendly_name')""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
-    )
+    t_ = str(my_class).split("'")[-2].split('.')[-1]
+    if 'ExecutionAutomate' not in t_:
+        exec(
+            """class {class_name}LegacySchema(ActionNoeudLegacySchema):
+        class Meta:
+            model = {class_name}
+            exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'mapped_class_child', 'id', 'friendly_name')""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
+        )
+    else:
+        exec(
+            """class {class_name}LegacySchema(ActionNoeudLegacySchema):
+        class Meta:
+            model = {class_name}
+            exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'mapped_class_child', 'id', 'friendly_name', 'automate')
+        automate = flask_marshmallow.fields.fields.Nested('AutomateLegacySchema', many=False)""".format(
+                class_name=str(my_class).split("'")[-2].split('.')[-1])
+        )
 
 
 class ActionNoeudLegacyPolySchema(OneOfSchema):
@@ -42,7 +53,8 @@ class RechercheInteretLegacySchema(ma.ModelSchema):
 
 
 for my_class in RechercheInteret.__subclasses__():
-    if 'OperationLogique' not in str(my_class).split("'")[-2].split('.')[-1]:
+    t_ = str(my_class).split("'")[-2].split('.')[-1]
+    if 'OperationLogique' not in t_:
         exec(
             """class {class_name}LegacySchema(RechercheInteretLegacySchema):
         class Meta:
