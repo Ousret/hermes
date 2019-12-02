@@ -1175,7 +1175,8 @@ class ManipulationSmtpActionNoeud(ActionNoeud):
 class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
     ZIP_EXTENSION_SAFEMODE = [
-        'eml'
+        'eml',
+        'txt'
     ]
 
     def __init__(self, designation, destinataire, sujet, corps, hote_smtp, port_smtp, nom_utilisateur, mot_de_passe, enable_tls=False, pj_source=False, source_pj_complementaire=None, force_keep_template=False, legacy_tls_support=False):
