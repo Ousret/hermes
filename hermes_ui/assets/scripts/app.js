@@ -135,6 +135,9 @@ $.fn.sidebar = function(options) {
 
 $(function () {
 
+    // Crappy way of not running this outside of app
+    if ($('.login-box').length > 0) {return; }
+
     $(".sidebarh.right").sidebar({side: "right"});
 
     $('#btn-analyse-manuelle-detecteur').click(AppInterfaceInteroperabilite.assistant_simulation_detecteur);

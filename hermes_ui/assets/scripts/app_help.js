@@ -13,6 +13,9 @@ let create_helper_callout = (titre, corps) => {
 
 $(function () {
 
+    // Crappy way of not running this outside of app
+    if ($('.login-box').length > 0) {return; }
+
     let current_admin_page = $('.content-header h1').html(),
         header_section = $('section.content-header'),
         content_section = $('section.content');
