@@ -267,7 +267,7 @@ def import_automates():
 
     return send_file(
         BytesIO(r.get_data() if isinstance(r.get_data(), bytes) else r.get_data().encode('utf-8')),
-        attachment_filename='automates.json',
+        attachment_filename='automates-{}.json'.format(datetime.now().timestamp()),
         mimetype='text/json; charset=utf-8',
         as_attachment=True
     )
