@@ -753,7 +753,7 @@ class AppInterfaceInteroperabilite {
 
                         queue_args.push(
                             {
-                                input: descriptif.formulaire[nom_champ_formulaire].format.toLowerCase(),
+                                input: 'select',
                                 html: '<b>' + nom_champ_formulaire + '</b>' + (descriptif.formulaire[nom_champ_formulaire].required === true ? '<sup class="color: red;">*</sup>' : '') + '<br>' + descriptif.formulaire[nom_champ_formulaire].help,
                                 inputOptions: inputOptions,
                                 inputValue: action_noeud !== undefined ? (action_noeud[nom_champ_formulaire] ? action_noeud[nom_champ_formulaire] : '') : '',
