@@ -5,6 +5,7 @@ Dropzone.autoDiscover = false;
 
 require('datatables.net-bs');
 require('jquery.terminal');
+require('jquery.terminal/js/unix_formatting');
 
 const introJs = require('intro.js');
 global.introJs = introJs;
