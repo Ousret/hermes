@@ -1207,6 +1207,11 @@ class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
             'required': True,
             'help': 'Les champs à extraire des objets iTop, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
         },
+        'commentaire': {
+            'format': 'TEXT',
+            'required': True,
+            'help': 'Explicitez brièvement la nature de votre création sous iTop (Journal iTop)',
+        },
         'authentification_basique_utilisateur': {
             'format': 'TEXT',
             'required': False,
@@ -1248,6 +1253,7 @@ class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
     fields = db.Column(db.Text(), nullable=False)
 
     output_fields = db.Column(db.Text(), nullable=False)
+    commentaire = db.Column(db.Text(), nullable=False)
 
     authentification_basique_utilisateur = db.Column(db.String(255), nullable=True)
     authentification_basique_mot_de_passe = db.Column(db.String(255), nullable=True)
@@ -1276,6 +1282,7 @@ class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
                 self.classe_itop_cible,
                 loads(self.fields),
                 self.output_fields,
+                self.commentaire,
                 (
                     self.authentification_basique_utilisateur,
                     self.authentification_basique_mot_de_passe
