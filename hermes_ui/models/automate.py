@@ -107,11 +107,11 @@ class ActionNoeud(db.Model):
         :param hermes.automate.ActionNoeud action_noeud:
         :return:
         """
-        if self.action_reussite_id is not None:
+        if self.action_reussite is not None:
             action_noeud.je_realise_en_cas_reussite(
                 get_child_polymorphic(self.action_reussite).transcription()
             )
-        if self.action_echec_id is not None:
+        if self.action_echec is not None:
             action_noeud.je_realise_en_cas_echec(
                 get_child_polymorphic(self.action_echec).transcription()
             )
