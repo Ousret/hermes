@@ -1331,7 +1331,7 @@ class AppInterfaceInteroperabilite {
                                 div_session_variable_locale.html('');
                                 div_session_filtre.html('');
 
-                                for (let el of AppInterfaceInteroperabilite.SUGGESTIONS_SAISIE)
+                                for (let el of data)
                                 {
                                     if (el.startsWith('{{') === true)
                                     {
