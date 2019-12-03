@@ -730,8 +730,7 @@ class AppInterfaceInteroperabilite {
                                         }
                                     );
 
-                                    if (action_noeud !== undefined && action_noeud[nom_champ_formulaire])
-                                    {
+                                    if (action_noeud !== undefined && action_noeud[nom_champ_formulaire]) {
                                         AppInterfaceInteroperabilite.EDITEUR_JSON.set(
                                             JSON.parse(action_noeud[nom_champ_formulaire])
                                         );
@@ -740,6 +739,27 @@ class AppInterfaceInteroperabilite {
                                 }
                             }
                         );
+                    } else if (descriptif.formulaire[nom_champ_formulaire].format === 'AUTOMATE') {
+
+                        let inputOptions = {};
+
+                        for (let opt of $('#selection-automate option'))
+                        {
+                            if (opt.value !== '' && parseInt(opt.value) !== AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id)
+                            {
+                                inputOptions[opt.value] = opt.innerText;
+                            }
+                        }
+
+                        queue_args.push(
+                            {
+                                input: descriptif.formulaire[nom_champ_formulaire].format.toLowerCase(),
+                                html: '<b>' + nom_champ_formulaire + '</b>' + (descriptif.formulaire[nom_champ_formulaire].required === true ? '<sup class="color: red;">*</sup>' : '') + '<br>' + descriptif.formulaire[nom_champ_formulaire].help,
+                                inputOptions: inputOptions,
+                                inputValue: action_noeud !== undefined ? (action_noeud[nom_champ_formulaire] ? action_noeud[nom_champ_formulaire] : '') : '',
+                            }
+                        );
+
                     } else if (descriptif.formulaire[nom_champ_formulaire].format === 'SELECT') {
                         let inputOptions = {};
 

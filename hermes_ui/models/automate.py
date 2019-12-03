@@ -844,13 +844,12 @@ class VerifierSiVariableVraiActionNoeud(ActionNoeud):
 class ExecutionAutomateActionNoeud(ActionNoeud):
     DESCRIPTION = "Execution d'une routine en ce basant sur un automate existant"
     PARAMETRES = OrderedDict({
-        'sous_automate': {
-            'format': 'REST_SELECT',
+        'sous_automate_id': {
+            'format': 'AUTOMATE',
             'required': True,
             'help': "Nom de l'automate à executer sur la source. "
                     "Le résultat final est celui donnée par la dernière action. "
-                    "Priere de ne pas jouer à Inception. À vos risques et périls",
-            'route': '/rest/admin/automates'
+                    "Priere de ne pas jouer à Inception. À vos risques et périls"
         }
     })
 
