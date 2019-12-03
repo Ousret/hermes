@@ -18,8 +18,8 @@ from hermes.session import Session
 
 from dateutil.parser import parse
 
-from msg_parser.msg_parser import MsOxMessage
-from msg_parser.msg_parser.email_builder import EmailFormatter
+from msg_parser import MsOxMessage
+from msg_parser.email_builder import EmailFormatter
 
 
 class Mail(Source):
