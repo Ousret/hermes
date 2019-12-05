@@ -1899,4 +1899,4 @@ class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
         source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name,
                               resultat_transformation)
 
-        return self._jai_reussi(source, str(resultat_transformation))
+        return self._jai_reussi(source, resultat_transformation)
