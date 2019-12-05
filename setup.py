@@ -19,7 +19,8 @@ setup(
     tests_require=[],
     keywords=[],
     dependency_links=[
-        'git+https://github.com/Ousret/msg_parser.git#egg=msg_parser'
+        'git+https://github.com/Ousret/msg_parser.git#egg=msg_parser',
+        'git+https://github.com/Ousret/python-emails.git#egg=emails'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
