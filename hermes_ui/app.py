@@ -35,6 +35,8 @@ from hermes.logger import logger, mem_handler
 from hermes_ui.moteur.processus import InstanceInteroperabilite
 from hermes_ui.incident import NotificationIncident
 
+from hermes.i18n import _
+
 from hermes_ui.marshmallow.legacy import *
 from hermes_ui.marshmallow.front import *
 from flask_webpackext.project import WebpackTemplateProject
@@ -49,7 +51,9 @@ __path__ = dirname(realpath(__file__))
 
 security = Security(app, admins_store)
 
-babel = Babel(app)
+babel = Babel(
+    app
+)
 
 project = WebpackTemplateProject(
     __name__,
@@ -67,10 +71,10 @@ FlaskWebpackExt(app)
 admin = AdminLte(
     app,
     skin='green-light',
-    name='Hermes - Automates de gestion des échanges électroniques',
+    name=_('Hermes - Automates de gestion des échanges électroniques'),
     short_name="<b>H</b><sup>ermes</sup>",
     long_name="<b>Hermes</b>",
-    index_view=AdminIndexView(name="Éditeur d'Automate", menu_icon_value='fa-pencil', menu_icon_type='fa')
+    index_view=AdminIndexView(name=_("Éditeur d'Automate"), menu_icon_value='fa-pencil', menu_icon_type='fa')
 )
 
 db.init_app(app)
@@ -82,9 +86,9 @@ admin.add_view(
     BoiteAuxLettresImapView(
         BoiteAuxLettresImap,
         db.session,
-        name="Boite aux lettres (IMAP)",
+        name=_("Boite aux lettres (IMAP)"),
         menu_icon_value="fa-envelope",
-        category="Sources de données"
+        category=_("Sources de données")
     )
 )
 
@@ -92,7 +96,7 @@ admin.add_view(
     ConfigurationView(
         Configuration,
         db.session,
-        name="Mes variables globales",
+        name=_("Mes variables globales"),
         menu_icon_value="fa-cogs"
     )
 )
@@ -101,7 +105,7 @@ admin.add_view(
     AutomateView(
         Automate,
         db.session,
-        name="Description des Automates",
+        name=_("Description des Automates"),
         menu_icon_value="fa-android"
     )
 )
@@ -110,7 +114,7 @@ admin.add_view(
     DectecteurView(
         Detecteur,
         db.session,
-        name="Détecteur",
+        name=_("Détecteur"),
         menu_icon_value="fa-flag"
     )
 )
@@ -119,9 +123,9 @@ admin.add_view(
     IdentificateurRechercheInteretView(
         IdentificateurRechercheInteret,
         db.session,
-        name="Identifiant",
+        name=_("Identifiant"),
         menu_icon_value="fa-sort-numeric-desc",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -129,9 +133,9 @@ admin.add_view(
     LocalisationExpressionRechercheInteretView(
         LocalisationExpressionRechercheInteret,
         db.session,
-        name="Recherche d'expression",
+        name=_("Recherche d'expression"),
         menu_icon_value="fa-search-plus",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -139,9 +143,9 @@ admin.add_view(
     DateRechercheInteretView(
         DateRechercheInteret,
         db.session,
-        name="Date",
+        name=_("Date"),
         menu_icon_value="fa-calendar",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -149,9 +153,9 @@ admin.add_view(
     ExpressionXPathInteretView(
         ExpressionXPathRechercheInteret,
         db.session,
-        name="XPath (HTML)",
+        name=_("XPath (HTML)"),
         menu_icon_value="fa-code",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -159,9 +163,9 @@ admin.add_view(
     ExpressionCleRechercheInteretView(
         ExpressionCleRechercheInteret,
         db.session,
-        name="Expression exacte",
+        name=_("Expression exacte"),
         menu_icon_value="fa-commenting",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -169,9 +173,9 @@ admin.add_view(
     CleRechercheInteretView(
         CleRechercheInteret,
         db.session,
-        name="Clé",
+        name=_("Clé"),
         menu_icon_value="fa-key",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -179,9 +183,9 @@ admin.add_view(
     ExpressionDansCleRechercheInteretView(
         ExpressionDansCleRechercheInteret,
         db.session,
-        name="Expression exacte dans la clé",
+        name=_("Expression exacte dans la clé"),
         menu_icon_value="fa-cubes",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -189,9 +193,9 @@ admin.add_view(
     ExpressionReguliereRechercheInteretView(
         ExpressionReguliereRechercheInteret,
         db.session,
-        name="Expression régulière",
+        name=_("Expression régulière"),
         menu_icon_value="fa-magic",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -199,9 +203,9 @@ admin.add_view(
     InformationRechercheInteretView(
         InformationRechercheInteret,
         db.session,
-        name="Information balisée",
+        name=_("Information balisée"),
         menu_icon_value="fa-hashtag",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -209,9 +213,9 @@ admin.add_view(
     OperationLogiqueRechercheInteretView(
         OperationLogiqueRechercheInteret,
         db.session,
-        name="Opération sur critères",
+        name=_("Opération sur critères"),
         menu_icon_value="fa-list-ol",
-        category="Critères de recherche"
+        category=_("Critères de recherche")
     )
 )
 
@@ -219,14 +223,14 @@ admin.add_view(
     RechercheInteretView(
         RechercheInteret,
         db.session,
-        name="Vue globales critères",
+        name=_("Vue globales critères"),
         menu_icon_value="fa-list"
     )
 )
 
 admin.add_view(
     AdminIndexView(
-        name="Manuel utilisateur",
+        name=_("Manuel utilisateur"),
         menu_icon_type='fa',
         menu_icon_value='fa-book',
         endpoint='/admin/manuel',
@@ -251,6 +255,12 @@ def security_context_processor():
         h=admin_helpers,
         get_url=url_for
     )
+
+
+@babel.localeselector
+def get_locale():
+    translations = [str(translation) for translation in babel.list_translations()]
+    return request.accept_languages.best_match(translations)
 
 
 @app.route("/", methods=['GET'])
@@ -282,7 +292,7 @@ def export_automates():
     mon_fichier = request.files['file']  # type: FileStorage
 
     if mon_fichier.content_type != 'application/json' or mon_fichier.filename.endswith('.json') is False:
-        return jsonify({'message': 'Fichier message invalide, fichier JSON requis !'}), 400
+        return jsonify({'message': _('Fichier message invalide, fichier JSON requis !')}), 400
 
     def rec_(at, act):
         """
@@ -325,7 +335,7 @@ def export_automates():
         from json import loads
         automates = AutomateLegacySchema(many=True).load(loads(mon_fichier.stream.read().decode('ascii')))  # type: list[Automate]
     except MarshmallowError as e:
-        return jsonify({'message': "Impossible d'importer votre fichier '{}' car votre fichier ne respecte pas la structure JSON obligatoire ! '{}'.".format(mon_fichier.filename, str(e))}), 409
+        return jsonify({'message': _("Impossible d'importer votre fichier '{fname}' car votre fichier ne respecte pas la structure JSON obligatoire ! '{msg_err}'.").format(fname=mon_fichier.filename, msg_err=str(e))}), 409
 
     for automate in automates:
 
@@ -356,9 +366,9 @@ def export_automates():
 
         except SQLAlchemyError as e:
             logger.error(
-                "Impossible d'importer votre automate '{}' car une erreur de transposition en base de données est survenue '{}'.",
-                automate.designation,
-                str(e)
+                _("Impossible d'importer votre automate '{automate_nom}' car une erreur de transposition en base de données est survenue '{msg_err}'."),
+                automate_nom=automate.designation,
+                msg_err=str(e)
             )
             continue
 
@@ -366,9 +376,9 @@ def export_automates():
         db.session.flush()
     except SQLAlchemyError as e:
         logger.warning(
-            "Erreur SQL '{}'.", str(e)
+            _("Erreur SQL '{err_msg}'."), err_msg=str(e)
         )
-        return jsonify({'message': 'Erreur de transaction SQL : {}'.format(str(e))}), 409
+        return jsonify({'message': _('Erreur de transaction SQL : {err_msg}').format(err_msg=str(e))}), 409
 
     return jsonify({}), 204
 
@@ -475,7 +485,7 @@ def assistance_saisie_automate(automate_id):
 
     if automate is None:
         return jsonify(
-            {'message': 'Impossible de proposer la liste des variables disponibles pour un automate inexistant'})
+            {'message': _('Impossible de proposer la liste des variables disponibles pour un automate inexistant')})
 
     propositions = list()
 
@@ -519,21 +529,21 @@ def creation_test_service():
         return jsonify({}), 400
 
     if InstanceInteroperabilite.current_thread is not None:
-        return jsonify({'message': "L'environnement de test nécessite que le traitement des flux soit désactivé."}), 409
+        return jsonify({'message': _("L'environnement de test nécessite que le traitement des flux soit désactivé.")}), 409
 
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
 
     if automate is None:
-        return jsonify({'message': 'Aucun automate ne correspond à ID {}'.format(automate_id)}), 404
+        return jsonify({'message': _('Aucun automate ne correspond à ID {id}').format(id=automate_id)}), 404
 
     if automate.production is True:
-        return jsonify({'message': 'Votre automate ne doit pas être en mode production.'}), 409
+        return jsonify({'message': _('Votre automate ne doit pas être en mode production.')}), 409
 
     InstanceInteroperabilite.liste_attente_test_lock.acquire(blocking=True)
 
     if automate_id in InstanceInteroperabilite.liste_attente_test:
         InstanceInteroperabilite.liste_attente_test_lock.release()
-        return jsonify({'message': "Votre automate est toujours en attente d'être testé. Veuillez patienter."}), 409
+        return jsonify({'message': _("Votre automate est toujours en attente d'être testé. Veuillez patienter.")}), 409
 
     InstanceInteroperabilite.liste_attente_test.append(automate_id)
     InstanceInteroperabilite.liste_attente_test_lock.release()
@@ -553,7 +563,7 @@ def simulation_detecteur_fichier():
 
     if (mon_fichier.content_type != 'application/octet-stream' and mon_fichier.content_type != 'message/rfc822') or (
             mon_fichier.filename.endswith('.eml') is False and mon_fichier.filename.endswith('.msg') is False):
-        return jsonify({'message': 'Fichier message invalide, fichier binaire *.EML ou *.MSG requis !'}), 400
+        return jsonify({'message': _('Fichier message invalide, fichier binaire *.EML ou *.MSG requis !')}), 400
 
     if mon_fichier.filename.endswith('.eml') is True:
         mon_message = Mail.from_eml(mon_fichier.stream.read())
@@ -638,17 +648,17 @@ def simulation_detecteur():
     corps = request.form.get('corps', type=str, default=None)
 
     if sujet is None:
-        return jsonify({'message': 'Formulaire incomplet, manque le sujet de la source'}), 400
+        return jsonify({'message': _('Formulaire incomplet, manque le sujet de la source')}), 400
     if corps is None:
-        return jsonify({'message': 'Formulaire incomplet, manque le corps de la source'}), 400
+        return jsonify({'message': _('Formulaire incomplet, manque le corps de la source')}), 400
 
     if detecteur_id is None:
-        return jsonify({'message': 'Formulaire incomplet, manque l\'identifiant du detecteur cible à tester'}), 400
+        return jsonify({'message': _('Formulaire incomplet, manque l\'identifiant du detecteur cible à tester')}), 400
 
     detecteur = db.session.query(Detecteur).get(detecteur_id)  # type: Detecteur
 
     if detecteur is None:
-        return jsonify({'message': 'Impossible de trouver le detecteur n°'+str(detecteur_id)}), 404
+        return jsonify({'message': _('Impossible de trouver le detecteur n°{n}').format(n=str(detecteur_id))}), 404
 
     from hermes.source import Source as SourceNatif
 
@@ -678,9 +688,9 @@ def simulation_extraction_interet():
     corps = request.form.get('corps', type=str, default=None)
 
     if sujet is None:
-        return jsonify({'message': 'Formulaire incomplet, manque le sujet de la source'}), 409
+        return jsonify({'message': _('Formulaire incomplet, manque le sujet de la source')}), 409
     if corps is None:
-        return jsonify({'message': 'Formulaire incomplet, manque le corps de la source'}), 409
+        return jsonify({'message': _('Formulaire incomplet, manque le corps de la source')}), 409
 
     mon_extraction_interet = ExtractionInteret(
         sujet,
@@ -742,7 +752,7 @@ def lecture_automates():
 def lecture_legacy_automate(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
     if automate is None:
-        return jsonify({'message': 'Aucun automate ne correspond à ID {}'.format(automate_id)}), 404
+        return jsonify({'message': _('Aucun automate ne correspond à ID {id}').format(id=automate_id)}), 404
     return AutomateLegacySchema().jsonify(automate), 200
 
 
@@ -760,7 +770,7 @@ def lecture_liste_action_noeud_type():
 def lecture_automate(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
     if automate is None:
-        return jsonify({'message': 'Aucun automate ne correspond à ID {}'.format(automate_id)}), 404
+        return jsonify({'message': _('Aucun automate ne correspond à ID {id}').format(id=automate_id)}), 404
     return AutomateSchema().jsonify(automate), 200
 
 
@@ -783,15 +793,15 @@ def lecture_action_automate(automate_id, action_noeud_id):
 
     if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
         return jsonify(
-            {'message': 'Type d\'action illégale à la création: "{}"'.format(decompose_type_action[-2])}), 409
+            {'message': _('Type d\'action illégale à la création: "{action_type}"').format(action_type=decompose_type_action[-2])}), 409
 
     target_module = modules['.'.join(decompose_type_action[-2].split('.')[0:-1])]
 
     try:
         target_model_class = getattr(target_module, decompose_type_action[-2].split('.')[-1])
     except AttributeError as e:
-        return jsonify({'message': 'Le type d\'action demandé à la création est inexistant: {}'.format(
-            decompose_type_action[-2].split('.')[-1])}), 400
+        return jsonify({'message': _('Le type d\'action demandé à la création est inexistant: {action_type}').format(
+            action_type=decompose_type_action[-2].split('.')[-1])}), 400
 
     target_sub_action = db.session.query(target_model_class).filter_by(automate_id=automate_id, id=action_noeud_id).one()  # type: ActionNoeud
 
@@ -809,15 +819,15 @@ def creation_action(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
 
     if not request.is_json:
-        return jsonify({'message': 'Aucun corps JSON présent dans la requête HTTP'}), 400
+        return jsonify({'message': _('Aucun corps JSON présent dans la requête HTTP')}), 400
 
     if automate is None:
-        return jsonify({'message': 'Aucun automate ne correspond à ID {}'.format(automate_id)}), 404
+        return jsonify({'message': _('Aucun automate ne correspond à ID {id}').format(id=automate_id)}), 404
 
     payload = request.json  # type: dict
 
     if 'type' not in payload or ('parent' not in payload and 'remplacer' not in payload) or 'formulaire' not in payload:
-        return jsonify({'message': 'Le JSON présent dans la requête est invalide'}), 400
+        return jsonify({'message': _('Le JSON présent dans la requête est invalide')}), 400
 
     type_action = payload['type']
     parent_information = payload['parent'] if 'parent' in payload else None
@@ -827,14 +837,14 @@ def creation_action(automate_id):
     decompose_type_action = type_action.split("'")  # type: list[str]
 
     if len(decompose_type_action) != 3 or not decompose_type_action[-2].startswith('hermes_ui.models.'):
-        return jsonify({'message': 'Type d\'action illégale à la création: "{}"'.format(decompose_type_action[-2])}), 409
+        return jsonify({'message': _('Type d\'action illégale à la création: "{action_type}"').format(action_type=decompose_type_action[-2])}), 409
 
     target_module = modules['.'.join(decompose_type_action[-2].split('.')[0:-1])]
 
     try:
         target_model_class = getattr(target_module, decompose_type_action[-2].split('.')[-1])  # type: type(ActionNoeud)
     except AttributeError as e:
-        return jsonify({'message': 'Le type d\'action demandé à la création est inexistant: {}'.format(decompose_type_action[-2].split('.')[-1])}), 400
+        return jsonify({'message': _('Le type d\'action demandé à la création est inexistant: {action_type}').format(action_type=decompose_type_action[-2].split('.')[-1])}), 400
 
     for key_form in formulaire.keys():
         if isinstance(formulaire[key_form], str) and len(formulaire[key_form].strip()) == 0 and key_form in target_model_class.PARAMETRES.keys() and target_model_class.PARAMETRES[key_form]['required'] is False:
@@ -843,7 +853,7 @@ def creation_action(automate_id):
     try:
         target_model_instance = target_model_class(**formulaire)  # type: ActionNoeud
     except AttributeError as e:
-        return jsonify({'message': 'Le formulaire de création est invalide, pour cause de "{}"'.format(str(e))}), 400
+        return jsonify({'message': _('Le formulaire de création est invalide, pour cause de "{msg_err}"').format(msg_err=str(e))}), 400
 
     target_model_instance.mapped_class_child = str(target_model_instance.__class__)
 
@@ -868,13 +878,13 @@ def creation_action(automate_id):
             automate.action_racine = target_model_instance
         else:
             if len(parent_information) != 2:
-                return jsonify({'message': 'Les informations de votre action parente sont malformés'}), 400
+                return jsonify({'message': _('Les informations de votre action parente sont malformés')}), 400
 
             action_parente_id, etat_reussite = tuple(parent_information)
             action_noeud_parente = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=int(action_parente_id)).one()  # type: ActionNoeud
 
             if action_noeud_parente is None:
-                return jsonify({'message': 'L\'action parente n\'existe pas !'}), 404
+                return jsonify({'message': _('L\'action parente n\'existe pas !')}), 404
 
             if 'ECHEC' in parent_information:
                 target_model_instance.action_echec_id = action_noeud_parente.id
@@ -884,7 +894,7 @@ def creation_action(automate_id):
         noeud_a_remplacer = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=int(remplacement_action_noeud)).one()  # type: ActionNoeud
 
         if noeud_a_remplacer is None:
-            return jsonify({'message': "Le noeud que vous souhaitez remplacer est inexistant"}), 404
+            return jsonify({'message': _("Le noeud que vous souhaitez remplacer est inexistant")}), 404
 
         target_model_instance.action_echec_id = noeud_a_remplacer.action_echec_id
         target_model_instance.action_reussite_id = noeud_a_remplacer.action_reussite_id
@@ -919,17 +929,17 @@ def modification_action(automate_id, action_noeud_id):
     action_noeud = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=action_noeud_id).first()  # type: ActionNoeud
 
     if not request.is_json:
-        return jsonify({'message': 'Aucun corps JSON présent dans la requête HTTP'}), 400
+        return jsonify({'message': _('Aucun corps JSON présent dans la requête HTTP')}), 400
 
     if automate is None:
-        return jsonify({'message': 'Aucun automate ne correspond à ID {}'.format(automate_id)}), 404
+        return jsonify({'message': _('Aucun automate ne correspond à ID {id}').format(id=automate_id)}), 404
     if action_noeud is None:
-        return jsonify({'message': 'Aucun action noeud ne correspond à ID {} pour l\'automate ID {}'.format(action_noeud_id, automate_id)}), 404
+        return jsonify({'message': _('Aucun action noeud ne correspond à ID {action_id} pour l\'automate ID {automate_id}').format(action_id=action_noeud_id, automate_id=automate_id)}), 404
 
     payload = request.json  # type: dict
 
     if 'type' not in payload.keys() or 'formulaire' not in payload.keys():
-        return jsonify({'message': 'Le JSON présent dans la requête est invalide'}), 400
+        return jsonify({'message': _('Le JSON présent dans la requête est invalide')}), 400
 
     type_action = payload['type']
     formulaire = payload['formulaire']  # type: dict
@@ -972,9 +982,9 @@ def supprimer_action(automate_id, action_noeud_id):
                                                            id=action_noeud_id).one()  # type: ActionNoeud
 
     if automate is None:
-        return jsonify({'message': 'Aucun automate ne correspond à ID {}'.format(automate_id)}), 404
+        return jsonify({'message': _('Aucun automate ne correspond à ID {id}').format(id=automate_id)}), 404
     if action_noeud is None:
-        return jsonify({'message': 'Aucun action noeud ne correspond à ID {} pour l\'automate ID {}'.format(action_noeud_id, automate_id)}), 404
+        return jsonify({'message': _('Aucun action noeud ne correspond à ID {action_id} pour l\'automate ID {automate_id}').format(action_id=action_noeud_id, automate_id=automate_id)}), 404
 
     if automate.action_racine_id == action_noeud.id:
         automate.action_racine_id = None
@@ -1031,6 +1041,6 @@ except OperationalError as e:
 except ProgrammingError as e:
     build_sample_db()
 except Exception as e:
-    logger.warning('Exception générique attrapée lors de la requête de test schéma. "{}"', str(e))
+    logger.warning(_('Exception générique attrapée lors de la requête de test schéma. "{msg_err}"'), msg_err=str(e))
     build_sample_db()
 

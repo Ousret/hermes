@@ -14,7 +14,7 @@
             {% autoescape false %}{{ admin_view.admin.long_name }}{% endautoescape %}
         </div>
         <div class="login-box-body">
-            <p class="login-box-msg">Sign in</p>
+            <p class="login-box-msg">{{ _( "Connexion à Hermes" ) }}</p>
             <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
                 {{ login_user_form.hidden_tag() }}
                 {{ render_field_with_errors(login_user_form.email, 'fa fa-at') }}
@@ -32,10 +32,10 @@
         </div>
         <p class="text-center" style="margin-top: 15px;">
             {% if security.recoverable %}
-                <a href="{{ url_for('security.forgot_password') }}">I forgot my password</a><br>
+                <a href="{{ url_for('security.forgot_password') }}">{{ _( "Mot de passe perdu" ) }}</a><br>
             {% endif %}
             {% if security.registerable %}
-                <a href="{{ url_for('security.register') }}">Register a new account</a>
+                <a href="{{ url_for('security.register') }}">{{ _( "Je m'inscris" ) }}</a>
             {% endif %}
         </p>
     </div>

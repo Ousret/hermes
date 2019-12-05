@@ -8,6 +8,9 @@ from copy import deepcopy
 from collections import OrderedDict
 
 
+from hermes.i18n import _
+
+
 class Automate(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     designation = db.Column(db.String(255), nullable=False, unique=True)
@@ -57,12 +60,12 @@ class ActionNoeud(db.Model):
         'designation': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Une courte explication de ce que votre action va réaliser'
+            'help': _('Une courte explication de ce que votre action va réaliser')
         },
         'friendly_name': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Un nom simple (de variable) sans espace pour réutiliser le résultat de votre action si il y a lieu'
+            'help': _('Un nom simple (de variable) sans espace pour réutiliser le résultat de votre action si il y a lieu')
         }
     })
 
@@ -152,47 +155,47 @@ class ActionNoeud(db.Model):
 
 
 class RequeteSqlActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Effectuer une requête de type SQL sur un serveur SGDB tel que ' \
-                  'Oracle, MySQL, PosgreSQL, Microsoft SQL Serveur et MariaDB'
+    DESCRIPTION = _('Effectuer une requête de type SQL sur un serveur SGDB tel que '
+                    'Oracle, MySQL, PosgreSQL, Microsoft SQL Serveur et MariaDB')
     PARAMETRES = OrderedDict({
         'hote_type_protocol': {
             'format': 'SELECT',
             'required': True,
-            'help': 'Type de serveur SGDB distant',
+            'help': _('Type de serveur SGDB distant'),
             'choix': ['mysql', 'mariadb', 'posgres', 'mssql', 'oracle']
         },
         'hote_ipv4': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Adresse IPv4 xxx.xxx.xxx.xxx de votre serveur SGDB',
+            'help': _('Adresse IPv4 xxx.xxx.xxx.xxx de votre serveur SGDB'),
         },
         'hote_port': {
             'format': 'NUMBER',
             'required': True,
-            'help': 'Port TCP à utiliser pour se connecter à votre serveur, '
-                    'eg. 3306 pour MySQL, MariaDB; 5432 pour PosgreSQL; 1521 pour Oracle; etc..',
+            'help': _('Port TCP à utiliser pour se connecter à votre serveur, '
+                    'eg. 3306 pour MySQL, MariaDB; 5432 pour PosgreSQL; 1521 pour Oracle; etc..'),
         },
         'hote_database': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Nom de votre base de données sur laquelle sera executée la requête SQL',
+            'help': _('Nom de votre base de données sur laquelle sera executée la requête SQL'),
         },
         'requete_sql': {
             'format': 'TEXTAREA',
             'required': True,
-            'help': 'Requête SQL à lancer sur votre serveur, l\'usage des variables {{ ma_variable }} '
+            'help': _('Requête SQL à lancer sur votre serveur, l\'usage des variables {{ ma_variable }} '
                     'est autorisée dans la clause WHERE. Elles seront insérées de manière sécurisée. '
-                    'eg. "SELECT * FROM Product WHERE name = {{ nom_produit }} LIMIT 5"',
+                    'eg. "SELECT * FROM Product WHERE name = {{ nom_produit }} LIMIT 5"'),
         },
         'nom_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Saisir le nom d\'utilisateur pour la connexion si nécessaire',
+            'help': _('Saisir le nom d\'utilisateur pour la connexion si nécessaire'),
         },
         'mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Saisir le mot de passe associé à l\'utilisateur pour la connexion si nécessaire',
+            'help': _('Saisir le mot de passe associé à l\'utilisateur pour la connexion si nécessaire'),
         },
     })
 
@@ -235,42 +238,42 @@ class RequeteSqlActionNoeud(ActionNoeud):
 
 
 class RequeteSoapActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Effectuer une requête de type SOAP Webservice'
+    DESCRIPTION = _('Effectuer une requête de type SOAP Webservice')
     PARAMETRES = OrderedDict({
         'url_service': {
             'format': 'TEXT',
             'required': True,
-            'help': 'URL du service WDSL cible sur lequel le webservice SOAP est actif'
+            'help': _('URL du service WDSL cible sur lequel le webservice SOAP est actif')
         },
         'methode_cible': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Choix de la méthode (fonction) à utiliser, la documentation du webservice doit vous le fournir',
+            'help': _('Choix de la méthode (fonction) à utiliser, la documentation du webservice doit vous le fournir'),
         },
         'form_data': {
             'format': 'JSON',
             'required': False,
-            'help': 'La structure de données à fournir au webservice, il est possible que celle-ci soit vide',
+            'help': _('La structure de données à fournir au webservice, il est possible que celle-ci soit vide'),
         },
         'authentification_basique_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Nom utilisateur à utiliser pour une éventuelle authentification',
+            'help': _('Nom utilisateur à utiliser pour une éventuelle authentification'),
         },
         'authentification_basique_mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Mot de passe associé à utiliser pour une éventuelle authentification',
+            'help': _('Mot de passe associé à utiliser pour une éventuelle authentification'),
         },
         'proxy_http': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Adresse de votre proxy pour les requêtes HTTP non sécurisée',
+            'help': _('Adresse de votre proxy pour les requêtes HTTP non sécurisée'),
         },
         'proxy_https': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Adresse de votre proxy pour les requêtes HTTPS sécurisée',
+            'help': _('Adresse de votre proxy pour les requêtes HTTPS sécurisée'),
         },
     })
 
@@ -318,53 +321,53 @@ class RequeteSoapActionNoeud(ActionNoeud):
 
 
 class RequeteHttpActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Effectuer une requête de type HTTP sur un serveur distant'
+    DESCRIPTION = _('Effectuer une requête de type HTTP sur un serveur distant')
     PARAMETRES = OrderedDict({
         'url_dest': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Adresse URL du serveur HTTP distant sur laquelle la requête sera lancée'
+            'help': _('Adresse URL du serveur HTTP distant sur laquelle la requête sera lancée')
         },
         'methode_http': {
             'format': 'SELECT',
             'required': True,
-            'help': 'La méthode (ou verbe) HTTP à utiliser avec la requête, cette information peut être disponible dans votre documentation du service distant',
+            'help': _('La méthode (ou verbe) HTTP à utiliser avec la requête, cette information peut être disponible dans votre documentation du service distant'),
             'choix': ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
         },
         'form_data': {
             'format': 'JSON',
             'required': False,
-            'help': 'Les données à transmettre dans votre requête HTTP',
+            'help': _('Les données à transmettre dans votre requête HTTP'),
         },
         'authentification_basique_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur'),
         },
         'authentification_basique_mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe'),
         },
         'proxy_http': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'proxy_https': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'resp_code_http': {
             'format': 'NUMBER',
             'required': False,
-            'help': 'Si vous attendez un code de retour HTTP spécifique pour vérifier que la requête à réussi, précisez-le',
+            'help': _('Si vous attendez un code de retour HTTP spécifique pour vérifier que la requête à réussi, précisez-le'),
         },
         'verify_peer': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+            'help': _('Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée'),
         }
     })
 
@@ -417,60 +420,60 @@ class RequeteHttpActionNoeud(ActionNoeud):
 
 
 class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Ecrire un message électronique vers n-tiers via un serveur SMTP'
+    DESCRIPTION = _('Ecrire un message électronique vers n-tiers via un serveur SMTP')
     PARAMETRES = OrderedDict({
         'destinataire': {
             'format': 'TEXT',
             'required': True,
-            'help': "L'adresse email du destinataire, en cas de multiple destinataire, "
-                    "veuillez les séparer par une virgule."
+            'help': _("L'adresse email du destinataire, en cas de multiple destinataire, "
+                    "veuillez les séparer par une virgule.")
         },
         'sujet': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le sujet de votre email transféré'
+            'help': _('Le sujet de votre email transféré')
         },
         'corps': {
             'format': 'TEXTAREA',
             'required': True,
-            'help': 'Le corps de votre message électronique, format HTML supporté'
+            'help': _('Le corps de votre message électronique, format HTML supporté')
         },
         'hote_smtp': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Votre serveur SMTP par lequel votre message transitera'
+            'help': _('Votre serveur SMTP par lequel votre message transitera')
         },
         'port_smtp': {
             'format': 'NUMBER',
             'required': True,
-            'help': 'Le port de votre serveur SMTP à utiliser, '
-                    'soit 587 (le plus courant) ou le port 25 à titre d\'exemple'
+            'help': _('Le port de votre serveur SMTP à utiliser, '
+                    'soit 587 (le plus courant) ou le port 25 à titre d\'exemple')
         },
         'nom_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Le nom d\'utilisateur à utiliser avec le serveur SMTP si il y a lieu',
+            'help': _('Le nom d\'utilisateur à utiliser avec le serveur SMTP si il y a lieu'),
         },
         'mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Le mot de passe à utiliser avec le serveur SMTP si il y a lieu',
+            'help': _('Le mot de passe à utiliser avec le serveur SMTP si il y a lieu'),
         },
         'enable_tls': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour utiliser la connexion via un port sécurisé, '
-                    'dans le doute laissez cette case cochée',
+            'help': _('Cochez cette case pour utiliser la connexion via un port sécurisé, '
+                    'dans le doute laissez cette case cochée'),
         },
         'pj_source': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour transférer le message source en pièce jointe si la source le permet',
+            'help': _('Cochez cette case pour transférer le message source en pièce jointe si la source le permet'),
         },
         'legacy_tls_support': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': "Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2."
+            'help': _("Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2.")
         }
     })
 
@@ -516,49 +519,49 @@ class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
 
 
 class TransfertSmtpActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Transferer un message électronique vers n-tiers via un serveur SMTP'
+    DESCRIPTION = _('Transferer un message électronique vers n-tiers via un serveur SMTP')
     PARAMETRES = OrderedDict({
         'destinataire': {
             'format': 'TEXT',
             'required': True,
-            'help': "L'adresse email du destinaire, en cas de multiple destinataire, "
-                    "veuillez les séparer par une virgule"
+            'help': _("L'adresse email du destinaire, en cas de multiple destinataire, "
+                    "veuillez les séparer par une virgule")
         },
         'sujet': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le sujet de votre email transféré'
+            'help': _('Le sujet de votre email transféré')
         },
         'hote_smtp': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Votre serveur SMTP par lequel votre message transitera'
+            'help': _('Votre serveur SMTP par lequel votre message transitera')
         },
         'port_smtp': {
             'format': 'NUMBER',
             'required': True,
-            'help': 'Le port de votre serveur SMTP à utiliser, le plus fréquent 587 ou 25'
+            'help': _('Le port de votre serveur SMTP à utiliser, le plus fréquent 587 ou 25')
         },
         'nom_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Le nom d\'utilisateur à utiliser avec le serveur SMTP si il y a lieu',
+            'help': _('Le nom d\'utilisateur à utiliser avec le serveur SMTP si il y a lieu'),
         },
         'mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Le mot de passe à utiliser avec le serveur SMTP si il y a lieu',
+            'help': _('Le mot de passe à utiliser avec le serveur SMTP si il y a lieu'),
         },
         'enable_tls': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour utiliser la connexion SMTP via un port sécurisé, '
-                    'dans le doute laissez cette case cochée',
+            'help': _('Cochez cette case pour utiliser la connexion SMTP via un port sécurisé, '
+                    'dans le doute laissez cette case cochée'),
         },
         'legacy_tls_support': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': "Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2."
+            'help': _("Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2.")
         }
     })
 
@@ -599,12 +602,12 @@ class TransfertSmtpActionNoeud(ActionNoeud):
 
 
 class ConstructionInteretActionNoeud(ActionNoeud):
-    DESCRIPTION = "Construire une variable intermédiaire"
+    DESCRIPTION = _("Construire une variable intermédiaire")
     PARAMETRES = OrderedDict({
         'interet': {
             'format': 'JSON',
             'required': True,
-            'help': 'Contruire votre objet variable intermédiaire'
+            'help': _('Contruire votre objet variable intermédiaire')
         },
     })
 
@@ -634,17 +637,17 @@ class ConstructionInteretActionNoeud(ActionNoeud):
 
 
 class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
-    DESCRIPTION = "Fabriquer une chaîne de caractère à partir d'une liste identifiable"
+    DESCRIPTION = _("Fabriquer une chaîne de caractère à partir d'une liste identifiable")
     PARAMETRES = OrderedDict({
         'variable_pattern': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Votre variable contenant au moins une liste identifiable tel que {{ ma_variable.0.adresse }}'
+            'help': _('Votre variable contenant au moins une liste identifiable tel que {{ ma_variable.0.adresse }}')
         },
         'separateur': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le séparateur à mettre pendant la phase de collage'
+            'help': _('Le séparateur à mettre pendant la phase de collage')
         },
     })
 
@@ -675,84 +678,84 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
 
 
 class InvitationEvenementActionNoeud(ActionNoeud):
-    DESCRIPTION = "Emettre ou mettre à jour une invitation à un évenement par message electronique"
+    DESCRIPTION = _("Emettre ou mettre à jour une invitation à un évenement par message electronique")
     PARAMETRES = OrderedDict({
         'organisateur': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Précisez-nous qui est à l\'origine de cette invitation, nom ou adresse de messagerie'
+            'help': _('Précisez-nous qui est à l\'origine de cette invitation, nom ou adresse de messagerie')
         },
         'participants': {
             'format': 'TEXT',
             'required': True,
-            'help': "Une liste d'adresse de messagerie séparées par une virgule, "
-                    "peut être précédemment construit par une autre action"
+            'help': _("Une liste d'adresse de messagerie séparées par une virgule, "
+                    "peut être précédemment construit par une autre action")
         },
         'sujet': {
             'format': 'TEXT',
             'required': True,
-            'help': "En bref, le sujet au coeur de votre invitation"
+            'help': _("En bref, le sujet au coeur de votre invitation")
         },
         'description': {
             'format': 'TEXTAREA',
             'required': True,
-            'help': 'Décrivez-nous en détails votre invitation, les enjeux, les prérequis, etc.. (!HTML non supporté!)'
+            'help': _('Décrivez-nous en détails votre invitation, les enjeux, les prérequis, etc.. (!HTML non supporté!)')
         },
         'lieu': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le lieu où l\'invitation aura lieu'
+            'help': _('Le lieu où l\'invitation aura lieu')
         },
         'date_heure_depart': {
             'format': 'TEXT',
             'required': True,
-            'help': "La date et heure de début de l'évenement, "
+            'help': _("La date et heure de début de l'évenement, "
                     "doit être facilement lisible pour un robot, format français ou anglais. "
-                    "eg. '15/01/2019 15:22 GMT+02'"
+                    "eg. '15/01/2019 15:22 GMT+02'")
         },
         'date_heure_fin': {
             'format': 'TEXT',
             'required': True,
-            'help': "La date et heure de fin de l'évenement, "
+            'help': _("La date et heure de fin de l'évenement, "
                     "doit être facilement lisible pour un robot, format français ou anglais. "
-                    "eg. '20/01/2019 15:22 GMT+02'"
+                    "eg. '20/01/2019 15:22 GMT+02'")
         },
         'est_maintenu': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': "Cochez-le si l'évenement doit être maintenu"
+            'help': _("Cochez-le si l'évenement doit être maintenu")
         },
 
         'hote_smtp': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Votre serveur SMTP par lequel votre message transitera'
+            'help': _('Votre serveur SMTP par lequel votre message transitera')
         },
         'port_smtp': {
             'format': 'NUMBER',
             'required': True,
-            'help': 'Le port de votre serveur SMTP à utiliser, le plus fréquent 587 ou 25'
+            'help': _('Le port de votre serveur SMTP à utiliser, le plus fréquent 587 ou 25')
         },
         'nom_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Le nom d\'utilisateur à utiliser avec le serveur SMTP si il y a lieu',
+            'help': _('Le nom d\'utilisateur à utiliser avec le serveur SMTP si il y a lieu'),
         },
         'mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Le mot de passe à utiliser avec le serveur SMTP si il y a lieu',
+            'help': _('Le mot de passe à utiliser avec le serveur SMTP si il y a lieu'),
         },
         'enable_tls': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour utiliser la connexion SMTP via un port sécurisé, '
-                    'dans le doute laissez cette case cochée',
+            'help': _('Cochez cette case pour utiliser la connexion SMTP via un port sécurisé, '
+                    'dans le doute laissez cette case cochée'),
         },
         'legacy_tls_support': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': "Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2."
+            'help': _("Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. eg. TLS inférieur à 1.2.")
         }
     })
 
@@ -808,12 +811,12 @@ class InvitationEvenementActionNoeud(ActionNoeud):
 
 
 class VerifierSiVariableVraiActionNoeud(ActionNoeud):
-    DESCRIPTION = "Vérifie si une variable est Vrai"
+    DESCRIPTION = _("Vérifie si une variable est Vrai")
     PARAMETRES = OrderedDict({
         'variable_cible': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Nom de votre variable à tester à Vrai, vous pouvez utiliser le format {{ ma_varible }}'
+            'help': _('Nom de votre variable à tester à Vrai, vous pouvez utiliser le format {{ ma_varible }}')
         },
     })
 
@@ -842,14 +845,14 @@ class VerifierSiVariableVraiActionNoeud(ActionNoeud):
 
 
 class ExecutionAutomateActionNoeud(ActionNoeud):
-    DESCRIPTION = "Execution d'une routine en ce basant sur un automate existant"
+    DESCRIPTION = _("Execution d'une routine en ce basant sur un automate existant")
     PARAMETRES = OrderedDict({
         'sous_automate_id': {
             'format': 'AUTOMATE',
             'required': True,
-            'help': "Nom de l'automate à executer sur la source. "
+            'help': _("Nom de l'automate à executer sur la source. "
                     "Le résultat final est celui donnée par la dernière action. "
-                    "Priere de ne pas jouer à Inception. À vos risques et périls"
+                    "Priere de ne pas jouer à Inception. À vos risques et périls")
         }
     })
 
@@ -879,23 +882,23 @@ class ExecutionAutomateActionNoeud(ActionNoeud):
 
 
 class ComparaisonVariableActionNoeud(ActionNoeud):
-    DESCRIPTION = "Effectue une comparaison entre deux variables de votre choix, nombres, dates, etc.."
+    DESCRIPTION = _("Effectue une comparaison entre deux variables de votre choix, nombres, dates, etc..")
     PARAMETRES = OrderedDict({
         'membre_gauche_variable': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Membre de gauche de notre comparaison, vous pouvez utiliser le format {{ ma_varible }}'
+            'help': _('Membre de gauche de notre comparaison, vous pouvez utiliser le format {{ ma_varible }}')
         },
         'operande': {
             'format': 'SELECT',
             'required': True,
-            'help': "Type d'opérateur à utiliser dans le cadre de notre comparaison",
+            'help': _("Type d'opérateur à utiliser dans le cadre de notre comparaison"),
             'choix': ['==', '>', '<', '>=', '<=', '!=']
         },
         'membre_droite_variable': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Membre de gauche de notre comparaison, vous pouvez utiliser le format {{ ma_varible }}'
+            'help': _('Membre de gauche de notre comparaison, vous pouvez utiliser le format {{ ma_varible }}')
         },
     })
 
@@ -928,12 +931,12 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
 
 
 class DeplacerMailSourceActionNoeud(ActionNoeud):
-    DESCRIPTION = "Déplacer un message électronique sur un autre dossier"
+    DESCRIPTION = _("Déplacer un message électronique sur un autre dossier")
     PARAMETRES = OrderedDict({
         'dossier_destination': {
             'format': 'TEXT',
             'required': True,
-            'help': 'La destination dans lequel votre source sera déplacée'
+            'help': _('La destination dans lequel votre source sera déplacée')
         }
     })
 
@@ -961,12 +964,12 @@ class DeplacerMailSourceActionNoeud(ActionNoeud):
 
 
 class CopierMailSourceActionNoeud(ActionNoeud):
-    DESCRIPTION = "Copier un message électronique dans un autre dossier"
+    DESCRIPTION = _("Copier un message électronique dans un autre dossier")
     PARAMETRES = OrderedDict({
         'dossier_destination': {
             'format': 'TEXT',
             'required': True,
-            'help': 'La destination dans lequel votre source sera copiée',
+            'help': _('La destination dans lequel votre source sera copiée'),
         },
     })
 
@@ -994,7 +997,7 @@ class CopierMailSourceActionNoeud(ActionNoeud):
 
 
 class SupprimerMailSourceActionNoeud(ActionNoeud):
-    DESCRIPTION = "Supprime un message électronique"
+    DESCRIPTION = _("Supprime un message électronique")
     PARAMETRES = OrderedDict()
 
     __tablename__ = 'supprimer_mail_source_action_noeud'
@@ -1018,24 +1021,24 @@ class SupprimerMailSourceActionNoeud(ActionNoeud):
 
 
 class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
-    DESCRIPTION = "Création d'une variable intermédiaire " \
-                  "sachant une liste [{'cle_a': 'val_a', 'cle_b': 'val_b'}] vers {'val_a': 'val_b'}"
+    DESCRIPTION = _("Création d'une variable intermédiaire " \
+                  "sachant une liste [{'cle_a': 'val_a', 'cle_b': 'val_b'}] vers {'val_a': 'val_b'}")
 
     PARAMETRES = OrderedDict({
         'resultat_concerne': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le nom de la variable concernée par la transformation'
+            'help': _('Le nom de la variable concernée par la transformation')
         },
         'champ_cle': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le nom du champ clé'
+            'help': _('Le nom du champ clé')
         },
         'champ_valeur': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le nom du champ valeur'
+            'help': _('Le nom du champ valeur')
         },
     })
 
@@ -1068,57 +1071,57 @@ class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
 
 
 class ItopRequeteCoreGetActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Requête sur iTop opération core/get REST JSON'
+    DESCRIPTION = _('Requête sur iTop opération core/get REST JSON')
     PARAMETRES = OrderedDict({
         'url_rest_itop': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+            'help': _('Adresse URL du service iTop REST/JSON à utiliser pour la requête')
         },
         'auth_user': {
             'format': 'TEXT',
             'required': True,
-            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+            'help': _("Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get"),
         },
         'auth_pwd': {
             'format': 'TEXT',
             'required': True,
-            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+            'help': _("Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get"),
         },
         'requete_dql': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Votre requête DQL à utiliser dans le cadre de la requête',
+            'help': _('Votre requête DQL à utiliser dans le cadre de la requête'),
         },
         'output_fields': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Les champs à extraire des objets iTop, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
+            'help': _('Les champs à extraire des objets iTop, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.'),
         },
         'authentification_basique_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur'),
         },
         'authentification_basique_mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe'),
         },
         'proxy_http': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'proxy_https': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'verify_peer': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+            'help': _('Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée'),
         }
     })
 
@@ -1175,67 +1178,67 @@ class ItopRequeteCoreGetActionNoeud(ActionNoeud):
 
 
 class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Requête sur iTop opération core/create REST JSON'
+    DESCRIPTION = _('Requête sur iTop opération core/create REST JSON')
     PARAMETRES = OrderedDict({
         'url_rest_itop': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+            'help': _('Adresse URL du service iTop REST/JSON à utiliser pour la requête')
         },
         'auth_user': {
             'format': 'TEXT',
             'required': True,
-            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+            'help': _("Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/create"),
         },
         'auth_pwd': {
             'format': 'TEXT',
             'required': True,
-            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+            'help': _("Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get"),
         },
         'classe_itop_cible': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le nom de votre classe iTop dont la création sera nécessaire',
+            'help': _('Le nom de votre classe iTop dont la création sera nécessaire'),
         },
         'fields': {
             'format': 'JSON',
             'required': True,
-            'help': 'Veuillez construire votre nouvel objet à l\'aide de cet utilitaire tel que votre schéma de données le permet',
+            'help': _('Veuillez construire votre nouvel objet à l\'aide de cet utilitaire tel que votre schéma de données le permet'),
         },
         'output_fields': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Les champs à extraire des objets iTop, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
+            'help': _('Les champs à extraire des objets iTop, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.'),
         },
         'commentaire': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Explicitez brièvement la nature de votre création sous iTop (Journal iTop)',
+            'help': _('Explicitez brièvement la nature de votre création sous iTop (Journal iTop)'),
         },
         'authentification_basique_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur'),
         },
         'authentification_basique_mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe'),
         },
         'proxy_http': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'proxy_https': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'verify_peer': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+            'help': _('Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée'),
         }
     })
 
@@ -1298,67 +1301,67 @@ class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
 
 
 class ItopRequeteCoreUpdateActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Requête sur iTop opération core/update REST JSON'
+    DESCRIPTION = _('Requête sur iTop opération core/update REST JSON')
     PARAMETRES = OrderedDict({
         'url_rest_itop': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+            'help': _('Adresse URL du service iTop REST/JSON à utiliser pour la requête')
         },
         'auth_user': {
             'format': 'TEXT',
             'required': True,
-            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+            'help': _("Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get"),
         },
         'auth_pwd': {
             'format': 'TEXT',
             'required': True,
-            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+            'help': _("Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/update"),
         },
         'requete_dql': {
             'format': 'TEXT',
             'required': True,
-            'help': 'La requête DQL permettant d\'identifier l\'objet iTop visé',
+            'help': _('La requête DQL permettant d\'identifier l\'objet iTop visé'),
         },
         'fields': {
             'format': 'JSON',
             'required': True,
-            'help': 'Veuillez indiquez les champs à mettre à niveau à l\'aide de cet utilitaire',
+            'help': _('Veuillez indiquez les champs à mettre à niveau à l\'aide de cet utilitaire'),
         },
         'output_fields': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Les champs à extraire des objets iTop ensuite, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
+            'help': _('Les champs à extraire des objets iTop ensuite, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.'),
         },
         'commentaire': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Explicitez brièvement la nature de votre mise à jour iTop (Journal iTop)',
+            'help': _('Explicitez brièvement la nature de votre mise à jour iTop (Journal iTop)'),
         },
         'authentification_basique_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur'),
         },
         'authentification_basique_mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe'),
         },
         'proxy_http': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'proxy_https': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'verify_peer': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+            'help': _('Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée'),
         }
     })
 
@@ -1421,72 +1424,72 @@ class ItopRequeteCoreUpdateActionNoeud(ActionNoeud):
 
 
 class ItopRequeteCoreApplyStimulusActionNoeud(ActionNoeud):
-    DESCRIPTION = 'Requête sur iTop opération core/apply_stimulus REST JSON'
+    DESCRIPTION = _('Requête sur iTop opération core/apply_stimulus REST JSON')
     PARAMETRES = OrderedDict({
         'url_rest_itop': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Adresse URL du service iTop REST/JSON à utiliser pour la requête'
+            'help': _('Adresse URL du service iTop REST/JSON à utiliser pour la requête')
         },
         'auth_user': {
             'format': 'TEXT',
             'required': True,
-            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+            'help': _("Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de type core/apply_stimulus"),
         },
         'auth_pwd': {
             'format': 'TEXT',
             'required': True,
-            'help': "Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get",
+            'help': _("Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une requête rest de type core/get"),
         },
         'requete_dql': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Le requête DQL à effectuer pour identifier l\'objet sur lequel appliquer un stimulis iTop',
+            'help': _('Le requête DQL à effectuer pour identifier l\'objet sur lequel appliquer un stimulis iTop'),
         },
         'stimulus': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Veuillez indiquez le nom de votre stimulus. eg. "ev_xxxxx".',
+            'help': _('Veuillez indiquez le nom de votre stimulus. eg. "ev_xxxxx".'),
         },
         'fields': {
             'format': 'JSON',
             'required': False,
-            'help': 'Veuillez indiquez les arguments nécessaires à votre stimulus. Laissez vide si aucun.',
+            'help': _('Veuillez indiquez les arguments nécessaires à votre stimulus. Laissez vide si aucun.'),
         },
         'output_fields': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Les champs à extraire des objets iTop ensuite, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.',
+            'help': _('Les champs à extraire des objets iTop ensuite, pour récupérer l\'ensemble des champs, mettre "*". Sinon la liste des champs séparés par une virgule.'),
         },
         'commentaire': {
             'format': 'TEXT',
             'required': True,
-            'help': 'Explicitez brièvement la nature de votre mise à jour iTop (Journal iTop)',
+            'help': _('Explicitez brièvement la nature de votre mise à jour iTop (Journal iTop)'),
         },
         'authentification_basique_utilisateur': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le nom utilisateur'),
         },
         'authentification_basique_mot_de_passe': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe',
+            'help': _('Si une authentification est nécessaire par le billet d\'une authentification basique, précisez le mot de passe'),
         },
         'proxy_http': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes non sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'proxy_https': {
             'format': 'TEXT',
             'required': False,
-            'help': 'Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP',
+            'help': _('Si votre requête doit utiliser un proxy pour les requêtes sécurisées, précisez l\'adresse de votre serveur mandataire HTTP'),
         },
         'verify_peer': {
             'format': 'CHECKBOX',
             'required': False,
-            'help': 'Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée',
+            'help': _('Cochez cette case pour activer la vérification TLS distante, dans le doute laissez cette case cochée'),
         }
     })
 
@@ -1561,7 +1564,7 @@ class ItopRequeteCoreDeleteActionNoeud(ActionNoeud):
         'auth_user': {
             'format': 'TEXT',
             'required': True,
-            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest",
+            'help': "Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest core/delete",
         },
         'auth_pwd': {
             'format': 'TEXT',

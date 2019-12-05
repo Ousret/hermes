@@ -14,6 +14,8 @@ from hermes.detecteur import AucuneObligationInteretException
 
 from hermes_ui.incident import NotificationIncident
 
+from hermes.i18n import _
+
 
 class InstanceInteroperabilite:
 
@@ -26,11 +28,11 @@ class InstanceInteroperabilite:
     @staticmethod
     def thread():
 
-        logger.info("Chargement des variables globales passées en base de données")
+        logger.info(_("Chargement des variables globales passées en base de données"))
         configurations = db.session.query(Configuration).all()  # type: list[Configuration]
 
         for configuration in configurations:
-            logger.info("Chargement de la configuration <'{}'::{}>", configuration.designation, configuration.format)
+            logger.info(_("Chargement de la configuration <'{conf_nom}'::{conf_format}>"), conf_nom=configuration.designation, conf_format=configuration.format)
             try:
                 Session.charger_input(
                     configuration.designation,
@@ -38,9 +40,9 @@ class InstanceInteroperabilite:
                     configuration.format
                 )
             except TypeError as e:
-                logger.error("Impossible de charger la configuration <'{}'::{}> car '{}'", configuration.designation, configuration.format, str(e))
+                logger.error(_("Impossible de charger la configuration <'{conf_nom}'::{conf_format}> car '{error_msg}'"), conf_nom=configuration.designation, conf_format=configuration.format, error_msg=str(e))
 
-        logger.info("Démarrage de la boucle de surveillance des automates sur les boîtes IMAP4")
+        logger.info(_("Démarrage de la boucle de surveillance des automates sur les boîtes IMAP4"))
 
         InstanceInteroperabilite.liste_attente_test_lock.acquire()
         est_une_sequence_test = len(InstanceInteroperabilite.liste_attente_test) > 0
@@ -59,18 +61,17 @@ class InstanceInteroperabilite:
                         el.get_mailtoolbox()
                     )
                 except LoginError as e:
-                    logger.error("Impossible de démarrer l'usine "
-                                                        "à production de source '{}' car '{}'", el.designation, str(e))
+                    logger.error(_("Impossible de démarrer l'usine "
+                                                        "à production de source '{designation}' car '{msg_err}'"), designation=el.designation, msg_err=str(e))
                 except Exception as e:
-                    logger.error("Impossible de démarrer l'usine "
-                                                        "à production de source '{}' car '{}'", el.designation, str(e))
+                    logger.error(_("Impossible de démarrer l'usine "
+                                                        "à production de source '{designation}' car '{msg_err}'"), designation=el.designation, msg_err=str(e))
 
             if len(mail_factories) == 0:
-                logger.warning("Aucune usine à production de source n'est active, "
-                                                      "impossible de continuer")
+                logger.warning(_("Aucune usine à production de source n'est active, impossible de continuer"))
                 break
 
-            logger.debug("{} usine à production de source sont actives", len(mail_factories))
+            logger.debug(_("{n} usine(s) à production de source sont actives"), n=len(mail_factories))
 
             if est_une_sequence_test:
                 models_automates = db.session.query(Automate).filter_by(production=False).all()  # type: list[Automate]
@@ -81,37 +82,37 @@ class InstanceInteroperabilite:
 
             if len(models_automates) == 0:
                 logger.warning(
-                    "Aucune automate à traitement de source n'est actif, impossible de continuer")
+                    _("Aucune automate à traitement de source n'est actif, impossible de continuer"))
                 break
 
-            logger.debug("{} automates en production sont actifs", len(models_automates))
+            logger.debug(_("{n} automates en production sont actifs"), n=len(models_automates))
 
             for mail_factory in mail_factories:
 
-                logger.debug("Ouverture de la BAL '{}'@'{}'", mail_factory.nom_utilisateur, mail_factory.hote_imap)
+                logger.debug(_("Ouverture de la BAL '{nom_utilisateur}'@'{hote_imap}'"), nom_utilisateur=mail_factory.nom_utilisateur, hote_imap=mail_factory.hote_imap)
 
                 if InstanceInteroperabilite.stop_instruction is not None:
-                    logger.info("Arrêt du service interopérabilité, fin de boucle")
+                    logger.info(_("Arrêt de la surveillance continue des BAL"))
                     return
 
                 sources = mail_factory.extraire()
 
-                logger.debug("{} sources ont été extraites de l'usine à production '{}'", len(sources), str(mail_factory))
+                logger.debug(_("{n} sources ont été extraites de l'usine à production '{usine}'"), n=len(sources), usine=str(mail_factory))
 
                 for source in sources:
 
-                    logger.debug("Vérification du message électronique '{}'", source.titre)
+                    logger.debug(_("Vérification du message électronique '{source_nom}'"), source_nom=source.titre)
 
                     for model in models_automates:
 
                         automate = model.transcription()
 
                         if InstanceInteroperabilite.stop_instruction is not None:
-                            logger.info("Arrêt du service interopérabilité, fin de boucle")
+                            logger.info(_("Arrêt de la surveillance continue des BAL"))
                             return
 
                         if est_une_sequence_test and model.id not in InstanceInteroperabilite.liste_attente_test:
-                            logger.debug("Séquence de test ne conserne pas '{}'.", model.designation)
+                            logger.debug(_("Séquence de test ne conserne pas '{automate_nom}'."), automate_nom=model.designation)
                             continue
 
                         date_depart_automate = datetime.now()
@@ -127,11 +128,11 @@ class InstanceInteroperabilite:
 
                         if nb_execution_heure >= (model.limite_par_heure if model.limite_par_heure is not None else 100):
                             logger.warning(
-                                "L'automate '{}' ne va pas traiter la source '{}' car celle ci  "
-                                "dépasse la limite de {} lancement(s) par heure.",
-                                automate.designation,
-                                source.titre,
-                                (model.limite_par_heure if model.limite_par_heure is not None else 100)
+                                _("L'automate '{automate_nom}' ne va pas traiter la source '{source_nom}' car celle ci  "
+                                "dépasse la limite de {n} lancement(s) par heure."),
+                                automate_nom=automate.designation,
+                                source_nom=source.titre,
+                                n=(model.limite_par_heure if model.limite_par_heure is not None else 100)
                             )
                             continue
 
@@ -145,11 +146,11 @@ class InstanceInteroperabilite:
 
                         if nb_execution_echec_heure >= (model.limite_echec_par_heure if model.limite_echec_par_heure is not None else 10):
                             logger.warning(
-                                "L'automate '{}' ne va pas traiter la source '{}' car celle ci  "
-                                "dépasse la limite en échec de {} lancement(s) par heure.",
-                                automate.designation,
-                                source.titre,
-                                (model.limite_echec_par_heure if model.limite_echec_par_heure is not None else 10)
+                                _("L'automate '{automate_nom}' ne va pas traiter la source '{source_nom}' car celle ci  "
+                                "dépasse la limite en échec de {n} lancement(s) par heure."),
+                                automate_nom=automate.designation,
+                                source_nom=source.titre,
+                                n=(model.limite_echec_par_heure if model.limite_echec_par_heure is not None else 10)
                             )
                             continue
 
@@ -158,36 +159,36 @@ class InstanceInteroperabilite:
 
                             if etat_final_automate is True:
                                 logger.info(
-                                    "L'automate '{}' vient de traiter avec succès la source '{}'",
-                                    automate.designation,
-                                    source.titre
+                                    _("L'automate '{automate_nom}' vient de traiter avec succès la source '{source_nom}'"),
+                                    automate_nom=automate.designation,
+                                    source_nom=source.titre
                                 )
                             elif etat_final_automate is False and automate.detecteur.est_accomplis is True:
                                 logger.warning(
-                                    "L'automate '{}' vient de traiter avec au moins une erreur la source '{}'",
-                                    automate.designation,
-                                    source.titre
+                                    _("L'automate '{automate_nom}' vient de traiter avec au moins une erreur la source '{source_nom}'"),
+                                    automate_nom=automate.designation,
+                                    source_nom=source.titre
                                 )
 
                                 if model.notifiable is True:
                                     NotificationIncident.prevenir(
                                         model,
                                         source,
-                                        "L'automate '{}' n'a pas réussi à aboutir, au moins une action est en échec".format(automate.designation),
-                                        "Vous recevez ce message car votre automate '{}' est configurée "
+                                        _("L'automate '{automate_nom}' n'a pas réussi à aboutir, au moins une action est en échec").format(automate_nom=automate.designation),
+                                        _("Vous recevez ce message car votre automate '{automate_nom}' est configurée "
                                         "pour émettre une notification dans ce cas. \n\n"
                                         "En PJ les élements nécessaires à l'analyse des évènements. "
-                                        "L'automate est toujours actif. \n\n".format(
-                                            automate.designation,
+                                        "L'automate est toujours actif. \n\n").format(
+                                            automate_nom=automate.designation,
                                         )
                                     )
 
                         except AucuneObligationInteretException as e:
                             logger.error(
-                                "L'automate '{}' ne dispose pas d'un détecteur contraignant, "
+                                _("L'automate '{automate_nom}' ne dispose pas d'un détecteur contraignant, "
                                 "il est nécessaire d'avoir au moins une règle avec obligation. "
-                                "Désactivation de l'automate.",
-                                automate.designation
+                                "Désactivation de l'automate."),
+                                automate_nom=automate.designation
                             )
                             model.production = False
                             db.session.commit()
@@ -195,23 +196,23 @@ class InstanceInteroperabilite:
                             continue
                         except KeyError as e:
                             logger.error(
-                                "L'automate '{}' est en erreur grave, "
-                                "une variable est non résolue: '{}'",
-                                automate.designation,
-                                str(e)
+                                _("L'automate '{automate_nom}' est en erreur grave, "
+                                "une variable est non résolue: '{err_msg}'"),
+                                automate_nom=automate.designation,
+                                err_msg=str(e)
                             )
                             NotificationIncident.prevenir(
                                 model,
                                 source,
-                                "L'automate '{}' est en erreur grave, une variable est non résolue !".format(
-                                    automate.designation),
-                                "Vous recevez ce message car votre automate '{}' n'est pas en mesure d'aboutir. \n\n"
+                                _("L'automate '{automate_nom}' est en erreur grave, une variable est non résolue !").format(
+                                    automate_nom=automate.designation),
+                                _("Vous recevez ce message car votre automate '{automate_nom}' n'est pas en mesure d'aboutir. \n\n"
                                 "Une variable est non résolue. Veuillez revenir en conception. "
                                 "L'automate <b>a été désactivé</b> par précaution. \n\n"
                                 "Information technique: \n\n"
-                                "<pre class='code code-html'><label></label><code>{}</code></pre>".format(
-                                    automate.designation,
-                                    str(e)
+                                "<pre class='code code-html'><label></label><code>{msg_err}</code></pre>").format(
+                                    automate_nom=automate.designation,
+                                    msg_err=str(e)
                                 )
                             )
 
@@ -230,16 +231,16 @@ class InstanceInteroperabilite:
                             exc_type, exc_obj, exc_tb = exc_info()
 
                             logger.critical(
-                                "L'automate '{}' est en erreur critique, "
-                                "une exception est soulevée: '{}'",
-                                automate.designation,
-                                str(e)
+                                _("L'automate '{automate_nom}' est en erreur critique, "
+                                "une exception est soulevée: '{msg_err}'"),
+                                automate_nom=automate.designation,
+                                msg_err=str(e)
                             )
 
                             fname = path.split(exc_tb.tb_frame.f_code.co_filename)[1]
 
                             logger.critical(
-                                "Informations complémentaires '{}', '{}' à la ligne {}.", str(exc_type), str(fname), str(exc_tb.tb_lineno)
+                                _("Informations complémentaires '{exc_type}', '{fname}' à la ligne {lineno}."), exc_type=str(exc_type), fname=str(fname), lineno=str(exc_tb.tb_lineno)
                             )
 
                             logger.critical(
@@ -249,13 +250,13 @@ class InstanceInteroperabilite:
                             NotificationIncident.prevenir(
                                 model,
                                 source,
-                                "L'automate '{}' est en erreur critique, une exception est soulevée !".format(automate.designation),
+                                _("L'automate '{automate_nom}' est en erreur critique, une exception est soulevée !").format(automate_nom=automate.designation),
 
-                                "Vous recevez ce message car votre automate '{}' n'est pas en mesure d'aboutir. \n\n"
+                                _("Vous recevez ce message car votre automate '{automate_nom}' n'est pas en mesure d'aboutir. \n\n"
                                 "Une exception est non résolue. Veuillez revenir en conception. "
                                 "L'automate a été désactivé par précaution. \n\n"
                                 "Information technique: \n\n"
-                                "<pre class='code code-html'><label>Logs</label><code>{}</code></pre>".format(automate.designation, traceback.format_exc())
+                                "<pre class='code code-html'><label>Logs</label><code>{msg_err}</code></pre>").format(automate_nom=automate.designation, msg_err=traceback.format_exc())
                             )
 
                             model.production = False
@@ -306,7 +307,7 @@ class InstanceInteroperabilite:
 
             sleep(1 if len(mail_factories) > 0 else 10)
 
-        logger.info("Fin de surveillance continue des automates sur les boîtes IMAP4")
+        logger.info(_("Fin de surveillance continue des automates sur les boîtes IMAP4"))
         InstanceInteroperabilite.current_thread = None
 
     @staticmethod

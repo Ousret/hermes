@@ -4,6 +4,8 @@ from hermes_ui.adminlte.models import User
 from hermes_ui.db import db
 from hermes_ui.db.polymorphic import get_child_polymorphic
 
+from hermes.i18n import _
+
 
 class Detecteur(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -22,7 +24,7 @@ class Detecteur(db.Model):
                                                         primaryjoin="User.id==Detecteur.responsable_derniere_modification_id")
 
     def __repr__(self):
-        return '<Détecteur \'{}\'>'.format(self.designation)
+        return _('<Détection DE \'{detecteur_nom}\'>').format(detecteur_nom=self.designation)
 
     def transcription(self):
         """
@@ -74,7 +76,7 @@ class RechercheInteret(db.Model):
     }
 
     def __repr__(self):
-        return '<Recherche Intêret \'{}\'>'.format(self.designation)
+        return _('<Recherche DE \'{nom}\'>').format(nom=self.designation)
 
     def transcription(self):
         """
@@ -104,7 +106,9 @@ class IdentificateurRechercheInteret(RechercheInteret):
     }
 
     def __repr__(self):
-        return '<Recherche Identifiant \'{}\'>'.format(self.prefixe)
+        if self.focus_cle and self.focus_cle != '':
+            return _('<Recherche Identifiant Préfixé \'{identifiant_prefixe}\' DANS \'{focus_cle}\'>').format(identifiant_prefixe=self.prefixe, focus_cle=self.focus_cle)
+        return _('<Recherche Identifiant Préfixé \'{identifiant_prefixe}\' PARTOUT>').format(identifiant_prefixe=self.prefixe)
 
     def transcription(self):
         """
@@ -135,7 +139,7 @@ class ExpressionXPathRechercheInteret(RechercheInteret):
     }
 
     def __repr__(self):
-        return '<Recherche XPath \'{}\'>'.format(self.expression_xpath)
+        return _('<Recherche XPath \'{expr_xpath}\' DANS CORPS HTML>').format(expr_xpath=self.expression_xpath)
 
     def transcription(self):
         """
@@ -164,7 +168,14 @@ class LocalisationExpressionRechercheInteret(RechercheInteret):
     }
 
     def __repr__(self):
-        return '<Recherche Expression ENTRE \'{}\' ET \'{}\'>'.format(self.expression_gauche, self.expression_droite)
+        if self.expression_gauche and self.expression_droite and self.expression_gauche != '' and self.expression_droite != '':
+            return _('<Recherche Expression ENTRE \'{expr_gauche}\' ET \'{expr_droite}\' {loc}>').format(self.expression_gauche, self.expression_droite, _('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
+        if self.expression_gauche and self.expression_gauche != '':
+            return _('<Recherche Expression À DROITE DE \'{expr_gauche}\' {loc}>').format(self.expression_gauche, _('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
+        if self.expression_droite and self.expression_droite != '':
+            return _('<Recherche Expression À GAUCHE DE \'{expr_droite}\' {loc}>').format(self.expression_droite, _('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
+
+        return _('<Recherche Expression ENTRE \'{expr_gauche}\' ET \'{expr_droite}\' {loc}>').format(self.expression_gauche, self.expression_droite, _('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
 
     def transcription(self):
         """
@@ -192,7 +203,9 @@ class ExpressionCleRechercheInteret(RechercheInteret):
     }
 
     def __repr__(self):
-        return '<Recherche Exactement \'{}\'>'.format(self.expression_cle)
+        if self.focus_cle and self.focus_cle != '':
+            return _('<Recherche Exactement \'{expr}\' DANS \'{loc}\'>').format(expr=self.expression_cle, loc=self.focus_cle)
+        return _('<Recherche Exactement \'{expr}\' PARTOUT>').format(expr=self.expression_cle)
 
     def transcription(self):
         """
@@ -220,7 +233,9 @@ class ExpressionReguliereRechercheInteret(RechercheInteret):
     }
 
     def __repr__(self):
-        return '<Recherche REGEX \'{}\'>'.format(self.expression_reguliere)
+        if self.focus_cle and self.focus_cle != '':
+            return _('<Recherche REGEX \'{expr}\' DANS \'{loc}\'>').format(expr=self.expression_reguliere, loc=self.focus_cle)
+        return _('<Recherche REGEX \'{expr}\' PARTOUT>').format(expr=self.expression_reguliere)
 
     def transcription(self):
         """
@@ -247,7 +262,7 @@ class CleRechercheInteret(RechercheInteret):
     }
 
     def __repr__(self):
-        return '<Recherche Clé \'{}\'>'.format(self.cle_recherchee)
+        return _('<Recherche Clé Auto-Découverte \'{loc}\'>').format(loc=self.cle_recherchee)
 
     def transcription(self):
         """
@@ -273,7 +288,9 @@ class DateRechercheInteret(RechercheInteret):
     }
 
     def __repr__(self):
-        return '<Recherche Date \'{}\'>'.format(self.prefixe)
+        if self.focus_cle and self.focus_cle != '':
+            return _('<Recherche Date \'{prefixe}\' DANS \'{loc}\'>').format(prefixe=self.prefixe, loc=self.focus_cle)
+        return _('<Recherche Date \'{prefixe}\' PARTOUT>').format(prefixe=self.prefixe)
 
     def transcription(self):
         """
@@ -302,7 +319,7 @@ class ExpressionDansCleRechercheInteret(RechercheInteret):
     }
 
     def __repr__(self):
-        return '<Recherche Exactement \'{} IN "{}"\'>'.format(self.expression_recherchee, self.cle_recherchee)
+        return _('<Recherche Exactement \'{expr}\' DANS Clé Auto-Découverte "{loc}">').format(expr=self.expression_recherchee, loc=self.cle_recherchee)
 
     def transcription(self):
         """
@@ -327,6 +344,11 @@ class InformationRechercheInteret(RechercheInteret):
     __mapper_args__ = {
         'polymorphic_identity': str(RechercheInteret).replace('RechercheInteret', 'InformationRechercheInteret'),
     }
+
+    def __repr__(self):
+        if self.focus_cle and self.focus_cle != '':
+            return _('<Recherche Information Balisée \'{expr}\' DANS "{loc}">').format(expr=self.expression_recherchee, loc=self.focus_cle)
+        return _('<Recherche Information Balisée \'{expr}\' PARTOUT>').format(expr=self.expression_recherchee)
 
     def transcription(self):
         """
@@ -369,6 +391,9 @@ class OperationLogiqueRechercheInteret(RechercheInteret):
     __mapper_args__ = {
         'polymorphic_identity': str(RechercheInteret).replace('RechercheInteret', 'OperationLogiqueRechercheInteret'),
     }
+
+    def __repr__(self):
+        return _('<Opération sur Critère(s) {operande} "{nom}">').format(operande=self.operande, nom=self.designation)
 
     def transcription(self):
         """

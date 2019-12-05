@@ -2,6 +2,8 @@ from hermes_ui.adminlte.views import BaseAdminView
 from flask_login import current_user
 from datetime import datetime
 
+from hermes.i18n import _
+
 
 class DectecteurView(BaseAdminView):
     column_editable_list = []
@@ -53,11 +55,11 @@ class RechercheInteretView(BaseAdminView):
     column_display_pk = False
 
     column_descriptions = {
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici',
-        'mapped_class_child': 'Nom du type de la règle',
-        'focus_cle': 'Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
-                     'pour laisser le moteur rechercher PARTOUT.'
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici'),
+        'mapped_class_child': _('Nom du type de la règle'),
+        'focus_cle': _('Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
+                     'pour laisser le moteur rechercher PARTOUT.')
     }
 
 
@@ -112,27 +114,27 @@ class DateRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable', focus_cle='Recherche ciblée')
+    column_labels = dict(friendly_name=_('Résultat dans variable'), focus_cle=_('Recherche ciblée'))
 
     form_choices = {
         'focus_cle':
             [
-                ('titre', 'Uniquement dans le TITRE'),
-                ('corpus', 'Uniquement dans le CORPS'),
-                ('expediteur', 'Dans le champ expéditeur du message'),
-                ('destinataire', 'Dans le champ destinataire du message'),
-                ('hyperliens', 'Dans la liste des URLs découvertes'),
-                ('pieces-jointes', 'Dans la liste des noms des pièces jointes'),
-                ('pieces-jointes-types', 'Dans la liste des formats MIME des pièces jointes')
+                ('titre', _('Uniquement dans le TITRE')),
+                ('corpus', _('Uniquement dans le CORPS')),
+                ('expediteur', _('Dans le champ expéditeur du message')),
+                ('destinataire', _('Dans le champ destinataire du message')),
+                ('hyperliens', _('Dans la liste des URLs découvertes')),
+                ('pieces-jointes', _('Dans la liste des noms des pièces jointes')),
+                ('pieces-jointes-types', _('Dans la liste des formats MIME des pièces jointes'))
             ],
     }
 
     column_descriptions = {
-        'prefixe': 'Le préfixe qui précède votre date, par ex. "Suivi à la date du"',
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici',
-        'focus_cle': 'Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
-                     'pour laisser le moteur rechercher PARTOUT.'
+        'prefixe': _('Le préfixe qui précède votre date, par ex. "Suivi à la date du"'),
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici'),
+        'focus_cle': _('Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
+                     'pour laisser le moteur rechercher PARTOUT.')
     }
 
     def on_model_change(self, form, model, is_created):
@@ -167,25 +169,25 @@ class IdentificateurRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable', focus_cle='Recherche ciblée')
+    column_labels = dict(friendly_name=_('Résultat dans variable'), focus_cle=_('Recherche ciblée'))
 
     column_descriptions = {
-        'prefixe': 'Indiquez ici le préfixe de votre identifiant',
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, spécifiez un nom simple ici',
-        'focus_cle': 'Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
-                     'pour laisser le moteur rechercher PARTOUT.'
+        'prefixe': _('Indiquez ici le préfixe de votre identifiant'),
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, spécifiez un nom simple ici'),
+        'focus_cle': _('Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
+                     'pour laisser le moteur rechercher PARTOUT.')
     }
 
     form_choices = {
         'focus_cle':
             [
-                ('titre', 'Uniquement dans le TITRE'),
-                ('corpus', 'Uniquement dans le CORPS'),
-                ('expediteur', 'Dans le champ expéditeur du message'),
-                ('destinataire', 'Dans le champ destinataire du message'),
-                ('hyperliens', 'Dans la liste des URLs découvertes'),
-                ('pieces-jointes', 'Dans la liste des noms des pièces jointes'),
-                ('pieces-jointes-types', 'Dans la liste des formats MIME des pièces jointes')
+                ('titre', _('Uniquement dans le TITRE')),
+                ('corpus', _('Uniquement dans le CORPS')),
+                ('expediteur', _('Dans le champ expéditeur du message')),
+                ('destinataire', _('Dans le champ destinataire du message')),
+                ('hyperliens', _('Dans la liste des URLs découvertes')),
+                ('pieces-jointes', _('Dans la liste des noms des pièces jointes')),
+                ('pieces-jointes-types', _('Dans la liste des formats MIME des pièces jointes'))
             ],
     }
 
@@ -221,29 +223,29 @@ class LocalisationExpressionRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable', focus_cle='Recherche ciblée')
+    column_labels = dict(friendly_name=_('Résultat dans variable'), focus_cle=_('Recherche ciblée'))
 
     column_descriptions = {
-        'expression_gauche': 'Expression immédiatement à gauche de ce que vous souhaitez extraire, '
-                             'laissez vide si votre cible est au début',
-        'expression_droite': 'Expression immédiatement à droite de ce que vous souhaitez extraire, '
-                             'laissez vide si votre cible est déjà en fin',
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici',
-        'focus_cle': 'Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
-                     'pour laisser le moteur rechercher PARTOUT.'
+        'expression_gauche': _('Expression immédiatement à gauche de ce que vous souhaitez extraire, '
+                             'laissez vide si votre cible est au début'),
+        'expression_droite': _('Expression immédiatement à droite de ce que vous souhaitez extraire, '
+                             'laissez vide si votre cible est déjà en fin'),
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici'),
+        'focus_cle': _('Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
+                     'pour laisser le moteur rechercher PARTOUT.')
     }
 
     form_choices = {
         'focus_cle':
             [
-                ('titre', 'Uniquement dans le TITRE'),
-                ('corpus', 'Uniquement dans le CORPS'),
-                ('expediteur', 'Dans le champ expéditeur du message'),
-                ('destinataire', 'Dans le champ destinataire du message'),
-                ('hyperliens', 'Dans la liste des URLs découvertes'),
-                ('pieces-jointes', 'Dans la liste des noms des pièces jointes'),
-                ('pieces-jointes-types', 'Dans la liste des formats MIME des pièces jointes')
+                ('titre', _('Uniquement dans le TITRE')),
+                ('corpus', _('Uniquement dans le CORPS')),
+                ('expediteur', _('Dans le champ expéditeur du message')),
+                ('destinataire', _('Dans le champ destinataire du message')),
+                ('hyperliens', _('Dans la liste des URLs découvertes')),
+                ('pieces-jointes', _('Dans la liste des noms des pièces jointes')),
+                ('pieces-jointes-types', _('Dans la liste des formats MIME des pièces jointes'))
             ],
     }
 
@@ -284,25 +286,25 @@ class ExpressionCleRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable', focus_cle='Recherche ciblée')
+    column_labels = dict(friendly_name=_('Résultat dans variable'), focus_cle=_('Recherche ciblée'))
 
     column_descriptions = {
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici',
-        'focus_cle': 'Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
-                     'pour laisser le moteur rechercher PARTOUT.'
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici'),
+        'focus_cle': _('Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
+                     'pour laisser le moteur rechercher PARTOUT.')
     }
 
     form_choices = {
         'focus_cle':
             [
-                ('titre', 'Uniquement dans le TITRE'),
-                ('corpus', 'Uniquement dans le CORPS'),
-                ('expediteur', 'Dans le champ expéditeur du message'),
-                ('destinataire', 'Dans le champ destinataire du message'),
-                ('hyperliens', 'Dans la liste des URLs découvertes'),
-                ('pieces-jointes', 'Dans la liste des noms des pièces jointes'),
-                ('pieces-jointes-types', 'Dans la liste des formats MIME des pièces jointes')
+                ('titre', _('Uniquement dans le TITRE')),
+                ('corpus', _('Uniquement dans le CORPS')),
+                ('expediteur', _('Dans le champ expéditeur du message')),
+                ('destinataire', _('Dans le champ destinataire du message')),
+                ('hyperliens', _('Dans la liste des URLs découvertes')),
+                ('pieces-jointes', _('Dans la liste des noms des pièces jointes')),
+                ('pieces-jointes-types', _('Dans la liste des formats MIME des pièces jointes'))
             ],
     }
 
@@ -339,27 +341,27 @@ class ExpressionReguliereRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable', focus_cle='Recherche ciblée')
+    column_labels = dict(friendly_name=_('Résultat dans variable'), focus_cle=_('Recherche ciblée'))
 
     column_descriptions = {
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici',
-        'focus_cle': 'Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
-                     'pour laisser le moteur rechercher PARTOUT.',
-        'expression_reguliere': 'Expression régulière à utiliser pour la recherche d\'information. '
-                                'Les groupes de capture sont supporté pour scinder le résultat.'
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici'),
+        'focus_cle': _('Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
+                     'pour laisser le moteur rechercher PARTOUT.'),
+        'expression_reguliere': _('Expression régulière à utiliser pour la recherche d\'information. '
+                                'Les groupes de capture sont supporté pour scinder le résultat.')
     }
 
     form_choices = {
         'focus_cle':
             [
-                ('titre', 'Uniquement dans le TITRE'),
-                ('corpus', 'Uniquement dans le CORPS'),
-                ('expediteur', 'Dans le champ expéditeur du message'),
-                ('destinataire', 'Dans le champ destinataire du message'),
-                ('hyperliens', 'Dans la liste des URLs découvertes'),
-                ('pieces-jointes', 'Dans la liste des noms des pièces jointes'),
-                ('pieces-jointes-types', 'Dans la liste des formats MIME des pièces jointes')
+                ('titre', _('Uniquement dans le TITRE')),
+                ('corpus', _('Uniquement dans le CORPS')),
+                ('expediteur', _('Dans le champ expéditeur du message')),
+                ('destinataire', _('Dans le champ destinataire du message')),
+                ('hyperliens', _('Dans la liste des URLs découvertes')),
+                ('pieces-jointes', _('Dans la liste des noms des pièces jointes')),
+                ('pieces-jointes-types', _('Dans la liste des formats MIME des pièces jointes'))
             ],
     }
 
@@ -395,11 +397,11 @@ class CleRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable')
+    column_labels = dict(friendly_name=_('Résultat dans variable'))
 
     column_descriptions = {
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici'
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici')
     }
 
     def on_model_change(self, form, model, is_created):
@@ -434,11 +436,11 @@ class ExpressionDansCleRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable')
+    column_labels = dict(friendly_name=_('Résultat dans variable'))
 
     column_descriptions = {
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici'
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici')
     }
 
     def on_model_change(self, form, model, is_created):
@@ -473,25 +475,25 @@ class InformationRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable', focus_cle='Recherche ciblée')
+    column_labels = dict(friendly_name=_('Résultat dans variable'), focus_cle=_('Recherche ciblée'))
 
     column_descriptions = {
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici',
-        'focus_cle': 'Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
-                     'pour laisser le moteur rechercher PARTOUT.'
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici'),
+        'focus_cle': _('Force le moteur à effectuer la recherche sur une partie restreinte de la source, laissez vide '
+                     'pour laisser le moteur rechercher PARTOUT.')
     }
 
     form_choices = {
         'focus_cle':
             [
-                ('titre', 'Uniquement dans le TITRE'),
-                ('corpus', 'Uniquement dans le CORPS'),
-                ('expediteur', 'Dans le champ expéditeur du message'),
-                ('destinataire', 'Dans le champ destinataire du message'),
-                ('hyperliens', 'Dans la liste des URLs découvertes'),
-                ('pieces-jointes', 'Dans la liste des noms des pièces jointes'),
-                ('pieces-jointes-types', 'Dans la liste des formats MIME des pièces jointes')
+                ('titre', _('Uniquement dans le TITRE')),
+                ('corpus', _('Uniquement dans le CORPS')),
+                ('expediteur', _('Dans le champ expéditeur du message')),
+                ('destinataire', _('Dans le champ destinataire du message')),
+                ('hyperliens', _('Dans la liste des URLs découvertes')),
+                ('pieces-jointes', _('Dans la liste des noms des pièces jointes')),
+                ('pieces-jointes-types', _('Dans la liste des formats MIME des pièces jointes'))
             ],
     }
 
@@ -527,10 +529,10 @@ class OperationLogiqueRechercheInteretView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
-    column_labels = dict(friendly_name='Résultat dans variable')
+    column_labels = dict(friendly_name=_('Résultat dans variable'))
     column_descriptions = {
-        'friendly_name': 'Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
-                         'spécifiez un nom simple ici'
+        'friendly_name': _('Si vous souhaitez conserver et exploiter le résultat de la règle dans votre automate, '
+                         'spécifiez un nom simple ici')
     }
 
     def on_model_change(self, form, model, is_created):

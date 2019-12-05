@@ -41,32 +41,32 @@
 
     <div class="sidebarh right">
 
-        <h4>Variables locales</h4>
+        <h4>{{ _( "Variables locales" ) }}</h4>
 
         <div class="box box-widget widget-user-2">
             <div class="box-footer no-padding">
                 <ul id="session-variables-locales" class="nav nav-stacked">
-                    <li><b>Aucune</b></li>
+                    <li><b>{{ _( "Aucune" ) }}</b></li>
                 </ul>
             </div>
         </div>
 
-        <h4>Variables globales</h4>
+        <h4>{{ _( "Variables globales" ) }}</h4>
 
         <div class="box box-widget widget-user-2">
             <div class="box-footer no-padding">
                 <ul id="session-variables-globales" class="nav nav-stacked">
-                    <li><b>Aucune</b></li>
+                    <li><b>{{ _( "Aucune" ) }}</b></li>
                 </ul>
             </div>
         </div>
 
-        <h4>Filtres sur variable</h4>
+        <h4>{{ _( "Filtres sur variable" ) }}</h4>
 
         <div class="box box-widget widget-user-2">
             <div class="box-footer no-padding">
                 <ul id="session-filtre" class="nav nav-stacked">
-                    <li><b>Aucune</b></li>
+                    <li><b>{{ _( "Aucune" ) }}</b></li>
                 </ul>
             </div>
         </div>
@@ -80,7 +80,7 @@
     <div data-step="4" data-intro="Cette zone va vous permettre de tester la résolution de vos détecteurs en fonction d'une source brute ou d'un fichier message" class="chatbox chatbox--tray chatbox--empty">
         <div class="chatbox__title">
             <h5>
-                <a href="javascript:void(0);">Simulation de détection</a>
+                <a href="javascript:void(0);">{{ _( "Simulation de détection" ) }}</a>
             </h5>
             <button class="chatbox__title__tray">
                 <span></span>
@@ -90,12 +90,12 @@
         <div class="row">
             <div class="col-lg-6">
                 <a style="height: 80px !important;" id="btn-analyse-manuelle-raw" class="btn btn-app">
-                    <i class="fa fa-microchip"></i> Analyse Manuelle<br>Brute
+                    <i class="fa fa-microchip"></i> {{ _( "Analyse Manuelle" ) }}<br>{{ _( "Brute" ) }}
                 </a>
             </div>
             <div class="col-lg-6">
                 <a style="height: 80px !important;" id="btn-analyse-manuelle-detecteur" class="btn btn-app">
-                    <i class="fa fa-flag"></i> Analyse Manuelle<br>Detecteur
+                    <i class="fa fa-flag"></i> {{ _( "Analyse Manuelle" ) }}<br>{{ _( "Détecteur" ) }}
                 </a>
             </div>
         </div>
@@ -162,13 +162,13 @@
                                                 <div class="pull-left">
                                                     <a href="{{ url_for('security.change_password') }}"
                                                        class="btn btn-default btn-flat">
-                                                        Modifier mot de passe
+                                                        {{ _( "Modifier mot de passe" ) }}
                                                     </a>
                                                 </div>
                                             {% endif %}
                                             <div class="pull-right">
                                                 <a href="{{ url_for('security.logout') }}"
-                                                   class="btn btn-default btn-flat">Déconnexion</a>
+                                                   class="btn btn-default btn-flat">{{ _( "Déconnexion" ) }}</a>
                                             </div>
                                         </li>
                                     </ul>
@@ -188,19 +188,8 @@
 
     <aside class="main-sidebar">
         <section class="sidebar">
-            <ul
-                    data-step="13"
-                    data-intro="
-                    Concevoir son <b>Automate</b> c'est d'abord commencer par
-                    concevoir un <b>Détecteur</b> !<br><br>
-                    <ul>
-                    <li>Créez des règles depuis <b>Règles de détection</b></li>
-                    <li>Créez un <b>Détecteur</b> et associez y vos règles fraichements éditées</li>
-                    <li>Créez une <b>Description d'Automate</b> et associez y votre nouveau détecteur</li>
-                    <li>Editez les <b>Actions</b> de votre <b>Automate</b> depuis cette page</li>
-                    </ul>"
-                    class="sidebar-menu">
-                <li class="header">NAVIGATION</li>
+            <ul class="sidebar-menu">
+                <li class="header">{{ _( "NAVIGATION" ) }}</li>
                 {% block main_menu %}
                     {{ layout.menu() }}
                 {% endblock %}
@@ -227,7 +216,7 @@
             </div>
             <footer class="main-footer">
                 <strong>Hermes</strong>
-                <div class="pull-right hidden-xs"><b>Version</b> 2.0.0</div>
+                <div class="pull-right hidden-xs"><b>{{ _( "Version" ) }}</b> 2.0.0</div>
             </footer>
         {% endif %}
 

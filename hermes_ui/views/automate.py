@@ -2,6 +2,8 @@ from hermes_ui.adminlte.views import BaseAdminView
 from flask_login import current_user
 from datetime import datetime
 
+from hermes.i18n import _
+
 
 class AutomateView(BaseAdminView):
     column_editable_list = ['production', 'notifiable']
@@ -20,13 +22,13 @@ class AutomateView(BaseAdminView):
     details_modal = True
 
     column_descriptions = {
-        'detecteur': 'Associe un détecteur, qui si résolu avec une source permet de lancer votre suite d\'action',
-        'designation': 'Description courte de ce que réalise votre automate, un objectif',
-        'production': 'Si cette case est cochée, votre automate sera executé en production',
-        'priorite': 'Un entier à partir de 0 (Zéro) permettant de priviligier une execution '
+        'detecteur': _('Associe un détecteur, qui si résolu avec une source permet de lancer votre suite d\'action'),
+        'designation': _('Description courte de ce que réalise votre automate, un objectif'),
+        'production': _('Si cette case est cochée, votre automate sera executé en production'),
+        'priorite': _('Un entier à partir de 0 (Zéro) permettant de priviligier une execution '
                     'd\'automate par rapport à un autre sur une source. De plus la priorité est proche de 0 (Zéro), '
-                    'de plus il est prioritaire',
-        'notifiable': 'Active les notifications en cas d\'échec d\'au moins une des actions de votre automate'
+                    'de plus il est prioritaire'),
+        'notifiable': _('Active les notifications en cas d\'échec d\'au moins une des actions de votre automate')
     }
 
     def on_model_change(self, form, model, is_created):

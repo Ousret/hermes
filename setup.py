@@ -33,4 +33,19 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
+    message_extractors = {
+        'hermes': [
+            ('**.py', 'python', None),
+            ('templates/**.html', 'jinja2', None),
+            ('assets/**', 'ignore', None),
+            ('static/**', 'ignore', None)
+        ],
+        'hermes_ui': [
+            ('**.py', 'python', None),
+            ('templates/**.html', 'jinja2', None),
+            ('assets/**', 'ignore', None),
+            ('static/**', 'ignore', None)
+        ],
+    },
+
 )

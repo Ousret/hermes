@@ -20,11 +20,11 @@
         <section class="content-header">
             <h1>
                 Hermes
-                <small>Interface utilisateur pour gérer le service et mettre en oeuvre des actions sur les automates</small>
+                <small>{{ _( "Interface utilisateur pour gérer le service et mettre en oeuvre des actions sur les automates" ) }}</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Hermes</a></li>
-                <li class="active">Service & Editeur d'Action</li>
+                <li class="active">{{ _( "Surveillance Continue & Éditeur d'Action" ) }}</li>
             </ol>
         </section>
 
@@ -36,12 +36,12 @@
                     <div class="small-box bg-aqua">
                         <div class="inner">
                             <h3 id="nb-automate">0</h3>
-                            <p>Automate</p>
+                            <p>{{ _( "Automate(s)" ) }}</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-android"></i>
                         </div>
-                        <a href="#" class="small-box-footer">Nombre d'automate programmé</a>
+                        <a href="#" class="small-box-footer">{{ _( "Nombre d'automate programmé" ) }}</a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -51,12 +51,12 @@
                         <div class="inner">
                             <h3 id="nb-critere">0</h3>
 
-                            <p>Critère(s)</p>
+                            <p>{{ _( "Critère(s)" ) }}</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-paper-plane-o"></i>
                         </div>
-                        <a href="#" class="small-box-footer">Nombre de critère</a>
+                        <a href="#" class="small-box-footer">{{ _( "Nombre de critère" ) }}</a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -66,12 +66,12 @@
                         <div class="inner">
                             <h3 id="nb-execution-reussite">0</h3>
 
-                            <p>Réussite</p>
+                            <p>{{ _( "Réussite" ) }}</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-check-circle-o"></i>
                         </div>
-                        <a href="#" class="small-box-footer">Nombre execution en réussite</a>
+                        <a href="#" class="small-box-footer">{{ _( "Nombre execution en réussite" ) }}</a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -81,12 +81,12 @@
                         <div class="inner">
                             <h3 id="nb-execution-echec">0</h3>
 
-                            <p>Echec</p>
+                            <p>{{ _( "Echec" ) }}</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-exclamation-triangle"></i>
                         </div>
-                        <a href="#" class="small-box-footer">Nombre execution en échec</a>
+                        <a href="#" class="small-box-footer">{{ _( "Nombre execution en échec" ) }}</a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -101,16 +101,16 @@
                         <div class="col-md-4">
                             <div data-step="1" data-intro="Cette section va permettre de lancer la surveillance continue des automates sur les BAL IMAP4 inscrites" class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Surveillance Continue des BAL</h3>
+                                    <h3 class="box-title">{{ _( "Surveillance Continue des BAL" ) }}</h3>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
                                     <a id="btn-start-service" class="btn btn-app disabled">
-                                        <i class="fa fa-play"></i> Démarrer
+                                        <i class="fa fa-play"></i> {{ _( "Démarrer" ) }}
                                     </a>
 
                                     <a id="btn-stop-service" class="btn btn-app disabled">
-                                        <i class="fa fa-stop"></i> Arrêter
+                                        <i class="fa fa-stop"></i> {{ _( "Arrêter" ) }}
                                     </a>
 
                                     <!-- /.row -->
@@ -125,22 +125,22 @@
                         <div class="col-md-4">
                             <div data-step="2" data-intro="Vous pouvez obtenir un aperçu de ce que le moteur perçoit dans vos messages" class="box">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Assistant</h3>
+                                    <h3 class="box-title">{{ _( "Assistant" ) }}</h3>
 
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
 
                                     <a href="javascript:void(0);" id="btn-introjs-start" onclick="introJs().start();" class="btn btn-app">
-                                        <i class="fa fa-question-circle"></i> Guide de l'interface
+                                        <i class="fa fa-question-circle"></i> {{ _( "Guide de l'interface" ) }}
                                     </a>
 
                                     <a href="/admin/import/automates" id="btn-export-data" class="btn btn-app">
-                                        <i class="fa fa-download"></i> Exporter
+                                        <i class="fa fa-download"></i> {{ _( "Exporter" ) }}
                                     </a>
 
                                     <a href="javascript:void(0);" id="btn-import-data" class="btn btn-app">
-                                        <i class="fa fa-upload"></i> Importer
+                                        <i class="fa fa-upload"></i> {{ _( "Importer" ) }}
                                     </a>
                                     <!-- /.row -->
                                 </div>
@@ -157,19 +157,19 @@
                         <div class="col-md-3">
                             <div data-step="6" data-intro="Pour pouvoir créer/modifier/supprimer des actions sur un automate, vous devez au préalable en choisir un existant depuis cette zone." class="box box-primary">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Choisir Automate</h3>
+                                    <h3 class="box-title">{{ _( "Choisir Automate" ) }}</h3>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
 
                                     <a data-step="10" data-intro="Pour pouvoir créer/modifier/supprimer un automate et y associer un détecteur, appuyez sur ce boutton. Cela vous emmenera sur une nouvelle page." href="/admin/automate/" class="btn btn-app">
-                                        <i class="fa fa-android"></i> Modifier liste d'Automate
+                                        <i class="fa fa-android"></i> {{ _( "Modifier liste d'Automate" ) }}
                                     </a>
 
                                     <div class="form-group">
-                                      <label for="selection-automate">Vos automates</label>
+                                      <label for="selection-automate">{{ _( "Vos automates" ) }}</label>
                                       <select id="selection-automate" class="form-control">
-                                        <option value="" selected>Veuillez choisir votre automate</option>
+                                        <option value="" selected>{{ _( "Veuillez choisir votre automate" ) }}</option>
                                       </select>
                                     </div>
 
@@ -195,34 +195,34 @@
                         <div class="col-md-9">
                             <div data-step="7" data-intro="Les ACTIONS effectuées par votre automate seront visuelements disponibles et éditables dans cette zone" class="box box-warning">
                                 <div class="box-header with-border">
-                                    <h3 id="visionneuse-automate-titre" class="box-title">Visionneuse Automate</h3>
+                                    <h3 id="visionneuse-automate-titre" class="box-title">{{ _( "Visionneuse Automate" ) }}</h3>
 
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
 
                                     <a data-step="8" data-intro="Dans le cadre de la conception de votre automate, vous pouvez lancer un test isolé" id="btn-tester-automate" class="btn btn-app disabled">
-                                        <i class="fa fa-fire-extinguisher"></i> Tester Automate
+                                        <i class="fa fa-fire-extinguisher"></i> {{ _( "Tester Automate" ) }}
                                     </a>
 
                                     <a id="btn-nouveau-noeud" class="btn btn-app disabled">
-                                        <i class="fa fa-plus"></i> Nouvelle Action
+                                        <i class="fa fa-plus"></i> {{ _( "Nouvelle Action" ) }}
                                     </a>
 
                                     <a id="btn-supprimer-noeud" class="btn btn-app disabled">
-                                        <i class="fa fa-recycle"></i> Supprimer Action
+                                        <i class="fa fa-recycle"></i> {{ _( "Supprimer Action" ) }}
                                     </a>
 
                                     <a id="btn-modifier-noeud" class="btn btn-app disabled">
-                                        <i class="fa fa-pencil"></i> Modifier Action
+                                        <i class="fa fa-pencil"></i> {{ _( "Modifier Action" ) }}
                                     </a>
 
                                     <a id="btn-remplacer-noeud" class="btn btn-app disabled">
-                                        <i class="fa fa-recycle"></i> Remplacer Action
+                                        <i class="fa fa-recycle"></i> {{ _( "Remplacer Action" ) }}
                                     </a>
 
                                     <div id="visu-automate">
-                                        <h3 style="text-align: center">Veuillez choisir un automate pour commencer</h3>
+                                        <h3 style="text-align: center">{{ _( "Veuillez choisir un automate pour commencer" ) }}</h3>
                                     </div>
 
                                 </div>
@@ -236,7 +236,7 @@
                         <div data-step="9" data-intro="Le programme d'interopérabilité vous laissera un accès en lecture aux logs depuis cette zone" class="col-md-12">
                             <div class="box box-danger">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Console</h3>
+                                    <h3 class="box-title">{{ _( "Console" ) }}</h3>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
@@ -255,7 +255,7 @@
                         <div class="col-md-12">
                             <div class="box box-success">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Historique des exécutions</h3>
+                                    <h3 class="box-title">{{ _( "Historique des exécutions" ) }}</h3>
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body">
@@ -263,24 +263,24 @@
                                     <table id="table-executions" class="table table-striped table-dark" style="width:auto">
                                         <thead data-step="12" data-intro="Consultez dans cette table l'historique des executions de vos automates, avec la possibilité de faire des recherches dans la table.">
                                             <tr>
-                                                <th>Numéro</th>
-                                                <th>Automate</th>
-                                                <th>Date de traitement</th>
-                                                <th data-orderable="false">Sujet de l'échange</th>
-                                                <th>Réussite</th>
-                                                <th data-orderable="false">Info</th>
+                                                <th>{{ _( "Numéro" ) }}</th>
+                                                <th>{{ _( "Automate" ) }}</th>
+                                                <th>{{ _( "Date de traitement" ) }}</th>
+                                                <th data-orderable="false">{{ _( "Sujet de l'échange" ) }}</th>
+                                                <th>{{ _( "Réussite" ) }}</th>
+                                                <th data-orderable="false">{{ _( "Info" ) }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>Numéro</th>
-                                                <th>Automate</th>
-                                                <th>Date de traitement</th>
-                                                <th>Sujet de l'échange</th>
-                                                <th>Réussite</th>
-                                                <th>Info</th>
+                                                <th>{{ _( "Numéro" ) }}</th>
+                                                <th>{{ _( "Automate" ) }}</th>
+                                                <th>{{ _( "Date de traitement" ) }}</th>
+                                                <th>{{ _( "Sujet de l'échange" ) }}</th>
+                                                <th>{{ _( "Réussite" ) }}</th>
+                                                <th>{{ _( "Info" ) }}</th>
                                             </tr>
                                         </tfoot>
                                     </table>
