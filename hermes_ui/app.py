@@ -405,7 +405,7 @@ def recuperation_statistique_generale():
     ), 200
 
 
-@app.route("/admin/rest/statistique/automate/<automate_id>", methods=['GET'])
+@app.route("/admin/rest/statistique/automate/<int:automate_id>", methods=['GET'])
 @login_required
 def recuperation_statistique_automate(automate_id):
     nb_execution = db.session.query(AutomateExecution).filter_by(automate_id=automate_id).count()
@@ -429,14 +429,14 @@ def lecture_automates_executions():
     return AutomateExecutionDataTableSchema().jsonify(AutomateExecutionDataTable(executions.items)), 200
 
 
-@app.route("/admin/rest/automate-execution/<automate_execution_id>", methods=['GET'])
+@app.route("/admin/rest/automate-execution/<int:automate_execution_id>", methods=['GET'])
 @login_required
 def lecture_automate_execution(automate_execution_id):
     execution = db.session.query(AutomateExecution).get(automate_execution_id)
     return AutomateExecutionSchema().jsonify(execution), 200 if execution is not None else 404
 
 
-@app.route("/admin/rest/automate-execution/automate/<automate_id>", methods=['GET'])
+@app.route("/admin/rest/automate-execution/automate/<int:automate_id>", methods=['GET'])
 @login_required
 def lecture_automate_executions(automate_id):
 
@@ -478,7 +478,7 @@ def assistance_saisie():
     ), 200
 
 
-@app.route("/admin/rest/assistance-saisie/automate/<automate_id>", methods=['GET'])
+@app.route("/admin/rest/assistance-saisie/automate/<int:automate_id>", methods=['GET'])
 @login_required
 def assistance_saisie_automate(automate_id):
     automate = db.session.query(Automate).get(automate_id)
@@ -747,7 +747,7 @@ def lecture_automates():
     return AutomateSchema(many=True).jsonify(automates), 200
 
 
-@app.route("/admin/rest/legacy/automate/<automate_id>", methods=['GET'])
+@app.route("/admin/rest/legacy/automate/<int:automate_id>", methods=['GET'])
 @login_required
 def lecture_legacy_automate(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
@@ -765,7 +765,7 @@ def lecture_liste_action_noeud_type():
     ), 200
 
 
-@app.route("/admin/rest/automate/<automate_id>", methods=['GET'])
+@app.route("/admin/rest/automate/<int:automate_id>", methods=['GET'])
 @login_required
 def lecture_automate(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
@@ -774,14 +774,14 @@ def lecture_automate(automate_id):
     return AutomateSchema().jsonify(automate), 200
 
 
-@app.route("/admin/rest/automate/<automate_id>/action_noeud", methods=['GET'])
+@app.route("/admin/rest/automate/<int:automate_id>/action_noeud", methods=['GET'])
 @login_required
 def lecture_actions_automate(automate_id):
     actions = db.session.query(ActionNoeud).filter_by(automate_id=automate_id).options().all()  # type: list[ActionNoeud]
     return ActionNoeudSchema(many=True).jsonify(actions), 200
 
 
-@app.route("/admin/rest/automate/<automate_id>/action_noeud/<action_noeud_id>", methods=['GET'])
+@app.route("/admin/rest/automate/<int:automate_id>/action_noeud/<int:action_noeud_id>", methods=['GET'])
 @login_required
 def lecture_action_automate(automate_id, action_noeud_id):
     action = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, id=action_noeud_id).one()  # type: ActionNoeud
@@ -813,7 +813,7 @@ def lecture_action_automate(automate_id, action_noeud_id):
     return ActionNoeudSchema().jsonify(target_sub_action), 200
 
 
-@app.route("/admin/rest/automate/<automate_id>/action_noeud", methods=['POST'])
+@app.route("/admin/rest/automate/<int:automate_id>/action_noeud", methods=['POST'])
 @login_required
 def creation_action(automate_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
@@ -922,7 +922,7 @@ def creation_action(automate_id):
     return jsonify({}), 201
 
 
-@app.route("/admin/rest/automate/<automate_id>/action_noeud/<action_noeud_id>", methods=['PUT', 'PATCH'])
+@app.route("/admin/rest/automate/<int:automate_id>/action_noeud/<int:action_noeud_id>", methods=['PUT', 'PATCH'])
 @login_required
 def modification_action(automate_id, action_noeud_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
@@ -974,7 +974,7 @@ def modification_action(automate_id, action_noeud_id):
     return jsonify({}), 200
 
 
-@app.route("/admin/rest/automate/<automate_id>/action_noeud/<action_noeud_id>", methods=['DELETE'])
+@app.route("/admin/rest/automate/<int:automate_id>/action_noeud/<int:action_noeud_id>", methods=['DELETE'])
 @login_required
 def supprimer_action(automate_id, action_noeud_id):
     automate = db.session.query(Automate).get(automate_id)  # type: Automate
