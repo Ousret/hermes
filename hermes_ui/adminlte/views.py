@@ -2,6 +2,10 @@ from flask_admin.contrib import sqla
 from flask_security import current_user
 from flask import url_for, redirect, request, abort
 from flask_admin import menu
+from flask_security.utils import hash_password
+from flask_security.forms import EqualTo, unique_user_email
+from wtforms import fields, validators
+from wtforms.fields import html5
 
 
 class FaLink(menu.MenuLink):
@@ -49,11 +53,13 @@ class BaseAdminView(FaModelView):
 
 class AdminsView(BaseAdminView):
     required_role = 'superadmin'
+
     column_display_all_relations = True
     column_editable_list = ['email', 'first_name', 'last_name']
     column_searchable_list = ['roles.name', 'email', 'first_name', 'last_name']
     column_exclude_list = ['password']
     column_details_exclude_list = ['password']
+    form_excluded_columns = ['password']
     column_filters = ['email', 'first_name', 'last_name']
     can_export = True
     can_view_details = True
@@ -63,3 +69,44 @@ class AdminsView(BaseAdminView):
     edit_modal = True
     create_modal = True
     details_modal = True
+
+    def on_model_change(self, form, model, is_created):
+        """
+        :param form:
+        :param hermes_ui.adminlte.models.User model:
+        :param is_created:
+        :return:
+        """
+        model.password = hash_password(form.password.data)
+
+    def get_create_form(self):
+        CreateForm = super().get_create_form()
+
+        CreateForm.email = html5.EmailField(
+            'Email',
+            validators=[
+                validators.DataRequired(),
+                validators.Email(),
+                unique_user_email,
+            ],
+        )
+        CreateForm.password = fields.PasswordField(
+            'Password',
+            validators=[
+                validators.DataRequired(),
+            ],
+        )
+
+        CreateForm.confirm_password = fields.PasswordField(
+            'Confirm Password',
+            validators=[
+                validators.DataRequired(),
+                EqualTo('password', message='RETYPE_PASSWORD_MISMATCH'),
+            ],
+        )
+
+        CreateForm.field_order = (
+            'email', 'first_name', 'last_name',
+            'password', 'confirm_password', 'roles', 'active')
+
+        return CreateForm
