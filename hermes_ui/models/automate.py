@@ -41,6 +41,9 @@ class Automate(db.Model):
     action_racine_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id'), nullable=True)
     action_racine = db.relation('ActionNoeud', foreign_keys='Automate.action_racine_id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete")
 
+    def __repr__(self):
+        return _('<Automate \'{automate_nom}\'>').format(automate_nom=self.designation)
+
     def transcription(self):
         from hermes.automate import Automate as NoModelAutomate
 
@@ -394,7 +397,7 @@ class RequeteHttpActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.RequeteHttpActionNoeud
+        :rtype: hermes.automate.RequeteHttpActionNoeud
         """
         from hermes.automate import RequeteHttpActionNoeud as ACTION
         from json import loads
@@ -1021,8 +1024,8 @@ class SupprimerMailSourceActionNoeud(ActionNoeud):
 
 
 class TransformationListeVersDictionnaireActionNoeud(ActionNoeud):
-    DESCRIPTION = _("Création d'une variable intermédiaire " \
-                  "sachant une liste [{'cle_a': 'val_a', 'cle_b': 'val_b'}] vers {'val_a': 'val_b'}")
+    DESCRIPTION = _("Création d'une variable intermédiaire "
+                    "sachant une liste [{'cle_a': 'val_a', 'cle_b': 'val_b'}] vers {'val_a': 'val_b'}")
 
     PARAMETRES = OrderedDict({
         'resultat_concerne': {
