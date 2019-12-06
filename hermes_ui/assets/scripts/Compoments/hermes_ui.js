@@ -754,7 +754,7 @@ class AppInterfaceInteroperabilite {
                         queue_args.push(
                             {
                                 input: 'select',
-                                html: '<b>' + nom_champ_formulaire + '</b>' + (descriptif.formulaire[nom_champ_formulaire].required === true ? '<sup class="color: red;">*</sup>' : '') + '<br>' + descriptif.formulaire[nom_champ_formulaire].help,
+                                html: '<b>' + nom_champ_formulaire + '</b>' + (descriptif.formulaire[nom_champ_formulaire].required === true ? '<br><span class="badge bg-red">obligatoire</span>' : '<br><span class="badge bg-green">optionnel</span>') + '<br>' + descriptif.formulaire[nom_champ_formulaire].help,
                                 inputOptions: inputOptions,
                                 inputValue: action_noeud !== undefined ? (action_noeud[nom_champ_formulaire] ? action_noeud[nom_champ_formulaire] : '') : '',
                             }
@@ -770,7 +770,7 @@ class AppInterfaceInteroperabilite {
                         queue_args.push(
                             {
                                 input: descriptif.formulaire[nom_champ_formulaire].format.toLowerCase(),
-                                html: '<b>' + nom_champ_formulaire + '</b>' + (descriptif.formulaire[nom_champ_formulaire].required === true ? '<sup class="color: red;">*</sup>' : '') + '<br>' + descriptif.formulaire[nom_champ_formulaire].help,
+                                html: '<b>' + nom_champ_formulaire + '</b>' + (descriptif.formulaire[nom_champ_formulaire].required === true ? '<br><span class="badge bg-red">obligatoire</span>' : '<br><span class="badge bg-green">optionnel</span>') + '<br>' + descriptif.formulaire[nom_champ_formulaire].help,
                                 inputOptions: inputOptions,
                                 inputValue: action_noeud !== undefined ? (action_noeud[nom_champ_formulaire] ? action_noeud[nom_champ_formulaire] : '') : '',
                             }
@@ -779,7 +779,7 @@ class AppInterfaceInteroperabilite {
                         queue_args.push(
                             {
                                 input: descriptif.formulaire[nom_champ_formulaire].format.toLowerCase(),
-                                html: '<b>' + nom_champ_formulaire + '</b>' + (descriptif.formulaire[nom_champ_formulaire].required === true ? '<sup class="color: red;">*</sup>' : '') + '<br>' + descriptif.formulaire[nom_champ_formulaire].help,
+                                html: '<b>' + nom_champ_formulaire + '</b>' + (descriptif.formulaire[nom_champ_formulaire].required === true ? '<br><span class="badge bg-red">obligatoire</span>' : '<br><span class="badge bg-green">optionnel</span>') + '<br>' + descriptif.formulaire[nom_champ_formulaire].help,
                                 inputValidator: (value) => {
                                     return new Promise((resolve) => {
 
