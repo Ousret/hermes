@@ -169,13 +169,13 @@ class LocalisationExpressionRechercheInteret(RechercheInteret):
 
     def __repr__(self):
         if self.expression_gauche and self.expression_droite and self.expression_gauche != '' and self.expression_droite != '':
-            return _('<Recherche Expression ENTRE \'{expr_gauche}\' ET \'{expr_droite}\' {loc}>').format(self.expression_gauche, self.expression_droite, _('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
+            return _('<Recherche Expression ENTRE \'{expr_gauche}\' ET \'{expr_droite}\' {loc}>').format(expr_gauche=self.expression_gauche, expr_droite=self.expression_droite, loc=_('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
         if self.expression_gauche and self.expression_gauche != '':
-            return _('<Recherche Expression À DROITE DE \'{expr_gauche}\' {loc}>').format(self.expression_gauche, _('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
+            return _('<Recherche Expression À DROITE DE \'{expr_gauche}\' {loc}>').format(expr_gauche=self.expression_gauche, loc=_('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
         if self.expression_droite and self.expression_droite != '':
-            return _('<Recherche Expression À GAUCHE DE \'{expr_droite}\' {loc}>').format(self.expression_droite, _('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
+            return _('<Recherche Expression À GAUCHE DE \'{expr_droite}\' {loc}>').format(expr_droite=self.expression_droite, loc=_('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
 
-        return _('<Recherche Expression ENTRE \'{expr_gauche}\' ET \'{expr_droite}\' {loc}>').format(self.expression_gauche, self.expression_droite, _('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
+        return _('<Recherche Expression ENTRE \'{expr_gauche}\' ET \'{expr_droite}\' {loc}>').format(expr_gauche=self.expression_gauche, expr_droite=self.expression_droite, loc=_('PARTOUT') if self.focus_cle and self.focus_cle != '' else _('DANS \'{}\'').format(self.focus_cle))
 
     def transcription(self):
         """

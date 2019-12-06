@@ -5,7 +5,7 @@ from flask_sqlalchemy import Pagination
 from marshmallow.exceptions import MarshmallowError
 from werkzeug.datastructures import FileStorage
 
-from flask_babel import Babel
+from flask_babelex import Babel
 
 from hermes import Mail
 from hermes.detecteur import AucuneObligationInteretException
