@@ -494,10 +494,7 @@ class RequeteHttpActionNoeud(ActionNoeud):
 
         super().je_realise(source)
 
-        logger.debug(str(self._form_data))
-
         try:
-            logger.info(str(self._form_data))
             response = request(self._methode_http, self._url_dest, data=self._form_data, proxies=self._proxies,
                                verify=self._verify_peer)
         except RequestException as e:
@@ -520,10 +517,11 @@ class RequeteHttpActionNoeud(ActionNoeud):
                     source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name,
                                           output)
             except ValueError as e:
+                output = response.content
                 logger.warning(_("L'action '{action_nom}' n'a pas réussi à exploiter le résultat : '{msg_err}'"),
                                action_nom=self._designation, msg_err=str(e))
 
-            return self._jai_reussi(source, response.content)
+            return self._jai_reussi(source, output)
 
         logger.error(_("L'action '{action_nom}' est en échec pour la raison suivante : '{msg_err}'"),
                      action_nom=self._designation,
@@ -1417,7 +1415,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
             return self._jai_echouee(source, str(e))
         except ValueError as e:
             logger.error(
-                _("L'action '{action_nom}' est en échec car il est impossible de se lire les adresses destinataires "
+                _("L'action '{action_nom}' est en échec car il est impossible de lire les adresses destinataires "
                   "Veuillez vérifier vos adresses. [{msg_err} :: {mail_to}]."),
                 action_nom=self.designation,
                 msg_err=str(e),
