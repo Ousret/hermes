@@ -310,6 +310,12 @@ def export_automates():
     db.session.query(RechercheInteretExecution).delete()
     db.session.query(AutomateExecution).delete()
 
+    for sb in ActionNoeud.__subclasses__():
+        db.session.query(sb).delete()
+
+    db.session.query(ActionNoeud).delete()
+    db.session.query(Automate).delete()
+
     db.session.query(LienDetecteurRechercheInteret).delete()
 
     db.session.query(LienSousRegleOperationLogique).delete()
@@ -320,13 +326,6 @@ def export_automates():
     db.session.query(RechercheInteret).delete()
 
     db.session.query(Detecteur).delete()
-
-    for sb in ActionNoeud.__subclasses__():
-        db.session.query(sb).delete()
-
-    db.session.query(ActionNoeud).delete()
-
-    db.session.query(Automate).delete()
 
     db.session.commit()
     db.session.flush()
