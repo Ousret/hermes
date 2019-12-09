@@ -91,7 +91,7 @@ class LienDetecteurRechercheInteret(db.Model):
     __tablename__ = 'lien_detecteur_recherche_interet'
 
     detecteur_id = db.Column(db.Integer(), db.ForeignKey('detecteur.id'), primary_key=True)
-    recherche_interet_id = db.Column(db.Integer(), db.ForeignKey('recherche_interet.id'), primary_key=True)
+    recherche_interet_id = db.Column(db.Integer(), db.ForeignKey('recherche_interet.id', ondelete='CASCADE'), primary_key=True)
 
 
 class IdentificateurRechercheInteret(RechercheInteret):
@@ -376,7 +376,7 @@ class LienSousRegleOperationLogique(db.Model):
 
     recherche_interet_id = db.Column(
         db.Integer(),
-        db.ForeignKey('recherche_interet.id'),
+        db.ForeignKey('recherche_interet.id', ondelete='CASCADE'),
         primary_key=True
     )
 

@@ -33,12 +33,12 @@ class Automate(db.Model):
     limite_echec_par_heure = db.Column(db.Integer(), nullable=True, default=10)
     limite_par_heure = db.Column(db.Integer(), nullable=True, default=100)
 
-    detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id), nullable=False)
+    detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id, ondelete='CASCADE'), nullable=False)
     detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="save-update")
 
     actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete, delete-orphan")
 
-    action_racine_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id'), nullable=True)
+    action_racine_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id', ondelete='CASCADE'), nullable=True)
     action_racine = db.relation('ActionNoeud', foreign_keys='Automate.action_racine_id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete")
 
     def __repr__(self):
@@ -89,10 +89,10 @@ class ActionNoeud(db.Model):
     responsable_derniere_modification = db.relationship(User,
                                                         primaryjoin="User.id==ActionNoeud.responsable_derniere_modification_id")
 
-    action_reussite_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id'), nullable=True)
+    action_reussite_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id', ondelete='CASCADE'), nullable=True)
     action_reussite = db.relationship('ActionNoeud', foreign_keys='ActionNoeud.action_reussite_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="save-update, merge, delete")
 
-    action_echec_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id'), nullable=True)
+    action_echec_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id', ondelete='CASCADE'), nullable=True)
     action_echec = db.relation('ActionNoeud', foreign_keys='ActionNoeud.action_echec_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="save-update, merge, delete")
 
     mapped_class_child = db.Column(db.String(128), nullable=True)
