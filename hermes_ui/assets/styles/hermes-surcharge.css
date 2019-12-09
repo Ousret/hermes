@@ -390,3 +390,6 @@ input[type="checkbox"] {
     -webkit-appearance: checkbox !important;
 }
 
+#table-executions {
+    width: 100% !important;
+}
