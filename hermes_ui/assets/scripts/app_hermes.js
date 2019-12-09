@@ -114,12 +114,24 @@ $(function () {
         AppInterfaceInteroperabilite.etat_statistique_globale();
 
         if (TABLE_EXECUTION_AUTOMATE !== null && TABLE_EXECUTION_AUTOMATE_FIRST_FETCH === true) {
-            TABLE_EXECUTION_AUTOMATE.ajax.reload(
-                (data) => {
-                    data = null;
-                },
-                false
+
+            
+            AppInterfaceInteroperabilite.lecture_execution_automate(
+                TABLE_EXECUTION_AUTOMATE.rows().data()[0][0].parseInt()+1
+            ).then(
+                () => {
+
+                    TABLE_EXECUTION_AUTOMATE.ajax.reload(
+                        (data) => {
+                            data = null;
+                        },
+                        false
+                    );
+
+                }
             );
+
+
         }
 
         setTimeout(
