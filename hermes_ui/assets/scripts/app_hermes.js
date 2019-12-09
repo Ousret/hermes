@@ -115,11 +115,8 @@ $(function () {
 
         if (TABLE_EXECUTION_AUTOMATE !== null && TABLE_EXECUTION_AUTOMATE_FIRST_FETCH === true) {
 
-            let btns_debug = $('.btn-automate-execution-debug'),
-                last_execution_id = btns_debug.length > 0 ? btns_debug[0].attr('data-automate-execution-id') : null;
-
             AppInterfaceInteroperabilite.lecture_execution_automate(
-                parseInt(last_execution_id === null ? '0' : last_execution_id )+1
+                parseInt(TABLE_EXECUTION_AUTOMATE.rows().data().length > 0 ? TABLE_EXECUTION_AUTOMATE.rows().data()[0][0] : '0')+1
             ).then(
                 () => {
 
