@@ -7,8 +7,8 @@ class AutomateExecution(db.Model):
 
     id = db.Column(db.BigInteger(), primary_key=True, autoincrement=True)
 
-    automate_id = db.Column(db.Integer(), db.ForeignKey(Automate.id), nullable=False)
-    automate = db.relationship(Automate)
+    automate_id = db.Column(db.Integer(), db.ForeignKey(Automate.id, ondelete='CASCADE'), nullable=False)
+    automate = db.relationship(Automate, cascade='all, save-update, delete, merge')
 
     sujet = db.Column(db.String(255), nullable=False)
     corps = db.Column(db.Text(), nullable=False)
@@ -35,10 +35,10 @@ class ActionNoeudExecution(db.Model):
 
     id = db.Column(db.BigInteger(), primary_key=True, autoincrement=True)
 
-    automate_execution_id = db.Column(db.BigInteger(), db.ForeignKey(AutomateExecution.id), nullable=False)
-    automate_execution = db.relationship(AutomateExecution)
+    automate_execution_id = db.Column(db.BigInteger(), db.ForeignKey(AutomateExecution.id, ondelete='CASCADE'), nullable=False)
+    automate_execution = db.relationship(AutomateExecution, cascade='all, save-update, delete, merge')
 
-    action_noeud_id = db.Column(db.Integer(), db.ForeignKey(ActionNoeud.id))
+    action_noeud_id = db.Column(db.Integer(), db.ForeignKey(ActionNoeud.id, ondelete='CASCADE'))
     action_noeud = db.relationship(ActionNoeud)
 
     validation_action_noeud = db.Column(db.Boolean(), default=False, nullable=False)

@@ -12,13 +12,13 @@ class Configuration(db.Model):
     designation = db.Column(db.String(255), nullable=False, unique=True)
     valeur = db.Column(db.Text(), nullable=False)
 
-    createur_id = db.Column(db.ForeignKey('user.id'), nullable=False)
+    createur_id = db.Column(db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     createur = db.relationship(User, primaryjoin="User.id==Configuration.createur_id")
 
     date_creation = db.Column(db.DateTime(timezone=True), nullable=False)
     date_modification = db.Column(db.DateTime(timezone=True), nullable=False)
 
-    responsable_derniere_modification_id = db.Column(db.ForeignKey('user.id'), nullable=False)
+    responsable_derniere_modification_id = db.Column(db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     responsable_derniere_modification = db.relationship(User, primaryjoin="User.id==Configuration.responsable_derniere_modification_id")
 
     format = db.Column(db.Enum("JSON", 'YAML', 'AUTRE'), nullable=False)

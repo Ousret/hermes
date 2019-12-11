@@ -20,26 +20,26 @@ class Automate(db.Model):
 
     priorite = db.Column(db.Integer(), nullable=False, default=0)
 
-    createur_id = db.Column(db.ForeignKey('user.id'), nullable=True)
+    createur_id = db.Column(db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     createur = db.relationship(User, primaryjoin="User.id==Automate.createur_id")
 
     date_creation = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.datetime.utcnow())
     date_modification = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.datetime.utcnow())
 
-    responsable_derniere_modification_id = db.Column(db.ForeignKey('user.id'), nullable=True)
+    responsable_derniere_modification_id = db.Column(db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     responsable_derniere_modification = db.relationship(User,
                                                         primaryjoin="User.id==Automate.responsable_derniere_modification_id")
 
     limite_echec_par_heure = db.Column(db.Integer(), nullable=True, default=10)
     limite_par_heure = db.Column(db.Integer(), nullable=True, default=100)
 
-    detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id, ondelete='CASCADE'), nullable=False)
-    detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="save-update, delete, merge")
+    detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id, ondelete='SET NULL'), nullable=True)
+    detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="all, save-update, delete, merge")
 
-    actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete, delete-orphan")
+    actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False, cascade="all, save-update, merge, delete, delete-orphan")
 
-    action_racine_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id', ondelete='CASCADE'), nullable=True)
-    action_racine = db.relation('ActionNoeud', foreign_keys='Automate.action_racine_id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete")
+    action_racine_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id', ondelete='SET NULL'), nullable=True)
+    action_racine = db.relation('ActionNoeud', foreign_keys='Automate.action_racine_id', lazy='joined', enable_typechecks=False, cascade="all, save-update, merge, delete")
 
     def __repr__(self):
         return _('<Automate \'{automate_nom}\'>').format(automate_nom=self.designation)
@@ -74,26 +74,25 @@ class ActionNoeud(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
 
-    automate_id = db.Column(db.Integer(), db.ForeignKey('automate.id'), nullable=False)
-    # automate = db.relation(Automate, back_populates="actions", foreign_keys="ActionNoeud.automate_id", lazy='noload')
+    automate_id = db.Column(db.Integer(), db.ForeignKey('automate.id', ondelete='SET NULL'), nullable=True)
 
     designation = db.Column(db.String(255), nullable=False)
 
-    createur_id = db.Column(db.ForeignKey('user.id'), nullable=True)
+    createur_id = db.Column(db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     createur = db.relationship(User, primaryjoin="User.id==ActionNoeud.createur_id")
 
     date_creation = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.datetime.utcnow())
     date_modification = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.datetime.utcnow())
 
-    responsable_derniere_modification_id = db.Column(db.ForeignKey('user.id'), nullable=True)
+    responsable_derniere_modification_id = db.Column(db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     responsable_derniere_modification = db.relationship(User,
                                                         primaryjoin="User.id==ActionNoeud.responsable_derniere_modification_id")
 
     action_reussite_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id', ondelete='CASCADE'), nullable=True)
-    action_reussite = db.relationship('ActionNoeud', foreign_keys='ActionNoeud.action_reussite_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="save-update, merge, delete")
+    action_reussite = db.relationship('ActionNoeud', foreign_keys='ActionNoeud.action_reussite_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="all, save-update, merge, delete")
 
     action_echec_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id', ondelete='CASCADE'), nullable=True)
-    action_echec = db.relation('ActionNoeud', foreign_keys='ActionNoeud.action_echec_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="save-update, merge, delete")
+    action_echec = db.relation('ActionNoeud', foreign_keys='ActionNoeud.action_echec_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="all, save-update, merge, delete")
 
     mapped_class_child = db.Column(db.String(128), nullable=True)
 
@@ -865,7 +864,7 @@ class ExecutionAutomateActionNoeud(ActionNoeud):
 
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
-    sous_automate_id = db.Column(db.Integer(), db.ForeignKey('automate.id'), nullable=False)
+    sous_automate_id = db.Column(db.Integer(), db.ForeignKey('automate.id', ondelete='CASCADE'), nullable=False)
     sous_automate = db.relation(Automate, foreign_keys="ExecutionAutomateActionNoeud.sous_automate_id")
 
     __mapper_args__ = {

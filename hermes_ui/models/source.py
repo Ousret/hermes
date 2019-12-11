@@ -19,13 +19,13 @@ class BoiteAuxLettresImap(db.Model):
     verification_certificat = db.Column(db.Boolean(), nullable=False, default=True)
     legacy_tls_support = db.Column(db.Boolean(), nullable=False, default=False)
 
-    createur_id = db.Column(db.ForeignKey('user.id'), nullable=False)
+    createur_id = db.Column(db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     createur = db.relationship(User, primaryjoin="User.id==BoiteAuxLettresImap.createur_id")
 
     date_creation = db.Column(db.DateTime(timezone=True), nullable=False)
     date_modification = db.Column(db.DateTime(timezone=True), nullable=False)
 
-    responsable_derniere_modification_id = db.Column(db.ForeignKey('user.id'), nullable=False)
+    responsable_derniere_modification_id = db.Column(db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
     responsable_derniere_modification = db.relationship(User,
                                                         primaryjoin="User.id==BoiteAuxLettresImap.responsable_derniere_modification_id")
 
