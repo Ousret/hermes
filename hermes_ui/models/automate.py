@@ -141,7 +141,6 @@ class ActionNoeud(db.Model):
 
             parametres = deepcopy(getattr(my_class, 'PARAMETRES'))  # type: dict
             ancetres_parametres.update(parametres)
-            # parametres.update(ancetres_parametres)
 
             if len(my_class.__subclasses__()) == 0:
 
@@ -153,7 +152,7 @@ class ActionNoeud(db.Model):
                     }
                 )
             else:
-                ma_liste_descriptif += ActionNoeud.descriptifs(my_class, ancetres_parametres=ancetres_parametres)
+                ma_liste_descriptif += ActionNoeud.descriptifs(my_class, ancetres_parametres=deepcopy(getattr(ActionNoeud, 'PARAMETRES')))
         return ma_liste_descriptif
 
 
