@@ -897,8 +897,9 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
         'operande': {
             'format': 'SELECT',
             'required': True,
-            'help': _("Type d'opérateur à utiliser dans le cadre de notre comparaison"),
-            'choix': ['==', '>', '<', '>=', '<=', '!=']
+            'help': _("Type d'opérateur à utiliser dans le cadre de notre comparaison. "
+                      "L'opérateur IN signifie SI membre_gauche_variable INCLUS DANS membre_droite_variable."),
+            'choix': ['==', '>', '<', '>=', '<=', '!=', 'IN']
         },
         'membre_droite_variable': {
             'format': 'TEXT',
