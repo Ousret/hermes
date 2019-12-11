@@ -703,7 +703,8 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         'description': {
             'format': 'TEXTAREA',
             'required': True,
-            'help': _('Décrivez-nous en détails votre invitation, les enjeux, les prérequis, etc.. (!HTML non supporté!)')
+            'help': _('Décrivez-nous en détails votre invitation, les enjeux, les prérequis, etc.. '
+                      'Vous pouvez intégrer les mots dynamiques suivants: {organisateur}, {sujet}, {lieu} et {date_depart}.')
         },
         'lieu': {
             'format': 'TEXT',

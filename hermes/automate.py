@@ -1172,20 +1172,11 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             fp_ram.read()
         )
 
-        description_invitation_notification = _("""Bonjour Madame, Monsieur,
-
-Par procuration de l'organisateur <b>{organisateur}</b>,
-Dans le cadre de <i>"{sujet}"</i> nous vous joignons une invitation à l'évenement localisé à <b>"{lieu}"</b> en date du <b>{date_depart}</b>.
-Cette invitation est sujette à être modifiée ou annulée dans le temps, vous serez notifié le cas échéant.
-
-Description: {description} 
-
-Nous vous remercions de votre attention.""").format(
+        description_invitation_notification = self._description.format(
             organisateur=self._organisateur,
             sujet=self._sujet,
             lieu=self._lieu,
-            date_depart=self._date_heure_depart.strftime('%d/%m/%Y à %H:%M:{}'),
-            description=self._description
+            date_depart=self._date_heure_depart.strftime('%d/%m/%Y à %H:%M')
         )
 
         mon_action_envoyer_notification_smtp = EnvoyerMessageSmtpActionNoeud(
