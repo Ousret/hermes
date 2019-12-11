@@ -11,7 +11,7 @@ class Detecteur(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     designation = db.Column(db.String(255), nullable=False)
 
-    regles = db.relationship("RechercheInteret", secondary='lien_detecteur_recherche_interet', lazy='joined', enable_typechecks=False, cascade="save-update, delete")  # type: list[RechercheInteret]
+    regles = db.relationship("RechercheInteret", secondary='lien_detecteur_recherche_interet', lazy='joined', enable_typechecks=False, cascade="save-update, merge")  # type: list[RechercheInteret]
 
     createur_id = db.Column(db.ForeignKey('user.id'), nullable=True)
     createur = db.relationship(User, primaryjoin="User.id==Detecteur.createur_id")

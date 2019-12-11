@@ -34,7 +34,7 @@ class Automate(db.Model):
     limite_par_heure = db.Column(db.Integer(), nullable=True, default=100)
 
     detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id, ondelete='CASCADE'), nullable=False)
-    detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="save-update")
+    detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="save-update, delete, merge")
 
     actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False, cascade="save-update, merge, delete, delete-orphan")
 
