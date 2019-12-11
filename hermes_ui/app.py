@@ -45,6 +45,8 @@ from flask_webpackext import FlaskWebpackExt
 
 app = Flask(__name__)
 app.config.from_yaml(join(app.root_path, '../configuration.yml'))
+app.config['JSON_SORT_KEYS'] = False
+
 app.logger = logger
 
 __path__ = dirname(realpath(__file__))
