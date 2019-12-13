@@ -161,7 +161,7 @@ $(function () {
     AppInterfaceInteroperabilite.TERM = $('#terminal')
         .terminal('',
             {
-                greetings: 'Hermes Copyright © 2019 GIE Sesam-Vitale. All rights reserved.\n\n',
+                greetings: '⚡ Hermes️ ⚡\n\n',
                 historySize: 40,
                 outputLimit: 80,
                 height: 250,
