@@ -116,7 +116,7 @@ $(function () {
         if (TABLE_EXECUTION_AUTOMATE !== null && TABLE_EXECUTION_AUTOMATE_FIRST_FETCH === true) {
 
             AppInterfaceInteroperabilite.lecture_execution_automate(
-                parseInt(TABLE_EXECUTION_AUTOMATE.rows().data().length > 0 ? TABLE_EXECUTION_AUTOMATE.rows().data()[0][0] : '0')+1
+                parseInt(TABLE_EXECUTION_AUTOMATE.rows().data().length > 0 ? TABLE_EXECUTION_AUTOMATE.rows().data()[0].id : '0')+1
             ).then(
                 () => {
 
