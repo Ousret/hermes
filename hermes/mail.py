@@ -387,12 +387,21 @@ class MailBody:
 
     def __str__(self):
         if self.get_head('Content-Transfer-Encoding') == 'base64':
+
+            charset_declared = None
+
             try:
-                decoded_content = str(b64decode(self._source + '=' * (-len(self._source) % 4)), 'utf-8')
+                charset_declared = self.content_type.split('=')[-1].replace('"', '')
+            except:
+                pass
+
+            try:
+                decoded_content = str(b64decode(self._source + '=' * (-len(self._source) % 4)), charset_declared if charset_declared is not None else 'utf-8', 'ignore')
                 decoded_content = decoded_content.replace('\\\\', '\\')
                 return decoded_content[2:-1] if decoded_content.startswith("b'") else decoded_content
             except binascii.Error as e:
                 pass
+
         return self._source
 
 
