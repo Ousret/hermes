@@ -52,7 +52,7 @@ class Automate(db.Model):
             self.detecteur.transcription() if self.detecteur is not None else None
         )
 
-        automate.action_racine = self.action_racine.transcription()
+        automate.action_racine = self.action_racine.transcription() if self.action_racine is not None else None
 
         return automate
 
