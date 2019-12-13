@@ -225,6 +225,7 @@ class Mail(Source):
             headers = header_parser.parsestr(message_part.as_string()).items()
 
             content_type = message_part.get_content_type()
+            content_disposition = message_part.get_content_disposition() or ''
 
             for message_part_header, message_part_header_value in headers:
 
@@ -246,6 +247,7 @@ class Mail(Source):
                     sub_charset_declared = None
 
                     sub_content_type = sub_message_part.get_content_type()
+                    sub_content_disposition = sub_message_part.get_content_disposition() or ''
                     sub_headers = header_parser.parsestr(sub_message_part.as_string()).items()
 
                     sub_raw_body = sub_message_part.as_string()
@@ -261,7 +263,7 @@ class Mail(Source):
                         if message_part_header.lower() == 'content-transfer-encoding':
                             sub_content_transfert_encoding_declared = message_part_header_value
 
-                    if sub_content_type == 'text/plain' or sub_content_type == 'text/html':
+                    if 'attachment' not in sub_content_disposition.lower() and sub_content_type == 'text/plain' or sub_content_type == 'text/html':
 
                         bodies.append(
                             MailBody(
@@ -271,7 +273,7 @@ class Mail(Source):
                             )
                         )
 
-            elif message_part.get_content_type() == 'text/plain' or message_part.get_content_type() == 'text/html':
+            elif 'attachment' not in content_disposition.lower() and message_part.get_content_type() == 'text/plain' or message_part.get_content_type() == 'text/html':
 
                 bodies.append(
                     MailBody(
