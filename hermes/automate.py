@@ -1451,30 +1451,10 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
         """
         super().je_realise(source)
 
-        destinataire = None
-
-        if isinstance(source.destinataire, list):
-            for el in source.destinataire:
-                if '@' in el:
-                    destinataire = el
-                    break
-            if not destinataire:
-                logger.error(
-                    _("L'action {action_nom} n'est pas en mesure de transférer le message {source_nom} "
-                      "car nous ne pouvons pas y lire le champs TO ({mail_to}) pour l'écrire dans FROM").format(
-                        action_nom=self.designation,
-                        source_nom=source.titre,
-                        mail_to=str(source.destinataire)
-                    )
-                )
-                return self._jai_echouee(source)
-        else:
-            destinataire = source.destinataire
-
         m = emails.Message(html=source.extract_body('html', strict=True),
                            text=source.extract_body('plain', strict=True),
                            subject=self._sujet,
-                           mail_from=destinataire)
+                           mail_from=source.destinataire[-1] if isinstance(source.destinataire, list) else source.destinataire)
 
         for attachement in source.attachements:
             m.attach(filename=attachement.filename, data=BytesIO(attachement.content), content_disposition='attachment')
