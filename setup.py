@@ -15,11 +15,10 @@ setup(
                       'flask-emails', 'ruamel.std.zipfile', 'ics>=0.5', 'olefile', 'html5lib', 'pandas', 'flask_babel',
                       'records', 'flask_babel', 'unidecode', 'pandas', 'records', 'marshmallow-oneofschema', 'loguru',
                       'Flask-Webpack', 'mysql-connector', 'werkzeug', 'sqlalchemy', 'flask_webpackext',
-                      'pyopenssl', 'msg_parser', 'wtforms'],
+                      'pyopenssl', 'msg_parser>=1.1.0', 'wtforms'],
     tests_require=[],
     keywords=[],
     dependency_links=[
-        'git+https://github.com/Ousret/msg_parser.git#egg=msg_parser',
         'git+https://github.com/Ousret/python-emails.git#egg=emails'
     ],
     classifiers=[
