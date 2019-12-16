@@ -13,6 +13,8 @@ from email.utils import parseaddr
 
 from slugify import slugify
 from tqdm import tqdm
+from unidecode import unidecode
+
 from hermes.source import Source, SourceFactory, ManipulationSourceException, ExtractionSourceException
 from hermes.session import Session
 
@@ -75,6 +77,13 @@ class Mail(Source):
         self._extraction_interet.injecter_interet(
             'pieces-jointes-types',
             [el.content_type for el in self._attachements]
+        )
+
+        self._extraction_interet.injecter_interet(
+            'documents',
+            dict(
+                [(unidecode(el.filename), {'content_type': el.content_type, 'content': el.b64_content}) for el in self._attachements]
+            )
         )
 
         self._extraction_interet['Date de réception'] = date_received
