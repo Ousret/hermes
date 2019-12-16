@@ -134,18 +134,14 @@ class Mail(Source):
 
     def extract_body(self, prefer='plain', strict=False):
         if len(self.bodies) == 0:
-            return ''
-
-        bodies = list()
+            return None
 
         for bd in self.bodies:
-            if bd.content_type == 'text/{}'.format(prefer):
-                bodies.append(str(bd))
+            if 'text/{}'.format(prefer) in bd.content_type:
+                return str(bd)
 
-        if len(bodies) > 0:
-            return '\n'.join(bodies)
         if strict is True:
-            return ''
+            return None
 
         return '\n'.join([str(bd) for bd in self.bodies])
 
