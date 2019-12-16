@@ -313,6 +313,68 @@ SessionFiltre.FILTRES.append(
     )
 )
 
+
+def prochaine_journee_depuis(date_courante, journee_cible):
+    """
+    :param datetime.datetime date_courante:
+    :param str journee_cible:
+    """
+    n_iter = 0
+    while date_courante.strftime('%A').lower() != journee_cible.lower() or n_iter >= 7:
+        date_courante += timedelta(days=+1)
+        n_iter+=1
+    return date_courante
+
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'dateProchainLundi',
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Monday')
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'dateProchainMardi',
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thuesday')
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'dateProchainMercredi',
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Wednesday')
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'dateProchainJeudi',
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thursday')
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'dateProchainVendredi',
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Friday')
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'dateProchainSamedi',
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Saturday')
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'dateProchainDimanche',
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Sunday')
+    )
+)
+
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'slug',
