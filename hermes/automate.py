@@ -1563,6 +1563,40 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
 
         mes_decouvertes = list()
 
+        logger.info(
+            _("L'action '{action_nom}' débute une auto-découverte d'une liste à partir de '{pattern}'").format(
+                action_nom=self._designation,
+                pattern=self._variable_pattern
+            )
+        )
+
+        logger.info(
+            source.session.retranscrire(
+                '{{req_lecture_participants}}'
+            )
+        )
+
+        logger.info(
+            source.session.retranscrire(
+                '{{req_lecture_participants.objects}}'
+            )
+        )
+
+        try:
+            logger.info(
+                source.session.retranscrire(
+                    '{{req_lecture_participants.objects.0}}'
+                )
+            )
+
+            logger.info(
+                source.session.retranscrire(
+                    '{{req_lecture_participants.objects.0.fields}}'
+                )
+            )
+        except:
+            logger.error('Failure retranscrire')
+
         try:
             mes_decouvertes.append(
                 source.session.retranscrire(
