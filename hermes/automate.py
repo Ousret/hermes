@@ -589,12 +589,6 @@ class ItopRequeteCoreGetActionNoeud(ActionNoeud):
                          req_dql=self._requete_dql, code_itop=my_payload['code'], message_itop=my_payload['message'])
             return self._jai_echouee(source, response.content)
 
-        if self._friendly_name is not None:
-            source.session.sauver(self._friendly_name, my_payload)
-        else:
-            for key in my_payload:
-                source.session.sauver(key, my_payload[key])
-
         return self._jai_reussi(source, my_payload)
 
 
@@ -659,12 +653,6 @@ class ItopRequeteCoreCreateActionNoeud(ActionNoeud):
                          classe_itop=self._classe_itop_cible, code_itop=my_payload['code'],
                          message_itop=my_payload['message'])
             return self._jai_echouee(source, response.content)
-
-        if self._friendly_name is not None:
-            source.session.sauver(self._friendly_name, my_payload)
-        else:
-            for key in my_payload:
-                source.session.sauver(key, my_payload[key])
 
         return self._jai_reussi(source, my_payload)
 
@@ -732,12 +720,6 @@ class ItopRequeteCoreUpdateActionNoeud(ActionNoeud):
                 "La requête core/update iTop REST '{req_dql}' n'a pas aboutie correctement. Une erreur a été soulevée (code {code_itop}) : {message_itop}"),
                          req_dql=self._requete_dql, code_itop=my_payload['code'], message_itop=my_payload['message'])
             return self._jai_echouee(source, response.content)
-
-        if self._friendly_name is not None:
-            source.session.sauver(self._friendly_name, my_payload)
-        else:
-            for key in my_payload:
-                source.session.sauver(key, my_payload[key])
 
         return self._jai_reussi(source, my_payload)
 
@@ -808,12 +790,6 @@ class ItopRequeteCoreApplyStimulusActionNoeud(ActionNoeud):
                          req_dql=self._requete_dql, code_itop=my_payload['code'], message_itop=my_payload['message'])
             return self._jai_echouee(source, response.content)
 
-        if self._friendly_name is not None:
-            source.session.sauver(self._friendly_name, my_payload)
-        else:
-            for key in my_payload:
-                source.session.sauver(key, my_payload[key])
-
         return self._jai_reussi(source, my_payload)
 
 
@@ -875,12 +851,6 @@ class ItopRequeteCoreDeleteActionNoeud(ActionNoeud):
                 "La requête core/delete iTop REST '{req_dql}' n'a pas aboutie correctement. Une erreur a été soulevée (code {code_itop}) : {message_itop}"),
                          req_dql=self._requete_dql, code_itop=my_payload['code'], message_itop=my_payload['message'])
             return self._jai_echouee(source, response.content)
-
-        if self._friendly_name is not None:
-            source.session.sauver(self._friendly_name, my_payload)
-        else:
-            for key in my_payload:
-                source.session.sauver(key, my_payload[key])
 
         return self._jai_reussi(source, my_payload)
 
