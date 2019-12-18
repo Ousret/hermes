@@ -827,7 +827,7 @@ def creation_action(automate_id):
 
     payload = request.json  # type: dict
 
-    if 'type' not in payload or ('parent' not in payload and 'remplacer' not in payload) or 'formulaire' not in payload:
+    if 'type' not in payload or ('parent' not in payload and 'remplacement' not in payload) or 'formulaire' not in payload:
         return jsonify({'message': _('Le JSON présent dans la requête est invalide')}), 400
 
     type_action = payload['type']
@@ -911,6 +911,9 @@ def creation_action(automate_id):
 
         if noeud_a_mettre_niveau_f is not None:
             noeud_a_mettre_niveau_f.action_echec_id = target_model_instance.id
+
+        if noeud_a_mettre_niveau_r is None and noeud_a_mettre_niveau_f is None:
+            automate.action_racine = target_model_instance
 
         db.session.delete(noeud_a_remplacer)
 
