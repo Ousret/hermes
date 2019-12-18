@@ -1034,6 +1034,8 @@ class AppInterfaceInteroperabilite {
 
                             });
 
+                            AppInterfaceInteroperabilite.recuperation_saisie_assistee();
+
                             resolve();
                         }
 
