@@ -1220,14 +1220,39 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
             r'<(br|basefont|hr|input|source|frame|param|area|meta|!--|col|link|option|base|img|wbr|!DOCTYPE|html|head).*?>|<(a|abbr|acronym|address|applet|article|aside|audio|b|bdi|bdo|big|blockquote|body|button|canvas|caption|center|cite|code|colgroup|command|datalist|dd|del|details|dfn|dialog|dir|div|dl|dt|em|embed|fieldset|figcaption|figure|font|footer|form|frameset|head|header|hgroup|h1|h2|h3|h4|h5|h6|html|i|iframe|ins|kbd|keygen|label|legend|li|map|mark|menu|meter|nav|noframes|noscript|object|ol|optgroup|output|p|pre|progress|q|rp|rt|ruby|s|samp|script|section|select|small|span|strike|strong|style|sub|summary|sup|table|tbody|td|textarea|tfoot|th|thead|time|title|tr|track|tt|u|ul|var|video).*?</\2>'
         )
 
-        logger.info(str(source.destinataire))
+        message_from_field = source.destinataire if isinstance(source.destinataire, list) is False else source.destinataire[-1]
+
+        if self._nom_utilisateur not in message_from_field:
+
+            logger.warning(
+                _("L'action '{action_nom}' ne reconnais pas l'adresse '{source_addr_to}' "
+                  "pour être utilisée en tant qu'expéditeur.").format(
+                    action_nom=self._designation,
+                    source_addr_to=message_from_field
+                )
+            )
+
+            if '@' in self._nom_utilisateur:
+                message_from_field = self._nom_utilisateur
+            else:
+                message_from_field = '{smtp_username}@{smtp_domain}'.format(
+                    smtp_username=self._nom_utilisateur,
+                    smtp_domain=message_from_field.split('@')[-1]
+                )
+
+            logger.info(
+                _("L'action '{action_nom}' va utiliser '{source_addr_to}' "
+                  "pour être utilisée en tant qu'expéditeur.").format(
+                    action_nom=self._designation,
+                    source_addr_to=message_from_field
+                )
+            )
 
         if re.search(regex_html_tags, self._corps) is not None and self._force_keep_template is False:
 
             m = emails.Message(html=self._corps,
                                subject=self._sujet,
-                               mail_from=source.destinataire if isinstance(source.destinataire, list) is False else
-                               source.destinataire[-1])
+                               mail_from=message_from_field)
 
         else:
 
@@ -1423,10 +1448,38 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
         """
         super().je_realise(source)
 
+        message_from_field = source.destinataire if isinstance(source.destinataire, list) is False else source.destinataire[-1]
+
+        if self._nom_utilisateur not in message_from_field:
+
+            logger.warning(
+                _("L'action '{action_nom}' ne reconnais pas l'adresse '{source_addr_to}' "
+                  "pour être utilisée en tant qu'expéditeur.").format(
+                    action_nom=self._designation,
+                    source_addr_to=message_from_field
+                )
+            )
+
+            if '@' in self._nom_utilisateur:
+                message_from_field = self._nom_utilisateur
+            else:
+                message_from_field = '{smtp_username}@{smtp_domain}'.format(
+                    smtp_username=self._nom_utilisateur,
+                    smtp_domain=message_from_field.split('@')[-1]
+                )
+
+            logger.info(
+                _("L'action '{action_nom}' va utiliser '{source_addr_to}' "
+                  "pour être utilisée en tant qu'expéditeur.").format(
+                    action_nom=self._designation,
+                    source_addr_to=message_from_field
+                )
+            )
+
         m = emails.Message(html=source.extract_body('html', strict=True),
                            text=source.extract_body('plain', strict=True),
                            subject=self._sujet,
-                           mail_from=source.destinataire[-1] if isinstance(source.destinataire, list) else source.destinataire)
+                           mail_from=message_from_field)
 
         for attachement in source.attachements:
             m.attach(filename=attachement.filename, data=BytesIO(attachement.content), content_disposition='attachment')
