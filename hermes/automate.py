@@ -1541,6 +1541,12 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
         self._separateur = separateur
 
     def je_realise(self, source):
+
+        logger.info(_("Démarrage de l'action '{action_nom}' sur '{source_nom}'"), action_nom=self._designation,
+                    source_nom=source.titre)
+
+        self._success = False
+
         if self._variable_pattern.startswith('{{') is False or self._variable_pattern.endswith('}}') is False:
             logger.error(
                 _("L'action '{action_nom}' sur la source '{source_nom}' est en échec : {msg_err}"),
