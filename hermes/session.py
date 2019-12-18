@@ -329,49 +329,49 @@ def prochaine_journee_depuis(date_courante, journee_cible):
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainLundi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Monday')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Monday').strftime('%Y-%m-%d')
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainMardi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thuesday')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thuesday').strftime('%Y-%m-%d')
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainMercredi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Wednesday')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Wednesday').strftime('%Y-%m-%d')
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainJeudi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thursday')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thursday').strftime('%Y-%m-%d')
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainVendredi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Friday')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Friday').strftime('%Y-%m-%d')
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainSamedi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Saturday')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Saturday').strftime('%Y-%m-%d')
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainDimanche',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Sunday')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Sunday').strftime('%Y-%m-%d')
     )
 )
 
