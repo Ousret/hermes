@@ -171,7 +171,7 @@ class Session:
                         if isinstance(valeur_dernier_niveau, dict):
                             dict_case_insensible = {k.lower(): v for k, v in valeur_dernier_niveau.items()}
                             dict_case_insensible_keys = dict_case_insensible.keys()
-                            if el.isdigit() is True and el not in dict_case_insensible_keys and int(el)+1 < len(dict_case_insensible_keys):
+                            if el.isdigit() is True and el not in dict_case_insensible_keys and int(el)+1 <= len(dict_case_insensible_keys):
                                 el = list(dict_case_insensible_keys)[int(el)]
                             if el.lower() not in dict_case_insensible.keys():
                                 raise KeyError(
