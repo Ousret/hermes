@@ -1232,13 +1232,10 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 )
             )
 
-            if '@' in self._nom_utilisateur:
-                message_from_field = self._nom_utilisateur
-            else:
-                message_from_field = '{smtp_username}@{smtp_domain}'.format(
-                    smtp_username=self._nom_utilisateur,
-                    smtp_domain=message_from_field.split('@')[-1]
-                )
+            message_from_field = '{smtp_username}@{smtp_domain}'.format(
+                smtp_username=self._nom_utilisateur,
+                smtp_domain=message_from_field.split('@')[-1]
+            )
 
             logger.info(
                 _("L'action '{action_nom}' va utiliser '{source_addr_to}' "
@@ -1460,13 +1457,10 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 )
             )
 
-            if '@' in self._nom_utilisateur:
-                message_from_field = self._nom_utilisateur
-            else:
-                message_from_field = '{smtp_username}@{smtp_domain}'.format(
-                    smtp_username=self._nom_utilisateur,
-                    smtp_domain=message_from_field.split('@')[-1]
-                )
+            message_from_field = '{smtp_username}@{smtp_domain}'.format(
+                smtp_username=self._nom_utilisateur,
+                smtp_domain=message_from_field.split('@')[-1]
+            )
 
             logger.info(
                 _("L'action '{action_nom}' va utiliser '{source_addr_to}' "
