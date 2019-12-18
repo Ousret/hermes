@@ -82,7 +82,7 @@ class Mail(Source):
         self._extraction_interet.injecter_interet(
             'documents',
             dict(
-                [(unidecode(el.filename), {'content_type': el.content_type, 'content': el.b64_content}) for el in self._attachements]
+                [(slugify(el.filename), {'content_type': el.content_type, 'content': el.b64_content}) for el in self._attachements]
             )
         )
 
