@@ -1233,7 +1233,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
             )
 
             message_from_field = '{smtp_username}@{smtp_domain}'.format(
-                smtp_username=self._nom_utilisateur,
+                smtp_username=self._nom_utilisateur.split('@')[0],
                 smtp_domain=message_from_field.split('@')[-1]
             )
 
@@ -1458,7 +1458,7 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
             )
 
             message_from_field = '{smtp_username}@{smtp_domain}'.format(
-                smtp_username=self._nom_utilisateur,
+                smtp_username=self._nom_utilisateur.split('@')[0],
                 smtp_domain=message_from_field.split('@')[-1]
             )
 
