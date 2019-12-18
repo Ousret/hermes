@@ -1576,33 +1576,6 @@ class ConstructionChaineCaractereSurListeActionNoeud(ActionNoeud):
             )
         )
 
-        logger.info(
-            source.session.retranscrire(
-                '{{req_lecture_participants}}'
-            )
-        )
-
-        logger.info(
-            source.session.retranscrire(
-                '{{req_lecture_participants.objects}}'
-            )
-        )
-
-        try:
-            logger.info(
-                source.session.retranscrire(
-                    '{{req_lecture_participants.objects.0}}'
-                )
-            )
-
-            logger.info(
-                source.session.retranscrire(
-                    '{{req_lecture_participants.objects.0.fields}}'
-                )
-            )
-        except:
-            logger.error('Failure retranscrire')
-
         try:
             mes_decouvertes.append(
                 source.session.retranscrire(
