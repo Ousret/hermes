@@ -1100,48 +1100,12 @@ class AppInterfaceInteroperabilite {
         ).done(
             (data) => {
 
-                // if (data.offset < AppInterfaceInteroperabilite.LAST_SEEK_LOGS)
-                // {
-                //     term.clear();
-                // }
-
                 AppInterfaceInteroperabilite.LAST_SEEK_LOGS = data.offset;
 
                 for (let line of data.logs) {
                     AppInterfaceInteroperabilite.TERM.echo(
-                        line.replace('\n', ''),
-                        {
-                            finalize: function(div) {
-
-                                if (line.includes('| INFO'))
-                                {
-                                    div.css("color", "green");
-                                }
-                                else if(line.includes('| DEBUG'))
-                                {
-                                    div.css("color", "white");
-                                }
-                                else if(line.includes('| WARNING'))
-                                {
-                                    div.css("color", "yellow");
-                                }
-                                else if(line.includes('| ERROR'))
-                                {
-                                    div.css("color", "red");
-                                }
-                                else if(line.includes('| ERROR'))
-                                {
-                                    div.css("color", "red");
-                                }
-                                else if(line.includes('| CRITICAL') || line.includes('| FATAL'))
-                                {
-                                    div.css("color", "purple");
-                                }
-                            }
-                        }
+                        line.replace('\n', '')
                     );
-
-
                 }
 
             }
