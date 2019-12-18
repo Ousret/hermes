@@ -1222,7 +1222,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
         message_from_field = source.destinataire if isinstance(source.destinataire, list) is False else source.destinataire[-1]
 
-        if self._nom_utilisateur not in message_from_field:
+        if self._nom_utilisateur.split('@')[0] not in message_from_field:
 
             logger.warning(
                 _("L'action '{action_nom}' ne reconnais pas l'adresse '{source_addr_to}' "
@@ -1287,8 +1287,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                                text=self._corps,
                                subject=self._sujet,
                                date=datetime.now(),
-                               mail_from=source.destinataire[-1] if isinstance(source.destinataire,
-                                                                               list) else source.destinataire)
+                               mail_from=message_from_field)
 
         for pj_source in [source if self._pj_source is True else None,
                           self._source_pj_complementaire if self._source_pj_complementaire is not None else None]:
@@ -1447,7 +1446,7 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
         message_from_field = source.destinataire if isinstance(source.destinataire, list) is False else source.destinataire[-1]
 
-        if self._nom_utilisateur not in message_from_field:
+        if self._nom_utilisateur.split('@')[0] not in message_from_field:
 
             logger.warning(
                 _("L'action '{action_nom}' ne reconnais pas l'adresse '{source_addr_to}' "
