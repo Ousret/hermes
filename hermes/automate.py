@@ -46,10 +46,12 @@ class Automate(object):
         self._designation = designation
         self._detecteur = detecteur
 
-        self._handler = BufferingHandler(capacity=1024)
+        self._handler = BufferingHandler(capacity=2048)
         self._logger_handler_id = None
 
         self._action_racine = None  # type: ActionNoeud
+
+        self._logs = ''
 
     @property
     def designation(self):
@@ -91,10 +93,10 @@ class Automate(object):
     @property
     def logs(self):
         """
-        Transforme le buffer logs en mémoire en string
+        Récupère les logs d'après fonctionnement
         :rtype: str
         """
-        return '\n'.join([str(el.msg) for el in self._handler.buffer])
+        return self._logs
 
     def explain(self):
         my_table = PrettyTable([_("Type"), _("Action"), _("Réussite"), _("Valeur")])
@@ -126,7 +128,7 @@ class Automate(object):
         :rtype: bool
         """
 
-        self._logger_handler_id = logger.add(self._handler, level='DEBUG', enqueue=True, colorize=False)
+        self._logger_handler_id = logger.add(self._handler, level='DEBUG', enqueue=True, colorize=False, catch=True)
 
         logger.debug(
             _("Initialisation de l'automate '{automate_nom}' avec la source '{source_nom}'."),
@@ -156,6 +158,7 @@ class Automate(object):
 
             final_leaf_bool = self._action_racine.je_realise(source) if self._action_racine is not None else False
 
+            self._logs = '\n'.join([str(el.msg) for el in self._handler.buffer])
             logger.remove(self._logger_handler_id)
             self._logger_handler_id = None
 
@@ -164,6 +167,7 @@ class Automate(object):
             logger.debug(_("L'automate ne semble pas concerné par la source '{detecteur_nom}'"),
                          detecteur_nom=str(self._detecteur))
 
+        self._logs = '\n'.join([str(el.msg) for el in self._handler.buffer])
         logger.remove(self._logger_handler_id)
         self._logger_handler_id = None
 
