@@ -1024,7 +1024,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         super().__init__(designation, friendly_name)
 
         self._organisateur = organisateur
-        self._participants = participants
+        self._participants = participants  # type: str
         self._sujet = sujet
         self._description = description
         self._lieu = lieu
@@ -1067,7 +1067,6 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             dumps(
                 {
                     'sujet': self._sujet,
-                    # 'description': self._description,
                     'lieu': self._lieu,
                     'organisateur': self._organisateur
                 }
@@ -1078,6 +1077,14 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         my_cached_uid = None
 
         if exists(cached_ics_path) is True:
+
+            logger.info(
+                _("L'action '{action_nom}' se souvient d'avoir déjà émis un rendez-vous. "
+                  "L'invitation '{invitation_sha512}' sera mise à jour automatiquement en conservant les références.").format(
+                    action_nom=self._designation,
+                    invitation_sha512=cached_ics_hash
+                )
+            )
 
             try:
                 my_cached_calendar = Calendar(open(cached_ics_path, 'r', encoding='utf-8').read())
@@ -1121,7 +1128,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         )
 
         for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp="TRUE") for el in
-                         self._participants.split(',')]:
+                         self._participants.split(',') if not el.lower().startswith('bcc:') and not el.lower().startswith('cc:')]:
             my_event.add_attendee(attendee)
 
         my_calendar.events.add(my_event)
@@ -1339,9 +1346,19 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                                source_type=type(pj_source))
 
         destinaires_adresses_valides = list()
+        destinataires_copies_cachees_valides = list()
+        destinataire_copies_visibles_valides = list()
 
         for dest in [self._destinataire] if ',' not in self._destinataire else [destinataire.strip(' ') for destinataire
                                                                                 in self._destinataire.split(',')]:
+
+            type_copie = None
+
+            if 'cc:' in dest.lower():
+                type_copie, dest = dest.split(':')
+            elif 'bcc:' in dest.lower():
+                type_copie, dest = dest.split(':')
+
             if re.fullmatch(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)', dest) is None:
                 logger.warning(
                     _("Action '{action_nom}': Impossible d'émettre un message à cette adresse '{addr_cible}' "
@@ -1350,7 +1367,16 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                     addr_cible=dest
                 )
                 continue
-            destinaires_adresses_valides.append(dest)
+
+            if type_copie is None:
+                destinaires_adresses_valides.append(dest)
+            elif type_copie.lower() == 'cc':
+                destinataire_copies_visibles_valides.append(dest)
+            elif type_copie.lower() == 'bcc':
+                destinataires_copies_cachees_valides.append(dest)
+
+        m.set_cc(destinataire_copies_visibles_valides)
+        m.set_bcc(destinataires_copies_cachees_valides)
 
         if len(destinaires_adresses_valides) == 0:
             logger.error(
@@ -1488,18 +1514,37 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
             m.attach(filename=attachement.filename, data=BytesIO(attachement.content), content_disposition='attachment')
 
         destinaires_adresses_valides = list()
+        destinataires_copies_cachees_valides = list()
+        destinataire_copies_visibles_valides = list()
 
         for dest in [self._destinataire] if ',' not in self._destinataire else [destinataire.strip(' ') for destinataire
                                                                                 in self._destinataire.split(',')]:
+
+            type_copie = None
+
+            if 'cc:' in dest.lower():
+                type_copie, dest = dest.split(':')
+            elif 'bcc:' in dest.lower():
+                type_copie, dest = dest.split(':')
+
             if re.fullmatch(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)', dest) is None:
                 logger.warning(
-                    _("Action '{action_nom}': Impossible d'émettre un message à cette adresse '{mail_to}' "
-                      "car elle ne respecte pas la RFC 5322"),
+                    _("Action '{action_nom}': Impossible d'émettre un message à cette adresse '{addr_cible}' "
+                      "car elle ne respecte pas le RFC 5322"),
                     action_nom=self.designation,
-                    mail_to=dest
+                    addr_cible=dest
                 )
                 continue
-            destinaires_adresses_valides.append(dest)
+
+            if type_copie is None:
+                destinaires_adresses_valides.append(dest)
+            elif type_copie.lower() == 'cc':
+                destinataire_copies_visibles_valides.append(dest)
+            elif type_copie.lower() == 'bcc':
+                destinataires_copies_cachees_valides.append(dest)
+
+        m.set_cc(destinataire_copies_visibles_valides)
+        m.set_bcc(destinataires_copies_cachees_valides)
 
         if len(destinaires_adresses_valides) == 0:
             logger.error(

@@ -430,7 +430,9 @@ class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
             'format': 'TEXT',
             'required': True,
             'help': _("L'adresse email du destinataire, en cas de multiple destinataire, "
-                    "veuillez les séparer par une virgule.")
+                      "veuillez les séparer par une virgule."
+                      "Pour ajouter une copie cachée, veuillez ajouter le préfixe 'bcc:', pour une copie simple 'cc:' "
+                      "à chaque adresse.")
         },
         'sujet': {
             'format': 'TEXT',
@@ -529,7 +531,9 @@ class TransfertSmtpActionNoeud(ActionNoeud):
             'format': 'TEXT',
             'required': True,
             'help': _("L'adresse email du destinaire, en cas de multiple destinataire, "
-                    "veuillez les séparer par une virgule")
+                      "veuillez les séparer par une virgule"
+                      "Pour ajouter une copie cachée, veuillez ajouter le préfixe 'bcc:', pour une copie simple 'cc:' "
+                      "à chaque adresse.")
         },
         'sujet': {
             'format': 'TEXT',
@@ -693,7 +697,9 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             'format': 'TEXT',
             'required': True,
             'help': _("Une liste d'adresse de messagerie séparées par une virgule, "
-                    "peut être précédemment construit par une autre action")
+                      "peut être précédemment construit par une autre action. "
+                      "Pour ajouter une copie cachée, veuillez ajouter le préfixe 'bcc:', pour une copie simple 'cc:'."
+                      "Les adresses préfixées par bcc ou cc ne seront pas invitées au rendez-vous.")
         },
         'sujet': {
             'format': 'TEXT',
