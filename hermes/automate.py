@@ -4,6 +4,7 @@ from datetime import datetime
 from email.mime.base import MIMEBase
 from io import BytesIO
 from os.path import exists
+from smtplib import SMTPServerDisconnected
 from ssl import SSLContext, OP_ALL, PROTOCOL_TLS
 
 from emails.backend.smtp.exceptions import SMTPConnectNetworkError
@@ -1397,6 +1398,15 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 msg_err=str(e)
             )
             return self._jai_echouee(source, str(e))
+        except SMTPServerDisconnected as e:
+            logger.error(
+                _(
+                    "L'action '{action_nom}' est en échec car le server '{srv_smtp}' distant n'a pas répondu correctement à un de nos échanges. {msg_err}."),
+                action_nom=self.designation,
+                srv_smtp=self._hote_smtp + ':' + str(self._port_smtp),
+                msg_err=str(e)
+            )
+            return self._jai_echouee(source, str(e))
         except ValueError as e:
             logger.error(
                 _("L'action '{action_nom}' est en échec car il est impossible de lire les adresses destinataires "
@@ -1543,6 +1553,15 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 smtp_err=str(e)
             )
             return self._jai_echouee(source, str(e))
+        except SMTPServerDisconnected as e:
+            logger.error(
+                _(
+                    "L'action '{action_nom}' est en échec car le server '{srv_smtp}' distant n'a pas répondu correctement à un de nos échanges. {msg_err}."),
+                action_nom=self.designation,
+                srv_smtp=self._hote_smtp + ':' + str(self._port_smtp),
+                msg_err=str(e)
+            )
+            return self._jai_echouee(source, str(e))
 
         if response.status_code not in [250, ]:
             logger.warning(
@@ -1551,7 +1570,7 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 action_nom=self.designation,
                 smtp_err=str(response.status_code)
             )
-            return self._jai_echouee(source)
+            return self._jai_echouee(source, response)
 
         return self._jai_reussi(source, response)
 
