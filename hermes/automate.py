@@ -1066,7 +1066,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             dumps(
                 {
                     'sujet': self._sujet,
-                    'description': self._description,
+                    # 'description': self._description,
                     'lieu': self._lieu,
                     'organisateur': self._organisateur
                 }
