@@ -1,4 +1,5 @@
 import binascii
+from datetime import datetime
 from os.path import exists
 
 from imapclient import IMAPClient
@@ -13,7 +14,6 @@ from email.utils import parseaddr
 
 from slugify import slugify
 from tqdm import tqdm
-from unidecode import unidecode
 
 from hermes.source import Source, SourceFactory, ManipulationSourceException, ExtractionSourceException
 from hermes.session import Session
@@ -116,6 +116,10 @@ class Mail(Source):
     def bal_internal_id(self, new_value):
         if isinstance(new_value, int):
             self._bal_internal_id = new_value
+
+    @property
+    def date_received(self):
+        return self._date_received
 
     @property
     def folder(self):
@@ -553,7 +557,7 @@ class MailToolbox(SourceFactory):
 
             mail.factory = self
 
-        return extractions
+        return sorted(extractions, key=lambda x: x.date_received or datetime.now())
 
     def copier(self, mail, dossier_dest):
         """
