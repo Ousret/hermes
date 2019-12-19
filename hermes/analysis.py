@@ -34,7 +34,7 @@ class ExtractionInteret(object):
                 if table.attrs.get('class') is not None and 'MsoNormalTable' in table.attrs.get('class'):
                     continue
 
-                df = pd.read_html(table.raw_html)
+                df = pd.read_html(table.html)
 
                 for el in df[0].to_dict(orient='records'):
                     keys = el.keys()
