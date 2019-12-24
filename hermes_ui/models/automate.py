@@ -919,7 +919,7 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
     id = db.Column(db.Integer, db.ForeignKey('action_noeud.id'), primary_key=True)
 
     membre_gauche_variable = db.Column(db.String(255), nullable=False)
-    operande = db.Column(db.Enum('==', '>', '<', '>=', '<=', '!='), nullable=False)
+    operande = db.Column(db.Enum('==', '>', '<', '>=', '<=', '!=', 'IN'), nullable=False)
     membre_droite_variable = db.Column(db.String(255), nullable=False)
 
     __mapper_args__ = {
