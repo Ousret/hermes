@@ -270,7 +270,7 @@ class InstanceInteroperabilite:
 
                             automate_execution = AutomateExecution(
                                 automate=model,
-                                sujet=source.titre if len(source.titre) < 255 else source[1:250]+'..',
+                                sujet=source.titre if len(source.titre) < 255 else source.titre[1:250]+'..',
                                 corps=source.corps,
                                 date_creation=date_depart_automate,
                                 detecteur=model.detecteur,
