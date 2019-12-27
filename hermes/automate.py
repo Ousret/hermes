@@ -1150,8 +1150,9 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             organizer=Organizer(
                 email=message_from_field,
                 sent_by=message_from_field,
-                common_name=self._organisateur
+                # common_name=self._organisateur
             ),
+            transparent=False
         )
 
         for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp="TRUE") for el in
