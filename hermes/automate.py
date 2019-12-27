@@ -6,6 +6,7 @@ from io import BytesIO
 from os.path import exists
 from smtplib import SMTPServerDisconnected
 from ssl import SSLContext, OP_ALL, PROTOCOL_TLS
+from urllib.parse import quote
 
 from emails.backend.smtp.exceptions import SMTPConnectNetworkError
 from ics.alarm.base import BaseAlarm
@@ -1147,11 +1148,11 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         )
 
         my_event = Event(
-            name=self._sujet.replace(':', ' ').replace(',', ' ').replace(';', ' '),
+            name=quote(self._sujet),
             begin=self._date_heure_depart,
             end=self._date_heure_fin,
             uid=str(uuid4()).replace('-', '').upper() if my_cached_uid is None else my_cached_uid,
-            description=description_invitation_notification.replace(':', ' ').replace(',', ' ').replace(';', ' '),
+            description=quote(description_invitation_notification),
             created=datetime.now(),
             location=self._lieu,
             status='CONFIRMED' if self._est_maintenu is True else 'CANCELLED',
@@ -1160,11 +1161,12 @@ class InvitationEvenementActionNoeud(ActionNoeud):
                 sent_by=message_from_field,
             ),
             transparent=False,
-            alarms=[
-                DisplayAlarm(
-                    trigger=timedelta(minutes=-30)
-                )
-            ]
+            # alarms=[
+            #     DisplayAlarm(
+            #         trigger=timedelta(minutes=-30),
+            #         display_text='REMINDER'
+            #     )
+            # ]
         )
 
         for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp="TRUE") for el in
