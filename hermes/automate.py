@@ -23,7 +23,7 @@ from json import loads, dumps
 from json.decoder import JSONDecodeError
 from dateutil.parser import parse
 from jinja2 import Template, TemplateError
-from ics import Calendar, Event, Attendee, Organizer
+from ics import Calendar, Event, Attendee, Organizer, DisplayAlarm
 from uuid import uuid4
 from hashlib import sha512
 import ruamel.std.zipfile as zipfile
@@ -1161,8 +1161,8 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             ),
             transparent=False,
             alarms=[
-                BaseAlarm(
-                    trigger=timedelta(minutes=-10)
+                DisplayAlarm(
+                    trigger=timedelta(minutes=-30)
                 )
             ]
         )
