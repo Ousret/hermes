@@ -1209,7 +1209,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             )
             return self._jai_echouee(source)
 
-        return self._jai_reussi(source)
+        return self._jai_reussi(source, str(my_calendar))
 
 
 class ManipulationSmtpActionNoeud(ActionNoeud):
