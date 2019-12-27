@@ -12,7 +12,7 @@ setup(
                       'prettytable', 'imapclient', 'zeep', 'tqdm', 'emails>=0.6.1', 'mysqlclient',
                       'flask_security', 'flask_admin', 'flask_sqlalchemy', 'flask_migrate', 'pyyaml',
                       'marshmallow>=2.1', 'flask_marshmallow', 'marshmallow-sqlalchemy', 'python-dateutil', 'jinja2',
-                      'flask-emails', 'ruamel.std.zipfile', 'ics>=0.5', 'olefile', 'html5lib', 'pandas', 'flask_babel',
+                      'flask-emails', 'ruamel.std.zipfile', 'ics==0.5', 'olefile', 'html5lib', 'pandas', 'flask_babel',
                       'records', 'flask_babel', 'unidecode', 'pandas', 'records', 'marshmallow-oneofschema', 'loguru',
                       'Flask-Webpack', 'mysql-connector', 'werkzeug', 'sqlalchemy', 'flask_webpackext',
                       'pyopenssl', 'msg_parser>=1.1.0', 'wtforms'],

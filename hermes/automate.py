@@ -989,7 +989,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         def __init__(self, email, common_name=None, rsvp=None):
             super().__init__(email, common_name, rsvp)
 
-        def _get_params(self):
+        def get_params(self):
             params = {}
             if self.common_name:
                 params.update({'CN': ["'{}'".format(self.common_name)]})
