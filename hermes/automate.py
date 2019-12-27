@@ -1138,12 +1138,19 @@ class InvitationEvenementActionNoeud(ActionNoeud):
 
         my_calendar.method = 'REQUEST' if self._est_maintenu is True else 'CANCEL'
 
+        description_invitation_notification = self._description.format(
+            organisateur=self._organisateur,
+            sujet=self._sujet,
+            lieu=self._lieu,
+            date_depart=self._date_heure_depart.strftime('%d/%m/%Y à %H:%M')
+        )
+
         my_event = Event(
             name=self._sujet,
             begin=self._date_heure_depart,
             end=self._date_heure_fin,
             uid=str(uuid4()).replace('-', '').upper() if my_cached_uid is None else my_cached_uid,
-            description=self._description,
+            description=description_invitation_notification,
             created=datetime.now(),
             location=self._lieu,
             status='CONFIRMED' if self._est_maintenu is True else 'CANCELLED',
@@ -1176,13 +1183,6 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         ma_source_ics_invitation = InvitationEvenementActionNoeud.EvenementICS(
             slugify(my_event.uid) + '.ics',
             fp_ram.read()
-        )
-
-        description_invitation_notification = self._description.format(
-            organisateur=self._organisateur,
-            sujet=self._sujet,
-            lieu=self._lieu,
-            date_depart=self._date_heure_depart.strftime('%d/%m/%Y à %H:%M')
         )
 
         mon_action_envoyer_notification_smtp = EnvoyerMessageSmtpActionNoeud(
@@ -1405,8 +1405,9 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
         m.set_cc(destinataire_copies_visibles_valides)
         m.set_bcc(destinataires_copies_cachees_valides)
+        m.set_mail_to(destinaires_adresses_valides)
 
-        if len(destinaires_adresses_valides) == 0:
+        if len(destinaires_adresses_valides) == 0 and len(destinataire_copies_visibles_valides) == 0 and len(destinataires_copies_cachees_valides) == 0:
             logger.error(
                 _("Action '{action_nom}': Impossible d'émettre un message car aucune adresse valide n'est disponible "
                   "au sens du RFC 5322"),
@@ -1435,8 +1436,6 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
                 )
 
             response = m.send(
-                to=destinaires_adresses_valides[0] if len(
-                    destinaires_adresses_valides) == 1 else destinaires_adresses_valides,
                 smtp=smtp_kwargs
             )
 
@@ -1573,8 +1572,9 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
         m.set_cc(destinataire_copies_visibles_valides)
         m.set_bcc(destinataires_copies_cachees_valides)
+        m.set_mail_to(destinaires_adresses_valides)
 
-        if len(destinaires_adresses_valides) == 0:
+        if len(destinaires_adresses_valides) == 0 and len(destinataire_copies_visibles_valides) == 0 and len(destinataires_copies_cachees_valides) == 0:
             logger.error(
                 _("Action '{action_nom}': Impossible d'émettre un message car aucune adresse valide n'est disponible "
                   "au sens de la RFC 5322"),
@@ -1611,8 +1611,6 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
             )
 
             response = m.send(
-                to=destinaires_adresses_valides[0] if len(
-                    destinaires_adresses_valides) == 1 else destinaires_adresses_valides,
                 smtp=smtp_kwargs
             )
 
