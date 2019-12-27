@@ -1,6 +1,6 @@
 import re
 from copy import copy, deepcopy
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.mime.base import MIMEBase
 from io import BytesIO
 from os.path import exists
@@ -8,6 +8,7 @@ from smtplib import SMTPServerDisconnected
 from ssl import SSLContext, OP_ALL, PROTOCOL_TLS
 
 from emails.backend.smtp.exceptions import SMTPConnectNetworkError
+from ics.alarm.base import BaseAlarm
 from prettytable import PrettyTable
 from requests import request, RequestException, Session, post
 from slugify import slugify
@@ -1146,20 +1147,24 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         )
 
         my_event = Event(
-            name=self._sujet,
+            name=self._sujet.replace(':', '\\:').replace(',', '\\,').replace(';', '\\;'),
             begin=self._date_heure_depart,
             end=self._date_heure_fin,
             uid=str(uuid4()).replace('-', '').upper() if my_cached_uid is None else my_cached_uid,
-            description=description_invitation_notification,
+            description=description_invitation_notification.replace(':', '\\:').replace(',', '\\,').replace(';', '\\;'),
             created=datetime.now(),
             location=self._lieu,
             status='CONFIRMED' if self._est_maintenu is True else 'CANCELLED',
             organizer=Organizer(
                 email=message_from_field,
                 sent_by=message_from_field,
-                # common_name=self._organisateur
             ),
-            transparent=False
+            transparent=False,
+            alarms=[
+                BaseAlarm(
+                    trigger=timedelta(minutes=-10)
+                )
+            ]
         )
 
         for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp="TRUE") for el in
@@ -1168,21 +1173,17 @@ class InvitationEvenementActionNoeud(ActionNoeud):
 
         my_calendar.events.add(my_event)
 
-        self._payload = str(my_calendar)
+        vcalendar_output_raw = str(my_calendar)
         source.session.sauver(self._designation if self._friendly_name is None else self._friendly_name, self._payload)
 
-        vcalendar_output = self._payload.encode('utf-8')
+        vcalendar_output = vcalendar_output_raw.encode('utf-8')
 
         with open(cached_ics_path, 'wb') as fp:
             fp.write(vcalendar_output)
 
-        fp_ram = BytesIO()
-        fp_ram.write(vcalendar_output)
-        fp_ram.seek(0)
-
         ma_source_ics_invitation = InvitationEvenementActionNoeud.EvenementICS(
             slugify(my_event.uid) + '.ics',
-            fp_ram.read()
+            vcalendar_output
         )
 
         mon_action_envoyer_notification_smtp = EnvoyerMessageSmtpActionNoeud(
@@ -1207,7 +1208,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
                 action_nom=self._designation,
                 msg_err=_('Impossible d\'envoyer le fichier invitation ICS par le biais serveur SMTP')
             )
-            return self._jai_echouee(source)
+            return self._jai_echouee(source, str(my_calendar))
 
         return self._jai_reussi(source, str(my_calendar))
 
