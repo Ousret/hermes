@@ -1137,6 +1137,7 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             )
 
         my_calendar = Calendar(creator='Microsoft Exchange Server 2010')
+        my_calendar.scale = 'GREGORIAN'
 
         my_calendar.method = 'REQUEST' if self._est_maintenu is True else 'CANCEL'
 
@@ -1148,11 +1149,11 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         )
 
         my_event = Event(
-            name=quote(self._sujet),
+            name=self._sujet,
             begin=self._date_heure_depart,
             end=self._date_heure_fin,
             uid=str(uuid4()).replace('-', '').upper() if my_cached_uid is None else my_cached_uid,
-            description=quote(description_invitation_notification),
+            description=description_invitation_notification,
             created=datetime.now(),
             location=self._lieu,
             status='CONFIRMED' if self._est_maintenu is True else 'CANCELLED',
