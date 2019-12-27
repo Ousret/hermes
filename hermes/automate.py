@@ -1110,6 +1110,30 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             )
             return self._jai_echouee(source)
 
+        message_from_field = source.destinataire if isinstance(source.destinataire, list) is False else source.destinataire[-1]
+
+        if self._nom_utilisateur_smtp.split('@')[0] not in message_from_field:
+            logger.warning(
+                _("L'action '{action_nom}' ne reconnais pas l'adresse '{source_addr_to}' "
+                  "pour être utilisée en tant qu'organisateur.").format(
+                    action_nom=self._designation,
+                    source_addr_to=message_from_field
+                )
+            )
+
+            message_from_field = '{smtp_username}@{smtp_domain}'.format(
+                smtp_username=self._nom_utilisateur_smtp.split('@')[0],
+                smtp_domain=message_from_field.split('@')[-1]
+            )
+
+            logger.info(
+                _("L'action '{action_nom}' va utiliser '{source_addr_to}' "
+                  "pour être utilisée en tant qu'organisateur.").format(
+                    action_nom=self._designation,
+                    source_addr_to=message_from_field
+                )
+            )
+
         my_calendar = Calendar(creator='Microsoft Exchange Server 2010')
 
         my_calendar.method = 'REQUEST' if self._est_maintenu is True else 'CANCEL'
@@ -1124,15 +1148,14 @@ class InvitationEvenementActionNoeud(ActionNoeud):
             location=self._lieu,
             status='CONFIRMED' if self._est_maintenu is True else 'CANCELLED',
             organizer=Organizer(
-                email=source.destinataire if isinstance(source.destinataire, list) is False else source.destinataire[
-                    -1],
-                sent_by=source.destinataire if isinstance(source.destinataire, list) is False else source.destinataire[
-                    -1]
+                email=message_from_field,
+                sent_by=message_from_field,
+                common_name=self._organisateur
             ),
         )
 
         for attendee in [InvitationEvenementActionNoeud.AttendeePlus(el.strip(), rsvp="TRUE") for el in
-                         self._participants.split(',') if not el.lower().startswith('bcc:') and not el.lower().startswith('cc:')]:
+                         self._participants.split(',') if ':' not in el]:
             my_event.add_attendee(attendee)
 
         my_calendar.events.add(my_event)
