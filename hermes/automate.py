@@ -1147,11 +1147,11 @@ class InvitationEvenementActionNoeud(ActionNoeud):
         )
 
         my_event = Event(
-            name=self._sujet.replace(':', '\\:').replace(',', '\\,').replace(';', '\\;'),
+            name=self._sujet.replace(':', ' ').replace(',', ' ').replace(';', ' '),
             begin=self._date_heure_depart,
             end=self._date_heure_fin,
             uid=str(uuid4()).replace('-', '').upper() if my_cached_uid is None else my_cached_uid,
-            description=description_invitation_notification.replace(':', '\\:').replace(',', '\\,').replace(';', '\\;'),
+            description=description_invitation_notification.replace(':', ' ').replace(',', ' ').replace(';', ' '),
             created=datetime.now(),
             location=self._lieu,
             status='CONFIRMED' if self._est_maintenu is True else 'CANCELLED',
