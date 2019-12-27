@@ -1,15 +1,13 @@
 import re
 from copy import copy, deepcopy
-from datetime import datetime, timedelta
+from datetime import datetime
 from email.mime.base import MIMEBase
 from io import BytesIO
 from os.path import exists
 from smtplib import SMTPServerDisconnected
 from ssl import SSLContext, OP_ALL, PROTOCOL_TLS
-from urllib.parse import quote
 
 from emails.backend.smtp.exceptions import SMTPConnectNetworkError
-from ics.alarm.base import BaseAlarm
 from prettytable import PrettyTable
 from requests import request, RequestException, Session, post
 from slugify import slugify
@@ -24,7 +22,7 @@ from json import loads, dumps
 from json.decoder import JSONDecodeError
 from dateutil.parser import parse
 from jinja2 import Template, TemplateError
-from ics import Calendar, Event, Attendee, Organizer, DisplayAlarm
+from ics import Calendar, Event, Attendee, Organizer
 from uuid import uuid4
 from hashlib import sha512
 import ruamel.std.zipfile as zipfile
