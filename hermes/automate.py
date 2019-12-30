@@ -223,7 +223,7 @@ class ActionNoeud(object):
             return self._noeud_echec.derniere_action_lancee
         return self if self._success is not None else None
 
-    def _jai_echouee(self, source, new_payload=None):
+    def _jai_echouee(self, source, new_payload=None, force_success=False):
         """
         Prendre le chemin en cas d'échec
         :param hermes.source.Source source:
@@ -232,6 +232,7 @@ class ActionNoeud(object):
         logger.warning(_("Échec de l'action '{action_nom}' sur '{source_nom}'"), action_nom=self._designation,
                        source_nom=source.titre)
         self._payload = new_payload
+        self._success = force_success
         if self._friendly_name is not None:
             source.session.sauver(self._friendly_name, self._payload)
         return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
@@ -901,14 +902,14 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
             logger.warning(
                 _("L'opérateur '{operateur}' n'est pas reconnu pour effectuer une comparaison entre deux membres"),
                 operateur=self._operande)
-            return self._jai_echouee(source)
+            return self._jai_echouee(source, False, True)
 
         if self._membre_droite.isdigit() or self._membre_gauche.isdigit() and self._membre_droite.isdigit() != self._membre_gauche.isdigit():
             logger.warning(
                 _(
                     "Impossible de comparer un nombre avec un autre type de donnée. ({membre_gauche} AVEC {membre_droite})"),
                 membre_gauche=self._membre_gauche, membre_droite=self._membre_droite)
-            return self._jai_echouee(source)
+            return self._jai_echouee(source, False, True)
         elif self._membre_droite.isdigit() and self._membre_gauche.isdigit():
             self._membre_droite = int(self._membre_droite)
             self._membre_gauche = int(self._membre_gauche)
@@ -916,9 +917,9 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
             if eval('{membre_gauche} {operande} {membre_droite}'.format(membre_gauche=self._membre_gauche,
                                                                         operande=self._operande,
                                                                         membre_droite=self._membre_droite)) is True:
-                return self._jai_reussi(source)
+                return self._jai_reussi(source, True)
 
-            return self._jai_echouee(source)
+            return self._jai_echouee(source, False, True)
         elif all([el.isdigit() for el in self._membre_droite.split('.') + self._membre_gauche.split('.')]) is True:
             self._membre_droite = float(self._membre_droite)
             self._membre_gauche = float(self._membre_gauche)
@@ -926,9 +927,9 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
             if eval('{membre_gauche} {operande} {membre_droite}'.format(membre_gauche=self._membre_gauche,
                                                                         operande=self._operande,
                                                                         membre_droite=self._membre_droite)) is True:
-                return self._jai_reussi(source)
+                return self._jai_reussi(source, True)
 
-            return self._jai_echouee(source)
+            return self._jai_echouee(source, False, True)
         try:
             membre_date_droite = parse(self._membre_droite)
             membre_date_gauche = parse(self._membre_gauche)
@@ -936,9 +937,9 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
             if eval('{membre_gauche} {operande} {membre_droite}'.format(membre_gauche=membre_date_gauche.timestamp(),
                                                                         operande=self._operande,
                                                                         membre_droite=membre_date_droite.timestamp())) is True:
-                return self._jai_reussi(source)
+                return self._jai_reussi(source, True)
 
-            return self._jai_echouee(source)
+            return self._jai_echouee(source, False, True)
 
         except ValueError as e:
             if self._operande == '==':
@@ -961,9 +962,9 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
                 expr_ret = False
 
             if expr_ret is True:
-                return self._jai_reussi(source)
+                return self._jai_reussi(source, True)
 
-        return self._jai_echouee(source)
+        return self._jai_echouee(source, False, True)
 
 
 class InvitationEvenementActionNoeud(ActionNoeud):
