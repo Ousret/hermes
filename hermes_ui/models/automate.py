@@ -93,7 +93,7 @@ class ActionNoeud(db.Model):
     action_reussite = db.relationship('ActionNoeud', foreign_keys='ActionNoeud.action_reussite_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="all, save-update, merge, delete")
 
     action_echec_id = db.Column(db.Integer(), db.ForeignKey('action_noeud.id', ondelete='CASCADE'), nullable=True)
-    action_echec = db.relation('ActionNoeud', foreign_keys='ActionNoeud.action_echec_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="all, save-update, merge, delete")
+    action_echec = db.relationship('ActionNoeud', foreign_keys='ActionNoeud.action_echec_id', lazy='joined', uselist=False, enable_typechecks=False, cascade="all, save-update, merge, delete")
 
     mapped_class_child = db.Column(db.String(128), nullable=True)
 
