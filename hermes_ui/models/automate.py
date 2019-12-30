@@ -117,12 +117,13 @@ class ActionNoeud(db.Model):
             action_noeud.je_realise_en_cas_reussite(
                 get_child_polymorphic(self.action_reussite).transcription()
             )
-        logger.error("Debug transcription depuis {} action échec 1/ {} 2/ {}", self.designation, str(self.action_echec), self.action_echec_id)
+        logger.error("DEBUG DEPUIS '{}' action échec 1/ {} 2/ {}", self.designation, str(self.action_echec), self.action_echec_id)
         if self.action_echec is not None:
-            logger.error("Debug {} 1/ {}", str(type(self.action_echec)), str(get_child_polymorphic(self.action_echec).transcription()))
             action_noeud.je_realise_en_cas_echec(
                 get_child_polymorphic(self.action_echec).transcription()
             )
+            logger.error("DEBUG FIN TR DEPUIS '{}'", self.designation)
+        logger.error("DEBUG FIN OUT TR DEPUIS '{}'", self.designation)
         return action_noeud
 
     @staticmethod
