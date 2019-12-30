@@ -224,6 +224,13 @@ SessionFiltre.FILTRES.append(
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
+        'keys',
+        lambda ma_variable: list(ma_variable.keys()) if isinstance(ma_variable, dict) else ma_variable
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
         'int',
         lambda ma_variable: int(sub(r'\D', '', ma_variable)) if isinstance(ma_variable, str) else ma_variable
     )
