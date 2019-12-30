@@ -235,7 +235,7 @@ class ActionNoeud(object):
         self._success = force_success
         if self._friendly_name is not None:
             source.session.sauver(self._friendly_name, self._payload)
-        return False and self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
+        return self._noeud_echec.je_realise(source) if self._noeud_echec is not None else False
 
     def _jai_reussi(self, source, new_payload=None):
         """
