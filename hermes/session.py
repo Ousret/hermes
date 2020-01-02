@@ -14,19 +14,30 @@ from datetime import timedelta
 class SessionFiltre:
     FILTRES = list()  # type: list[SessionFiltre]
 
-    def __init__(self, methode, fonction):
+    def __init__(self, methode, fonction, types=None):
         """
         :param str methode:
         :param type fonction:
+        :param list[type] types:
         """
         self._methode = methode
         self._fonction = fonction
+        self._types = types
 
     @property
     def methode(self):
         return self._methode
 
     def filtrer(self, ma_variable):
+        if self._types is not None:
+            if any([isinstance(ma_variable, supported_type) for supported_type in self._types]) is False:
+                raise TypeError(
+                    "Impossible d'appliquer le filtre '{filtre_nom}' sur une variable de type '{variable_type}'.".format(
+                        filtre_nom=self.methode,
+                        variable_type=type(ma_variable)
+                    )
+                )
+
         return self._fonction(ma_variable)
 
     def __repr__(self):
@@ -196,11 +207,13 @@ class Session:
                     nb_key_mismatch += 1
                     continue
 
-                if isinstance(valeur_dernier_niveau, str):
+                try:
                     for filtre in filtres:
                         for filtre_existant in SessionFiltre.FILTRES:
                             if filtre_existant.methode.lower() == filtre.lower():
                                 valeur_dernier_niveau = filtre_existant.filtrer(valeur_dernier_niveau)
+                except TypeError as e:
+                    raise TypeError("{msg_error_filtre} :: Variable '{variable_nom}'".format(msg_error_filtre=str(e), variable_nom=correspondance))
 
                 if isinstance(valeur_dernier_niveau, str) or isinstance(valeur_dernier_niveau, float) or isinstance(valeur_dernier_niveau, int):
                     ma_str = ma_str.replace(correspondance, str(valeur_dernier_niveau))
@@ -225,7 +238,10 @@ SessionFiltre.FILTRES.append(
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'keys',
-        lambda ma_variable: list(ma_variable.keys()) if isinstance(ma_variable, dict) else ma_variable
+        lambda ma_variable: list(ma_variable.keys()) if isinstance(ma_variable, dict) else ma_variable,
+        [
+            dict
+        ]
     )
 )
 
@@ -253,7 +269,7 @@ SessionFiltre.FILTRES.append(
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'strip',
-        lambda ma_variable: ma_variable.strip() if isinstance(ma_variable, str) else ma_variable
+        lambda ma_variable: ma_variable.strip() if isinstance(ma_variable, str) else ma_variable,
     )
 )
 
@@ -336,49 +352,70 @@ def prochaine_journee_depuis(date_courante, journee_cible):
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainLundi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Monday').strftime('%Y-%m-%d')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Monday').strftime('%Y-%m-%d'),
+        [
+            str
+        ]
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainMardi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thuesday').strftime('%Y-%m-%d')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thuesday').strftime('%Y-%m-%d'),
+        [
+            str
+        ]
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainMercredi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Wednesday').strftime('%Y-%m-%d')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Wednesday').strftime('%Y-%m-%d'),
+        [
+            str
+        ]
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainJeudi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thursday').strftime('%Y-%m-%d')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Thursday').strftime('%Y-%m-%d'),
+        [
+            str
+        ]
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainVendredi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Friday').strftime('%Y-%m-%d')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Friday').strftime('%Y-%m-%d'),
+        [
+            str
+        ]
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainSamedi',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Saturday').strftime('%Y-%m-%d')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Saturday').strftime('%Y-%m-%d'),
+        [
+            str
+        ]
     )
 )
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
         'dateProchainDimanche',
-        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Sunday').strftime('%Y-%m-%d')
+        lambda ma_variable: prochaine_journee_depuis(parse(ma_variable, dayfirst=True), 'Sunday').strftime('%Y-%m-%d'),
+        [
+            str
+        ]
     )
 )
 
@@ -411,8 +448,3 @@ for i, chiffre_lettre in zip(range(1, 10), ['Un', 'Deux', 'Trois', 'Quatre', 'Ci
             lambda ma_variable, nb_zero=deepcopy(i): str(ma_variable).zfill(nb_zero) if isinstance(ma_variable, str) or isinstance(ma_variable, int) else ma_variable
         )
     )
-
-
-if __name__ == '__main__':
-
-    Session.charger('../configurations')
