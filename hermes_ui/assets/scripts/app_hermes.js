@@ -254,8 +254,17 @@ $(function () {
                                 let action_args = JSON.parse(action_exec.args_payload);
 
                                 for (let k in action_args) {
-                                    if (action_args.hasOwnProperty(k)) {
-                                        args_debug += `<br>${k} : <b>${action_args[k]}</b>`
+                                    if (action_args.hasOwnProperty(k) && k !== 'payload') {
+
+                                        if (action_args[k].length <= 64)
+                                        {
+                                            args_debug += `<br>${k} : <b>${action_args[k]}</b>`
+                                        }
+                                        else
+                                        {
+                                            args_debug += `<br><b>-- ${k} --</b> <br> <textarea rows="10" cols="60">${action_args[k]}</textarea>`
+                                        }
+
                                     }
                                 }
 
@@ -266,7 +275,7 @@ $(function () {
                                     title: `${action_exec.validation_action_noeud === true ? '✅' : '❌'} Action #${action_exec.id}`,
                                     html: `<h4>${action_exec.action_noeud.designation}</h4>
 <br><br>Type de l'action : <b>${action_exec.action_noeud.type}</b>
-<br>Réponse de l'action : <b>${action_exec.payload}</b>
+${action_exec.payload.length <= 64 ? `<br>Réponse de l'action : <b>${action_exec.payload}</b>` : `<br><b>-- Réponse de l'action --</b> <br> <textarea rows="10" cols="60">${action_exec.payload}</textarea>`} 
 <br><h4>Argument(s)</h4>
 ${args_debug === '' ? '<b>Aucun argument disponible en mode debug !</b>' : args_debug}`,
                                     confirmButtonText: 'Suivant &rarr;'
