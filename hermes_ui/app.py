@@ -11,14 +11,14 @@ from hermes import Mail
 from hermes.detecteur import AucuneObligationInteretException
 from .flask_extended import Flask
 from flask_migrate import Migrate
-from flask_security import Security, login_required
+from flask_security import Security, login_required, current_user
 from flask_security.utils import hash_password
 from flask_admin import helpers as admin_helpers, AdminIndexView
 
 from json import dumps
 from os.path import realpath, dirname
 from sys import modules
-from os.path import join, basename
+from os.path import join
 
 from sqlalchemy.exc import NoReferencedTableError, NoSuchTableError, OperationalError, IntegrityError, SQLAlchemyError, \
     ProgrammingError
@@ -1002,10 +1002,7 @@ def supprimer_action(automate_id, action_noeud_id):
     return jsonify({}), 204
 
 
-def build_sample_db():
-    """
-    Populate a small db with some example entries.
-    """
+def init_db():
 
     db.drop_all()
     db.create_all()
@@ -1037,14 +1034,14 @@ def build_sample_db():
 try:
     db.session.query(Role).all()
 except NoReferencedTableError as e:
-    build_sample_db()
+    init_db()
 except NoSuchTableError as e:
-    build_sample_db()
+    init_db()
 except OperationalError as e:
-    build_sample_db()
+    init_db()
 except ProgrammingError as e:
-    build_sample_db()
+    init_db()
 except Exception as e:
     logger.warning(_('Exception générique attrapée lors de la requête de test schéma. "{msg_err}"'), msg_err=str(e))
-    build_sample_db()
+    init_db()
 
