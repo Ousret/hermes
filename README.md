@@ -4,6 +4,9 @@
 
 ![hermes](https://user-images.githubusercontent.com/9326700/71805247-0eb8a200-3066-11ea-90a8-a58477ce5e8f.jpg)
 
+<sub><sup>Les noms et logos `iTop` et `Microsoft Exchange` sont affichés à titre d'exemple uniquement. 
+N'importe quel service IMAP/SMTP fonctionne avec Hermes. De même qu'iTop est UN des services sur lequel vous pouvez émettre des requêtes.</sup></sub>
+
 ## Contributions
 
 Merci d'offrir une ⭐ à ce projet s'il vous a été utile. Encore mieux, participez en : 
@@ -59,5 +62,18 @@ Une entreprise peut-être confrontée à cette problématique :
 
 ## 👤 Documentations
 
+Cette section vous propose de prendre en main rapidement Hermes.
+
+  - [ ] Comprendre le mécanisme des variables simplifiées sous Hermes
+  - [ ] Écrire et enregistrer vos variables partagées / globales
+  - [ ] Mise en place de votre/vos boîte(s) IMAP
+  - [ ] Détecter un message électronique
+  - [ ] Créer un automate en réaction à une détection de message électronique
+  - [ ] Mettre en oeuvre une suite d'action à appliquer après la détection
+  - [ ] Test et debug d'un automate
+
 ## 📝 Droits
 
+**L'exploitation commerciale est strictement interdite tandis que l'usage interne professionnel est autorisée.**
+
+Publication sous les termes de 
