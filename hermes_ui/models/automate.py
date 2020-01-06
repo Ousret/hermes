@@ -9,7 +9,6 @@ from collections import OrderedDict
 
 
 from hermes.i18n import _
-from hermes.logger import logger
 
 
 class Automate(db.Model):
@@ -35,7 +34,7 @@ class Automate(db.Model):
     limite_par_heure = db.Column(db.Integer(), nullable=True, default=100)
 
     detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id, ondelete='SET NULL'), nullable=True)
-    detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="all, save-update, delete, merge")
+    detecteur = db.relationship(Detecteur, foreign_keys="Automate.detecteur_id", lazy='joined', backref='automates', cascade="all, save-update, merge")
 
     actions = db.relationship('ActionNoeud', primaryjoin='ActionNoeud.automate_id==Automate.id', lazy='joined', enable_typechecks=False, cascade="all, save-update, merge, delete, delete-orphan")
 

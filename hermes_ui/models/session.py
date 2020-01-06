@@ -15,8 +15,8 @@ class AutomateExecution(db.Model):
 
     date_creation = db.Column(db.DateTime(timezone=True), nullable=False)
 
-    detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id), nullable=False)
-    detecteur = db.relationship(Detecteur)
+    detecteur_id = db.Column(db.Integer(), db.ForeignKey(Detecteur.id, ondelete='CASCADE'), nullable=False)
+    detecteur = db.relationship(Detecteur, cascade='all, save-update, merge')
 
     validation_detecteur = db.Column(db.Boolean(), default=False, nullable=False)
     validation_automate = db.Column(db.Boolean(), default=False, nullable=False)
