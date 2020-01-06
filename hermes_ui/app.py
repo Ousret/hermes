@@ -3,6 +3,7 @@ from io import StringIO, BytesIO
 from flask import url_for, redirect, jsonify, request, Response, send_file
 from flask_sqlalchemy import Pagination
 from marshmallow.exceptions import MarshmallowError
+from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.datastructures import FileStorage
 
 from flask_babelex import Babel
