@@ -187,7 +187,7 @@ class AppInterfaceInteroperabilite {
                             AppInterfaceInteroperabilite.supprimer_action_noeud(
                                 AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id,
                                 mon_action_id.value,
-                                !!r.value
+                                r.value ? 1 : 0
                             ).then(
                                 () => {
                                     Swal.fire(

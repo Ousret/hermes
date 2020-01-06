@@ -1017,13 +1017,13 @@ def supprimer_action(automate_id, action_noeud_id):
     if action_noeud is None:
         return jsonify({'message': _('Aucun action noeud ne correspond à ID {action_id} pour l\'automate ID {automate_id}').format(action_id=action_noeud_id, automate_id=automate_id)}), 404
 
-    cascade_delete = request.form.get('cascade', default=True, type=bool)
+    cascade_delete = request.form.get('cascade', default=0, type=int)
 
     if automate.action_racine_id == action_noeud.id:
         automate.action_racine_id = None
         automate.action_racine = None
 
-    if cascade_delete is True:
+    if cascade_delete > 0:
         db.session.delete(action_noeud)
     else:
         try:
