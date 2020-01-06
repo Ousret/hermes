@@ -172,44 +172,61 @@ class AppInterfaceInteroperabilite {
                     if (!mon_action_id.value) {
                         return;
                     }
-                    AppInterfaceInteroperabilite.supprimer_action_noeud(
-                        AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id,
-                        mon_action_id.value
+
+                    Swal.fire(
+                        {
+                            title: 'Supprimer les actions fils ?',
+                            text: `Voulez-vous aussi supprimer les actions fils ? Si vous souhaitez les conserver, nous ferons de notre mieux pour conserver les branches descendantes en préférant la branche réussite.`,
+                            showCancelButton: true
+                        }
                     ).then(
-                        () => {
-                            Swal.fire(
-                                'Action',
-                                'Votre action a été supprimée avec succès',
-                                'success'
+                        (r) => {
+                            AppInterfaceInteroperabilite.supprimer_action_noeud(
+                                AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id,
+                                mon_action_id.value,
+                                r.value
                             ).then(
                                 () => {
-                                    AppInterfaceInteroperabilite.automate_vers_ui(
-                                        AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id
+                                    Swal.fire(
+                                        'Action',
+                                        'Votre action a été supprimée avec succès',
+                                        'success'
+                                    ).then(
+                                        () => {
+                                            AppInterfaceInteroperabilite.automate_vers_ui(
+                                                AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id
+                                            );
+                                        }
+                                    )
+                                }
+                            ).catch(
+                                (jqXHR) => {
+                                    Swal.fire(
+                                        'Action',
+                                        'Votre action n\'a pas pu être supprimée ! ',
+                                        'error'
                                     );
                                 }
-                            )
-                        }
-                    ).catch(
-                        (jqXHR) => {
-                            Swal.fire(
-                                'Action',
-                                'Votre action n\'a pas pu être supprimée ! ',
-                                'error'
                             );
                         }
                     );
+
+
                 }
             )
     }
 
-    static supprimer_action_noeud(automate_id, action_noeud_id) {
+    static supprimer_action_noeud(automate_id, action_noeud_id, cascade) {
         return new Promise(
             function (resolve, reject) {
 
                 $.ajax(
                     {
                         url: `/admin/rest/automate/${automate_id}/action_noeud/${action_noeud_id}`,
-                        method: 'DELETE'
+                        method: 'DELETE',
+                        data: {
+                            cascade: cascade === true
+                        }
                     }
                 ).done(
                     resolve
@@ -544,29 +561,30 @@ class AppInterfaceInteroperabilite {
                         for (let action of AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.actions) {
                             if (action.id === parseInt(choix_associations.value[0]))
                             {
-                                if (choix_associations.value[1] === 'REUSSITE' && action.action_reussite)
-                                {
-                                    Swal.fire(
-                                        'Association impossible',
-                                        "L'action parente dispose déjà d'un cas de réussite, veuillez le supprimer avant !",
-                                        'warning'
-                                    );
+                                // if (choix_associations.value[1] === 'REUSSITE' && action.action_reussite)
+                                // {
+                                //     Swal.fire(
+                                //         'Association impossible',
+                                //         "L'action parente dispose déjà d'un cas de réussite, veuillez le supprimer avant !",
+                                //         'warning'
+                                //     );
+                                //
+                                //     return;
+                                // }
+                                //
+                                // if (choix_associations.value[1] === 'ECHEC' && action.action_echec)
+                                // {
+                                //     Swal.fire(
+                                //         'Association impossible',
+                                //         "L'action parente dispose déjà d'un cas d'échec, veuillez le supprimer avant !",
+                                //         'warning'
+                                //     );
+                                //
+                                //     return;
+                                // }
 
-                                    return;
-                                }
-
-                                if (choix_associations.value[1] === 'ECHEC' && action.action_echec)
-                                {
-                                    Swal.fire(
-                                        'Association impossible',
-                                        "L'action parente dispose déjà d'un cas d'échec, veuillez le supprimer avant !",
-                                        'warning'
-                                    );
-
-                                    return;
-                                }
-
-                                break;
+                                //break;
+                                console.warn("Autorisation exceptionnelle association action sur place existante.")
                             }
                         }
 
