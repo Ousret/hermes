@@ -18,6 +18,14 @@ Merci d'offrir une ⭐ à ce projet s'il vous a été utile. Encore mieux, parti
 
 Le projet Hermes s'installe et s'execute très facilement de deux manières.
 
+Quelque soit votre méthode préférée, commencez par :
+
+```sh
+cd $HOME
+git clone https://github.com/Ousret/hermes.git
+cd ./hermes
+```
+
 ### Méthode 1 : AVEC Docker
 
 En ayant déjà installé `docker` et `docker-compose` sur votre machine, vous n'avez plus qu'à lancer :
@@ -26,21 +34,14 @@ En ayant déjà installé `docker` et `docker-compose` sur votre machine, vous n
 docker-compose up
 ```
 
-Ouvrir le navigateur à l'adresse suivante : [http://127.0.0.1:5000](http://127.0.0.1:5000)
-L'utilisateur par défaut est `hermes@localhost` et le mot de passe associé est `admin`. 
-Il est bien entendu sage de le modifier rapidement après la 1ere connexion.
-
 ### Méthode 2 : SANS Docker
 
-Les pré-requis sont les suivants : `python3`, `pip`, `nodejs` et `npm`
+Les pré-requis sont les suivants : `python3`, `pip`, `nodejs`, `npm`, `mariadb-server` et `mariadb-client`.
 
 ```sh
 pip install certifi pyopenssl --user
 npm install yarn -g
 
-cd $HOME
-git clone https://github.com/Ousret/hermes.git
-cd ./hermes
 python setup.py install --user
 cd ./hermes_ui
 yarn install
@@ -48,6 +49,12 @@ yarn build
 cd ..
 python wsgi.py
 ```
+
+### APRÈS Méthode 1 OU 2
+
+Ouvrir le navigateur à l'adresse suivante : [http://127.0.0.1:5000](http://127.0.0.1:5000)
+L'utilisateur par défaut est `hermes@localhost` et le mot de passe associé est `admin`. 
+Il est bien entendu sage de le modifier rapidement après la 1ere connexion.
 
 ## ⚡ Comment ça marche ?
 
