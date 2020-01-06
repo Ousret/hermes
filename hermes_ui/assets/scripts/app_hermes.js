@@ -262,7 +262,7 @@ $(function () {
                                         }
                                         else
                                         {
-                                            args_debug += `<br><b>-- ${k} --</b> <br> <textarea rows="10" cols="60">${action_args[k]}</textarea>`
+                                            args_debug += `<br><b>-- ${k} --</b> <br> <textarea rows="7" cols="90" readonly>${action_args[k]}</textarea>`
                                         }
 
                                     }
@@ -275,7 +275,7 @@ $(function () {
                                     title: `${action_exec.validation_action_noeud === true ? '✅' : '❌'} Action #${action_exec.id}`,
                                     html: `<h4>${action_exec.action_noeud.designation}</h4>
 <br><br>Type de l'action : <b>${action_exec.action_noeud.type}</b>
-${action_exec.payload.length <= 64 ? `<br>Réponse de l'action : <b>${action_exec.payload}</b>` : `<br><b>-- Réponse de l'action --</b> <br> <textarea rows="10" cols="60">${action_exec.payload}</textarea>`} 
+${action_exec.payload.length <= 64 ? `<br>Réponse de l'action : <b>${action_exec.payload}</b>` : `<br><b>-- Réponse de l'action --</b> <br> <textarea rows="7" cols="90" readonly>${action_exec.payload}</textarea>`} 
 <br><h4>Argument(s)</h4>
 ${args_debug === '' ? '<b>Aucun argument disponible en mode debug !</b>' : args_debug}`,
                                     confirmButtonText: 'Suivant &rarr;'
