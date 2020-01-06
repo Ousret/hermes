@@ -1,4 +1,3 @@
-from jsonpickle import loads, dumps
 from slugify import slugify
 import copy
 from prettytable import PrettyTable
@@ -29,10 +28,6 @@ class Detecteur(object):
                 return True
         return False
 
-    def sauvegarder(self, dossier='./data/'):
-        with open('{dossier}{regle_designation}.json'.format(dossier=dossier, regle_designation=slugify(self._titre)), 'w') as fp:
-            fp.write(dumps(self))
-
     def raz(self):
         """
         Remet à zéro le détecteur
@@ -40,17 +35,6 @@ class Detecteur(object):
         """
         for el in self._elements:
             el.value = None
-
-    @staticmethod
-    def load(regle_designation, dossier='./data/'):
-        try:
-            with open('{dossier}{regle_designation}.json'.format(dossier=dossier, regle_designation=slugify(regle_designation)), 'r') as fp:
-                my_detecteur = loads(fp.read())
-        except IOError as e:
-            return None
-        if isinstance(my_detecteur, Detecteur):
-            return my_detecteur
-        return None
 
     def __eq__(self, autre_detecteur):
         """
