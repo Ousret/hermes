@@ -177,14 +177,17 @@ class AppInterfaceInteroperabilite {
                         {
                             title: 'Supprimer les actions fils ?',
                             text: `Voulez-vous aussi supprimer les actions fils ? Si vous souhaitez les conserver, nous ferons de notre mieux pour conserver les branches descendantes en préférant la branche réussite.`,
-                            showCancelButton: true
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'Oui, je retire tout',
+                            cancelButtonText: 'Non, je conserve les fils'
                         }
                     ).then(
                         (r) => {
                             AppInterfaceInteroperabilite.supprimer_action_noeud(
                                 AppInterfaceInteroperabilite.AUTOMATE_EDITEUR.id,
                                 mon_action_id.value,
-                                r.value
+                                !!r.value
                             ).then(
                                 () => {
                                     Swal.fire(
