@@ -427,7 +427,7 @@ def recuperation_statistique_automate(automate_id):
 @app.route("/admin/rest/automate-execution", methods=['GET'])
 @login_required
 def lecture_automates_executions():
-    executions = db.session.query(AutomateExecution).order_by(AutomateExecution.date_finalisation.desc()).paginate(1, 25)  # type: Pagination
+    executions = db.session.query(AutomateExecution).order_by(AutomateExecution.date_finalisation.desc()).paginate(1, 50)  # type: Pagination
     return AutomateExecutionDataTableSchema().jsonify(AutomateExecutionDataTable(executions.items)), 200
 
 
