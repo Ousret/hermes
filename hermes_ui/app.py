@@ -897,20 +897,27 @@ def creation_action(automate_id):
         if noeud_a_remplacer is None:
             return jsonify({'message': _("Le noeud que vous souhaitez remplacer est inexistant")}), 404
 
-        target_model_instance.action_echec_id = noeud_a_remplacer.action_echec_id
-        target_model_instance.action_reussite_id = noeud_a_remplacer.action_reussite_id
+        target_model_instance.action_echec = noeud_a_remplacer.action_echec
+        target_model_instance.action_reussite = noeud_a_remplacer.action_reussite
 
-        noeud_a_remplacer.action_echec_id = None
-        noeud_a_remplacer.action_reussite_id = None
+        noeud_a_remplacer.action_echec = None
+        noeud_a_remplacer.action_reussite = None
 
-        noeud_a_mettre_niveau_r = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, action_reussite_id=noeud_a_remplacer.id).one()  # type: ActionNoeud
-        noeud_a_mettre_niveau_f = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, action_echec_id=noeud_a_remplacer.id).one()  # type: ActionNoeud
+        try:
+            noeud_a_mettre_niveau_r = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, action_reussite=noeud_a_remplacer).one()  # type: ActionNoeud
+        except NoResultFound:
+            noeud_a_mettre_niveau_r = None
+
+        try:
+            noeud_a_mettre_niveau_f = db.session.query(ActionNoeud).filter_by(automate_id=automate_id, action_echec=noeud_a_remplacer).one()  # type: ActionNoeud
+        except NoResultFound:
+            noeud_a_mettre_niveau_f = None
 
         if noeud_a_mettre_niveau_r is not None:
-            noeud_a_mettre_niveau_r.action_reussite_id = target_model_instance.id
+            noeud_a_mettre_niveau_r.action_reussite = target_model_instance
 
         if noeud_a_mettre_niveau_f is not None:
-            noeud_a_mettre_niveau_f.action_echec_id = target_model_instance.id
+            noeud_a_mettre_niveau_f.action_echec = target_model_instance
 
         if noeud_a_mettre_niveau_r is None and noeud_a_mettre_niveau_f is None:
             automate.action_racine = target_model_instance
