@@ -15,7 +15,7 @@ from email.utils import parseaddr
 from slugify import slugify
 from tqdm import tqdm
 
-from hermes import logger
+from hermes.logger import logger
 from hermes.source import Source, SourceFactory, ManipulationSourceException, ExtractionSourceException
 from hermes.session import Session
 
@@ -486,7 +486,7 @@ class MailToolbox(SourceFactory):
             self._client = IMAPClient(host=self._hote_imap, port=993 if self._use_secure_socket else 143, ssl=self._use_secure_socket, ssl_context=self._ssl_context)
             self._client.login(self._nom_utilisateur, Session.UNIVERSELLE.retranscrire(self._mot_de_passe))
         except IMAPClientError as e:
-            logger.critical("Une erreur IMAP critique est survenue lors de la reconnexion. {msg_err}", msg_err=str(e))
+            logger.error("Une erreur IMAP critique est survenue lors de la reconnexion. {msg_err}", msg_err=str(e))
             self._echec = True
             return
 
