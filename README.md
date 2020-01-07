@@ -1,6 +1,6 @@
 <h1 align="center">Automates programmables IMAP4 pour les humains 👋 <a href="https://twitter.com/intent/tweet?text=Hermes%20&url=https://www.github.com/Ousret/hermes&hashtags=python,imap,automatons,developers"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"/></a></h1>
 
-> Ce projet permet à un utilisateur d'identifier des messages électroniques et d'y réagir en y effectuant une suite d'action.
+> Ce projet permet d'identifier des messages électroniques et d'y réagir en y effectuant une suite d'actions.
 
 ![hermes](https://user-images.githubusercontent.com/9326700/71805247-0eb8a200-3066-11ea-90a8-a58477ce5e8f.jpg)
 
@@ -24,6 +24,7 @@ Quelque soit votre méthode préférée, commencez par :
 cd $HOME
 git clone https://github.com/Ousret/hermes.git
 cd ./hermes
+cp configuration.dist.yml configuration.yml
 ```
 
 ### Méthode 1 : AVEC Docker
@@ -71,13 +72,22 @@ Une entreprise peut-être confrontée à cette problématique :
 
 Cette section vous propose de prendre en main rapidement Hermes.
 
-  - [ ] Comprendre le mécanisme des variables simplifiées sous Hermes
-  - [ ] Écrire et enregistrer vos variables partagées / globales
-  - [ ] Mise en place de votre/vos boîte(s) IMAP
-  - [ ] Détecter un message électronique
-  - [ ] Créer un automate en réaction à une détection de message électronique
-  - [ ] Mettre en oeuvre une suite d'action à appliquer après la détection
-  - [ ] Test et debug d'un automate
+  - [ ] [Comprendre le mécanisme des variables simplifiées sous Hermes](docs/CHAPITRE-1.md)
+  - [ ] [Écrire et enregistrer vos variables partagées / globales](docs/CHAPITRE-2.md)
+  - [ ] [Mise en place de votre/vos boîte(s) IMAP](docs/CHAPITRE-3.md)
+  - [ ] [Détecter un message électronique](docs/CHAPITRE-4.md)
+  - [ ] [Créer un automate en réaction à une détection de message électronique](docs/CHAPITRE-5.md)
+  - [ ] [Mettre en oeuvre une suite d'action à appliquer après la détection](docs/CHAPITRE-6.md)
+  - [ ] [Test et debug d'un automate](docs/CHAPITRE-7.md)
+
+## 🚧 Maintenance
+
+Ce programme n'est qu'à ses balbutiements. 
+Bien qu'Hermes soit prêt pour une mise en production des pistes d'améliorations significatives sont disponibles.
+
+Un projet Github est ouvert avec l'ensemble des idées / tâches à réaliser pour rendre ce projet incroyable.
+
+Pour le moment, j'adresse la maintenance concernant les bugs et la sécurité et je relis et j'approuve les contributions soumises.
 
 ## 📝 Droits
 
