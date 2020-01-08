@@ -47,12 +47,12 @@ Pouvoir stocker et réutiliser de l'information c'est bien, pouvoir la transform
 | upper                | Chaque caractère se transforme en majuscule s'il y a lieu                                                     | je suis            | JE SUIS      |
 | strip                | Retire les espaces d'une chaîne de caractères                                                                 | je suis            | jesuis       |
 | capitalize           | Première lettre en majuscule uniquement                                                                       | je Suis            | Je suis      |
-| dateAjouterUnJour    | Prends une date US et y additionne une seule journée                                                          | 01/01/2020         | 02/01/2020   |
-| dateAjouterUnMois    | Prends une date US et y additionne un mois                                                                    |                    |              |
-| dateAjouterUneAnnee  | Prends une date US et y additionne une année                                                                  |                    |              |
-| dateRetirerUnJour    | Prends une date US et y retire une journée                                                                    |                    |              |
-| dateRetirerUnMois    | Prends une date US et y retire un mois                                                                        |                    |              |
-| dateRetirerUneAnnee  | Prends une date US et y retire une année                                                                      |                    |              |
+| dateAjouterUnJour    | Prends une date US et y additionne une seule journée                                                          | 2020/01/01         | 2020/01/02   |
+| dateAjouterUnMois    | Prends une date US et y additionne un mois                                                                    | 2020/01/01         | 2020/02/01   |
+| dateAjouterUneAnnee  | Prends une date US et y additionne une année                                                                  | 2020/01/01         | 2021/01/01   |
+| dateRetirerUnJour    | Prends une date US et y retire une journée                                                                    | 2020/01/01         | 2019/12/31   |
+| dateRetirerUnMois    | Prends une date US et y retire un mois                                                                        | 2020/01/01         | 2019/12/01   |
+| dateRetirerUneAnnee  | Prends une date US et y retire une année                                                                      | 2020/01/01         | 2019/01/01   |
 | dateFormatFrance     | Prends une date et passe du format US à FR Y-m-d à d-m-Y                                                      | 2020/01/01         | 01/01/2020   |
 | dateFormatUS         | Prends une date et passe du format FR à US d-m-Y à Y-m-d                                                      | 01/01/2020         | 2020/01/01   |
 | dateProchainLundi    | Prends une date FR et remplace cette date par la date du prochain Lundi SI cette date n'est pas déjà un Lundi |                    |              |
@@ -66,7 +66,6 @@ Pouvoir stocker et réutiliser de l'information c'est bien, pouvoir la transform
 | alNum                | Conserve les caractères alphanumériques d'une chaîne                                                          | [##BONJOUR1]       | BONJOUR1     |
 | alpha                | Conserve les caractères alpha d'une chaîne                                                                    | [##BONJOUR1]       | BONJOUR      |
 | remplissage**Zero    | Rajoute des zéros en début de chaîne. Remplacer « *** » par « Un,Deux, Trois, Quatre, Cinq, etc.. »           |                    |              |
-|                      |                                                                                                               |                    |              |
 
 Imaginons que la variable `{{ ma_variable }}` contienne la valeur `ITOP-T-00541`. Pour en extraire la partie numérique j'applique 
 le filtre `int` sur celle-ci.
