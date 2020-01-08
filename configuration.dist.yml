@@ -1,0 +1,66 @@
+COMMON: &common
+  SECRET_KEY: bHxU26p6
+  SECURITY_URL_PREFIX: '/admin'
+
+  SECURITY_PASSWORD_HASH: 'pbkdf2_sha512'
+  SECURITY_PASSWORD_SALT: 'ATGUOHAELKiubahiughaerGOJAEGj'
+
+  SECURITY_LOGIN_URL: '/connexion/'
+  SECURITY_LOGOUT_URL: '/deconnexion/'
+  SECURITY_REGISTER_URL: '/inscription/'
+  SECURITY_RESET_URL: '/reinitialisation/'
+
+  SECURITY_POST_LOGIN_VIEW: '/admin/'
+  SECURITY_POST_LOGOUT_VIEW: '/admin/'
+  SECURITY_POST_REGISTER_VIEW: '/admin/'
+  SECURITY_POST_RESET_VIEW: '/admin/'
+
+  SECURITY_REGISTERABLE: False
+  SECURITY_RECOVERABLE: True
+  SECURITY_CHANGEABLE: True
+  SECURITY_SEND_REGISTER_EMAIL: False
+
+  BABEL_DEFAULT_LOCALE: 'fr'
+  BABEL_DEFAULT_TIMEZONE: 'Europe/Paris'
+  BABEL_TRANSLATION_DIRECTORIES: '../hermes/locale'
+
+  INCIDENT_NOTIFIABLE: ~
+
+  WEBPACKEXT_MANIFEST_PATH: 'build/manifest.json'
+  WEBPACKEXT_PROJECT_DISTDIR: './build/'
+  WEBPACKEXT_PROJECT_DISTURL: './build/'
+  WEBPACK_ASSETS_URL: './assets/'
+
+
+DEVELOPMENT: &development
+  <<: *common
+  DEBUG: True
+  SQLALCHEMY_DATABASE_URI: 'sqlite:///hermes.sqlite'
+  SQLALCHEMY_ECHO: False
+  SQLALCHEMY_TRACK_MODIFICATIONS: False
+  SQLALCHEMY_RECORD_QUERIES: True
+  EMAIL_HOST: 'cas-mail.sesam.loc'
+  EMAIL_PORT: 587
+  EMAIL_TIMEOUT: 10
+  EMAIL_USE_TLS: True
+  EMAIL_HOST_USER: ''
+  EMAIL_HOST_PASSWORD: ''
+  EMAIL_FROM: ''
+
+
+PRODUCTION: &production
+  <<: *common
+  SECRET_KEY: MerciDeMeChangerImmediatementAvantPremierLancement
+  SECURITY_RECOVERABLE: False
+  SQLALCHEMY_DATABASE_URI: 'mysql://hermes:hermes@mariadb/hermes'
+  SQLALCHEMY_ECHO: False
+  SQLALCHEMY_TRACK_MODIFICATIONS: False
+  SQLALCHEMY_RECORD_QUERIES: False
+  EMAIL_HOST: 'hote-smtp'
+  EMAIL_PORT: 587
+  EMAIL_TIMEOUT: 10
+  EMAIL_USE_TLS: True
+  EMAIL_HOST_USER: 'smtp-utilisateur@hote-smtp'
+  EMAIL_HOST_PASSWORD: 'secret_smtp'
+  EMAIL_FROM: 'smtp-utilisateur@hote-smtp'
+  INCIDENT_NOTIFIABLE: 'destinataire@gmail.com'
