@@ -108,6 +108,34 @@ Il est également possible d'accéder à `nom_utilisateur` de la manière suivan
 
 Pour acceder à la lettre `C`, on écrit `{{ ma_variable.2 }}`. Les index de liste commence à ZÉRO.
 
+## Les variables imbriquées
+
+Pour les plus aguéris, sachez que vous pouvez invoquer une variable dans une variable. Sans limite.
+
+Imaginons que la variable `{{ ma_variable }}` contienne :
+
+```json
+{
+  "tickets": {
+    "561": {
+      "A": 1,
+      "B": 2
+    }
+  }
+}
+```
+
+Nous souhaitons obtenir la valeur associé à `A`, soit `1`. Nous écrirons, naturellement, alors `{{ ma_variable.tickets.561.A }}`.
+Néanmoins, partons du principe que nous sachons pas à l'avance que nous souhaitons passer par le niveau `561`.
+
+Disons que si un de vos critères a réussi à capturer `561` dans la variable `mon_numero_de_ticket`.
+
+Nous pouvons écrire : `{{ ma_variable.tickets.{{ mon_numero_de_ticket }}.A }}`, sachant qu'il sera traduit par `{{ ma_variable.tickets.561.A }}` puis `1`.
+Génial, non ?
+
+Maintenant si `{{ mon_numero_de_ticket }}` contient `Ticket 561` à la place de `561`, vous n'avez qu'à appliquer le filtre `|int` sur cette variable tel que :
+`{{ ma_variable.tickets.{{ mon_numero_de_ticket|int }}.A }}`
+
 ## Pour aller plus loin
 
   - [ ] [Écrire et enregistrer vos variables partagées / globales](CHAPITRE-2.md)
