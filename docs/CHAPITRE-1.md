@@ -1,6 +1,6 @@
 <h1 align="center">Comprendre le fonctionnement des variables sous d'Hermes</h1>
 
-## ✨ Préambule
+## ✨ La génèse
 
 Hermes dispose d'un moteur de variables (simplifié). 
 La syntaxe d'appel des variables est similaire à celle du moteur de template Twig.

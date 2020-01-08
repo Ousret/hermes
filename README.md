@@ -27,6 +27,27 @@ cd ./hermes
 cp configuration.dist.yml configuration.yml
 ```
 
+Modifions d'abord la configuration à l'aide de votre éditeur préféré, `nano`, `vim`, etc..
+
+```sh
+nano configuration.yml
+```
+
+```yaml
+PRODUCTION: &production
+  <<: *common
+  SECRET_KEY: MerciDeMeChangerImmediatementAvantPremierLancement  # Remplacer par une longue chaîne de caractère aléatoire 
+  # *-* configuration smtp *-* à utiliser pour envoyer les rapports d'erreurs
+  EMAIL_HOST: 'hote-smtp'
+  EMAIL_PORT: 587
+  EMAIL_TIMEOUT: 10
+  EMAIL_USE_TLS: True
+  EMAIL_HOST_USER: 'smtp-utilisateur@hote-smtp'
+  EMAIL_HOST_PASSWORD: 'secret_smtp'
+  EMAIL_FROM: 'smtp-utilisateur@hote-smtp'
+  INCIDENT_NOTIFIABLE: 'destinataire@gmail.com' # Remplacer par l'adresse email à laquelle transmettre un rapport d'erreur
+```
+
 ### Méthode 1 : AVEC Docker
 
 En ayant déjà installé `docker` et `docker-compose` sur votre machine, vous n'avez plus qu'à lancer :
@@ -37,7 +58,7 @@ docker-compose up
 
 ### Méthode 2 : SANS Docker
 
-Les pré-requis sont les suivants : `python3`, `pip`, `nodejs`, `npm`, `mariadb-server` et `mariadb-client`.
+Les pré-requis sont les suivants : `python3`, `pip`, `nodejs`, `npm`. Optionnellement `mariadb-server` et `mariadb-client`.
 
 ```sh
 pip install certifi pyopenssl --user
@@ -48,7 +69,30 @@ cd ./hermes_ui
 yarn install
 yarn build
 cd ..
-python wsgi.py
+```
+
+La seconde méthode nécessite de mettre en oeuvre une base de données. Si vous êtes sous `mariadb`, connectez-vous et créez une base de données `hermes`.
+
+```mysql
+CREATE DATABASE hermes;
+```
+
+Si vous n'avez pas `mariadb`, vous pouvez opter pour un système léger `sqlite` qui ne nécessite rien de plus.
+
+Dans le fichier `configuration.yml`, modifiez le paramètre suivant :
+
+```yaml
+PRODUCTION: &production
+  <<: *common
+  SQLALCHEMY_DATABASE_URI: 'mysql://utilisateur:mdp@127.0.0.1/hermes'
+```
+
+Si vous ne souhaitez pas mettre en place `mariadb`, remplacez par :
+
+```yaml
+PRODUCTION: &production
+  <<: *common
+  SQLALCHEMY_DATABASE_URI: 'sqlite:///hermes.sqlite'
 ```
 
 ### APRÈS Méthode 1 OU 2
@@ -93,4 +137,4 @@ Pour le moment, j'adresse la maintenance concernant les bugs et la sécurité et
 
 **L'exploitation commerciale est strictement interdite tandis que l'usage interne professionnel est autorisée.**
 
-Publication sous les termes de 
+Publication sous "Non-Profit Open Software License 3.0 (NPOSL-3.0)"
