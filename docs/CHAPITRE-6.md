@@ -113,11 +113,21 @@ Chaque action nécessite n argument(s) obligatoire(s) et n optionnel(s). Chaque 
 
 Un support de completion automatique est disponible dans la mesure du raisonable.
 
+⚠️ Aucun support de marche arrière n'est disponible. Ceci est une limitation de la bibliothèque sweetalert2.
+L'assistant de création des actions ne permet pas de revenir à une étape antérieur.
+
 ### L'arbre des actions
 
 <p align="center">
 <img width="1027" alt="Capture d’écran 2020-01-09 à 11 21 41" src="https://user-images.githubusercontent.com/9326700/72060066-8dfedd80-32d3-11ea-90d0-217ee608a121.png">
 </p>
+
+Une fois vos actions mises en place. L'éditeur vous proposera une représentation visuelle de votre arbre d'action.
+
+### Modifier l'arbre
+
+Vous pouvez insérer dans l'arbre, supprimer et remplacer. 
+Sachez qu'Hermes tentera de rééquilibrer l'arbre en priviligiant toujours la branche de **réussite**.
 
 ## Pour aller plus loin
 
