@@ -5,7 +5,7 @@
 ![hermes](https://user-images.githubusercontent.com/9326700/71805247-0eb8a200-3066-11ea-90a8-a58477ce5e8f.jpg)
 
 <sub><sup>Les noms et logos `iTop` et `Microsoft Exchange` sont affichés à titre d'exemple uniquement. 
-N'importe quel service IMAP/SMTP fonctionne avec Hermes. De même qu'iTop est UN des services sur lequel vous pouvez émettre des requêtes.</sup></sub>
+N'importe quel service IMAP fonctionne avec Hermes. De même qu'iTop est UN des services sur lequel vous pouvez émettre des requêtes. Hermes n'est pas affilié à Combodo (iTop) ni à Microsoft (Exchange).</sup></sub>
 
 ## Contributions
 
@@ -13,6 +13,26 @@ Merci d'offrir une ⭐ à ce projet s'il vous a été utile. Encore mieux, parti
   - Signalant un problème
   - Proposant un correctif via le système de pull request
   - Proposant des fonctionnalités utiles à tous
+
+## 🍰 Quel besoin ?
+
+Ce projet est né d'un besoin spécifique qui a laissé entrevoir la possibilité d'un cas bien plus ouvert et générique.
+Une entreprise peut-être confrontée à cette problématique : 
+
+**Comment gérer une interopérabilité des services avec n-tiers en se basant uniquement sur les échanges électroniques ?**
+
+L'origine est qu'une entreprise utilisant le programme ITSM iTop et l'Incoming Mail (Scanner de boîte mail).
+La description officielle du module iTop est la suivante : `This extension runs in the background to scan the defined mail inbox(es) and either create or update tickets based on the content of the incoming emails.`
+
+Avec l'ancienne solution (non exhaustif) :
+
+1) Impossible d'identifier clairement et automatiquement un message
+2) Obligation de créer des dossiers IMAP pour n opération(s)
+3) Les actions du scanner sont limitées à des simples opérations
+
+Ils se sont retrouvés extrêment limitée par l'Incoming Mail.
+
+Hermes offre une solution complète à ce qu'iTop ne peux pas fournir.
 
 ## ✨ Installation
 
@@ -105,12 +125,11 @@ Il est bien entendu sage de le modifier rapidement après la 1ere connexion.
 
 ![hermes-principes](https://user-images.githubusercontent.com/9326700/71805268-2001ae80-3066-11ea-9e8e-386044ddd621.gif)
 
-## 🍰 Quel besoin ?
+En bref, 
 
-Ce projet est né d'un besoin spécifique qui a laissé entrevoir la possibilité d'un cas bien plus ouvert et générique.
-Une entreprise peut-être confrontée à cette problématique : 
-
-**Comment gérer une interopérabilité des services avec n-tiers en se basant uniquement sur les échanges électroniques ?**
+Un message électronique est reçu, nous arrivons, grâce à une suite de critères à définir la nature du message tout en conservant les résultats de l'évaluation 
+des critères.  Ensuite une suite d'actions déterminées par le concepteur s'enchainera en arbre binaire, chaque action se solde par une réussite ou un échec et prend la branche correspondante 
+pour exécuter l'action suivante.
 
 ## 👤 Documentations
 
@@ -123,6 +142,11 @@ Cette section vous propose de prendre en main rapidement Hermes.
   - [ ] [Créer un automate en réaction à une détection de message électronique](docs/CHAPITRE-5.md)
   - [ ] [Mettre en oeuvre une suite d'action à appliquer après la détection](docs/CHAPITRE-6.md)
   - [ ] [Test et debug d'un automate](docs/CHAPITRE-7.md)
+
+Pour aller encore plus loin :
+
+  - [ ] [Les critères de détection](docs/CRITERES.md)
+  - [ ] [Les actions](docs/ACTIONS.md)  
 
 ## 🚧 Maintenance
 
