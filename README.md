@@ -1,6 +1,6 @@
 <h1 align="center">Automates programmables IMAP4 pour les humains 👋 <a href="https://twitter.com/intent/tweet?text=Hermes%20&url=https://www.github.com/Ousret/hermes&hashtags=python,imap,automatons,developers"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social"/></a></h1>
 
-> Ce projet permet d'identifier des messages électroniques et d'y réagir en y effectuant une suite d'actions.
+> Hermès est une divinité issue de la mythologie grecque. Messager des dieux.
 
 ![hermes](https://user-images.githubusercontent.com/9326700/71805247-0eb8a200-3066-11ea-90a8-a58477ce5e8f.jpg)
 
