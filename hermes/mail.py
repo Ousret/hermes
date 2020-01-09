@@ -11,6 +11,7 @@ from email.header import decode_header
 from quopri import decodestring
 from email.parser import HeaderParser
 from email.utils import parseaddr
+from quopri import decodestring
 
 from slugify import slugify
 from tqdm import tqdm
@@ -398,13 +399,18 @@ class MailBody:
         return None
 
     def __str__(self):
-        if self.get_head('Content-Transfer-Encoding') == 'base64':
+        if self.get_head('Content-Transfer-Encoding').lower() == 'base64':
 
             try:
                 decoded_content = str(b64decode(self._source + '=' * (-len(self._source) % 4)), 'utf-8', 'ignore')
                 decoded_content = decoded_content.replace('\\\\', '\\')
                 return decoded_content[2:-1] if decoded_content.startswith("b'") else decoded_content
             except binascii.Error as e:
+                pass
+        elif self.get_head('Content-Transfer-Encoding').lower() == 'quoted-printable':
+            try:
+                return decodestring(self._source.encode('utf-8')).decode('utf-8')
+            except:
                 pass
 
         return self._source
