@@ -254,6 +254,13 @@ SessionFiltre.FILTRES.append(
 
 SessionFiltre.FILTRES.append(
     SessionFiltre(
+        'float',
+        lambda ma_variable: float(sub(r'[^\d.]', '', ma_variable.replace(',', '.'))) if isinstance(ma_variable, str) else ma_variable
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
         'lower',
         lambda ma_variable: ma_variable.lower() if isinstance(ma_variable, str) else ma_variable
     )
