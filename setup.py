@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='hermes',
-    version='2.1.0',
+    version='1.0.0',
     author='Ahmed TAHRI',
     author_email='ahmed.tahri@cloudnursery.dev',
     description='Identifier, réagir et classer un message électronique',
@@ -15,7 +15,7 @@ setup(
                       'flask-emails', 'ruamel.std.zipfile', 'ics==0.5', 'olefile', 'html5lib', 'pandas', 'flask_babel',
                       'records', 'flask_babel', 'unidecode', 'pandas', 'records', 'marshmallow-oneofschema', 'loguru',
                       'Flask-Webpack', 'mysql-connector', 'werkzeug', 'sqlalchemy', 'flask_webpackext',
-                      'pyopenssl', 'msg_parser>=1.1.0', 'wtforms'],
+                      'pyopenssl', 'msg_parser>=1.1.0', 'wtforms', 'dateparser'],
     tests_require=[],
     keywords=[],
     dependency_links=[
@@ -30,6 +30,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
