@@ -225,7 +225,7 @@ class RequeteSqlActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.RequeteSqlActionNoeud
+        :rtype: hermes.automate.RequeteSqlActionNoeud
         """
         from hermes.automate import RequeteSqlActionNoeud as Action
         return self.transcription_fils(
@@ -303,7 +303,7 @@ class RequeteSoapActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.RequeteSoapActionNoeud
+        :rtype: hermes.automate.RequeteSoapActionNoeud
         """
         from hermes.automate import RequeteSoapActionNoeud as Action
         from json import loads
@@ -506,7 +506,7 @@ class EnvoyerMessageSmtpActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.EnvoyerMessageSmtpActionNoeud
+        :rtype: hermes.automate.EnvoyerMessageSmtpActionNoeud
         """
         from hermes.automate import EnvoyerMessageSmtpActionNoeud as ACTION
         return self.transcription_fils(
@@ -594,7 +594,7 @@ class TransfertSmtpActionNoeud(ActionNoeud):
 
     def transcription(self):
         """
-        :rtype: gie_interoperabilite.automate.EnvoyerMessageSmtpActionNoeud
+        :rtype: hermes.automate.EnvoyerMessageSmtpActionNoeud
         """
         from hermes.automate import TransfertSmtpActionNoeud as ACTION
         return self.transcription_fils(

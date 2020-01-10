@@ -49,8 +49,8 @@
   "name": "hermes",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "GIE Sesam-Vitale",
-  "license": "MIT",
+  "author": "Hermès",
+  "license": "NPOSL-3.0",
   "devDependencies": {
     "webpack-cli": "^3.3.9"
   }

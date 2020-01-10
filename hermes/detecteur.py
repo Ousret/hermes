@@ -213,7 +213,7 @@ class RechercheInteret:
 
     def tester_sur(self, extraction_interet):
         """
-        :param gie_interoperabilite.ExtractionInteret extraction_interet:
+        :param hermes.ExtractionInteret extraction_interet:
         :return:
         """
         raise NotImplemented
@@ -282,7 +282,7 @@ class IdentificateurRechercheInteret(RechercheInteret):
 
     def tester_sur(self, extraction_interet):
         """
-        :param gie_interoperabilite.ExtractionInteret extraction_interet:
+        :param hermes.ExtractionInteret extraction_interet:
         :return:
         """
 
@@ -321,7 +321,7 @@ class ExpressionReguliereRechercheInteret(RechercheInteret):
 
     def tester_sur(self, extraction_interet):
         """
-        :param gie_interoperabilite.ExtractionInteret extraction_interet:
+        :param hermes.ExtractionInteret extraction_interet:
         :return:
         """
 
@@ -358,7 +358,7 @@ class ExpressionCleRechercheInteret(RechercheInteret):
 
     def tester_sur(self, extraction_interet):
         """
-        :param gie_interoperabilite.ExtractionInteret extraction_interet:
+        :param hermes.ExtractionInteret extraction_interet:
         :return:
         """
 
@@ -395,7 +395,7 @@ class DateRechercheInteret(RechercheInteret):
 
     def tester_sur(self, extraction_interet):
         """
-        :param gie_interoperabilite.ExtractionInteret extraction_interet:
+        :param hermes.ExtractionInteret extraction_interet:
         :return:
         """
         self.value = extraction_interet.retrieve_date(self._prefixe, focus=self._focus_cle)
@@ -423,7 +423,7 @@ class CleRechercheInteret(RechercheInteret):
 
     def tester_sur(self, extraction_interet):
         """
-        :param gie_interoperabilite.ExtractionInteret extraction_interet:
+        :param hermes.ExtractionInteret extraction_interet:
         :return:
         """
 
@@ -544,7 +544,7 @@ class InformationRechercheInteret(RechercheInteret):
 
     def tester_sur(self, extraction_interet):
         """
-        :param gie_interoperabilite.ExtractionInteret extraction_interet:
+        :param hermes.ExtractionInteret extraction_interet:
         :return:
         """
 

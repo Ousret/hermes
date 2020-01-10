@@ -47,6 +47,11 @@ class SourceFactory:
 class Source:
 
     def __init__(self, titre, corps):
+        """
+        Une source est obligatoirement composée d'un titre et d'un corps
+        :param str titre:
+        :param str corps:
+        """
         self._extraction_interet = ExtractionInteret(titre, corps)  # type: ExtractionInteret
 
         self._session = Session()

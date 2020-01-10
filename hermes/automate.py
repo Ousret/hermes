@@ -344,7 +344,7 @@ class ActionNoeud(object):
     def je_realise(self, source):
         """
         Réalisation de l'action
-        :param gie_interoperabilite.source.Source source:
+        :param hermes.source.Source source:
         :return:
         :rtype: bool
         """
@@ -428,7 +428,7 @@ class RequeteSoapActionNoeud(ActionNoeud):
     def je_realise(self, source):
         """
 
-        :param gie_interoperabilite.source.Source source:
+        :param hermes.source.Source source:
         :return:
         """
         super().je_realise(source)
@@ -1250,7 +1250,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
     def je_realise(self, source):
         """
-        :param gie_interoperabilite.mail.Mail source:
+        :param hermes.mail.Mail source:
         :return:
         """
         super().je_realise(source)
@@ -1506,7 +1506,7 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
     def je_realise(self, source):
         """
 
-        :param gie_interoperabilite.mail.Mail source:
+        :param hermes.mail.Mail source:
         :return:
         """
         super().je_realise(source)
