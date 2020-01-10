@@ -124,6 +124,10 @@ Ouvrir le navigateur à l'adresse suivante : [http://127.0.0.1:5000](http://127.
 L'utilisateur par défaut est `hermes@localhost` et le mot de passe associé est `admin`. 
 Il est bien entendu sage de le modifier rapidement après la 1ere connexion.
 
+<p align="center">
+<img width="900" alt="Capture d’écran 2020-01-10 à 15 59 14" src="https://user-images.githubusercontent.com/9326700/72162392-325f4d80-33c2-11ea-9d10-8d4a5ec19bb1.png">
+</p>
+
 ## ⚡ Comment ça marche ?
 
 ![hermes-principes](https://user-images.githubusercontent.com/9326700/71805268-2001ae80-3066-11ea-9e8e-386044ddd621.gif)
