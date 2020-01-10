@@ -231,11 +231,14 @@ admin.add_view(
     )
 )
 
-admin.add_link(FaLink(name='GitHub Hermès', category=_('Liens'), url='https://github.com/Ousret/hermes',
+admin.add_link(FaLink(name='GitHub', category=_('Liens'), url='https://github.com/Ousret/hermes',
                               icon_value='fa-github', target="_blank"))
 
-admin.add_link(FaLink(name=_('Support Hermès'), category=_('Liens'), url='https://github.com/Ousret/hermes/issues',
+admin.add_link(FaLink(name=_('Support'), category=_('Liens'), url='https://github.com/Ousret/hermes/issues',
                               icon_value='fa-ticket', target="_blank"))
+
+admin.add_link(FaLink(name=_('Documentations'), category=_('Liens'), url='https://github.com/Ousret/hermes/blob/master/docs/CHAPITRE-1.md',
+                              icon_value='fa-book', target="_blank"))
 
 bookmarks = app.config.get('BOOKMARKS')
 
