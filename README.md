@@ -12,7 +12,7 @@ N'importe quel service IMAP fonctionne avec Hermes. De même qu'iTop est UN des 
 Merci d'offrir une ⭐ à ce projet s'il vous a été utile. Encore mieux, participez en : 
   - Signalant un problème
   - Proposant un correctif via le système de pull request
-  - Proposant des fonctionnalités utiles à tous
+  - Proposant des fonctionnalités/idées utiles à tous
 
 ## 🍰 Quel besoin ?
 
@@ -36,11 +36,14 @@ Hermes offre une solution complète à ce qu'iTop ne peux pas fournir.
 
 ## ✨ Installation
 
-Le projet Hermes s'installe et s'execute très facilement de deux manières.
+Le projet Hermes s'installe et s'execute très facilement de deux manières. À condition d'avoir :
+
+  - Un compte IMAP et SMTP utilisable
+  - Environnement Linux, Unix ou Windows au choix
 
 Quelque soit votre méthode préférée, commencez par :
 
-```sh
+```shell script
 cd $HOME
 git clone https://github.com/Ousret/hermes.git
 cd ./hermes
@@ -49,7 +52,7 @@ cp configuration.dist.yml configuration.yml
 
 Modifions d'abord la configuration à l'aide de votre éditeur préféré, `nano`, `vim`, etc..
 
-```sh
+```shell script
 nano configuration.yml
 ```
 
@@ -72,7 +75,7 @@ PRODUCTION: &production
 
 En ayant déjà installé `docker` et `docker-compose` sur votre machine, vous n'avez plus qu'à lancer :
 
-```sh
+```shell script
 docker-compose up
 ```
 
@@ -80,7 +83,7 @@ docker-compose up
 
 Les pré-requis sont les suivants : `python3`, `pip`, `nodejs`, `npm`. Optionnellement `mariadb-server` et `mariadb-client`.
 
-```sh
+```shell script
 pip install certifi pyopenssl --user
 npm install yarn -g
 
@@ -137,7 +140,7 @@ Cette section vous propose de prendre en main rapidement Hermes.
 
   - [ ] [Comprendre le mécanisme des variables simplifiées sous Hermes](docs/CHAPITRE-1.md)
   - [ ] [Écrire et enregistrer vos variables partagées / globales](docs/CHAPITRE-2.md)
-  - [ ] [Mise en place de votre/vos boîte(s) IMAP](docs/CHAPITRE-3.md)
+  - [ ] [Configurer votre/vos boîte(s) IMAP](docs/CHAPITRE-3.md)
   - [ ] [Détecter un message électronique](docs/CHAPITRE-4.md)
   - [ ] [Créer un automate en réaction à une détection de message électronique](docs/CHAPITRE-5.md)
   - [ ] [Mettre en oeuvre une suite d'action à appliquer après la détection](docs/CHAPITRE-6.md)
@@ -151,7 +154,7 @@ Pour aller encore plus loin :
 ## 🚧 Maintenance
 
 Ce programme n'est qu'à ses balbutiements. 
-Bien qu'Hermes soit prêt pour une mise en production des pistes d'améliorations significatives sont disponibles.
+Hermès est stable et disponible pour la production. Ce projet peut être amélioré, des idées d'évolutions significatives sont à l'étude.
 
 Un projet Github est ouvert avec l'ensemble des idées / tâches à réaliser pour rendre ce projet incroyable.
 
@@ -162,3 +165,7 @@ Pour le moment, j'adresse la maintenance concernant les bugs et la sécurité et
 **L'exploitation commerciale est strictement interdite tandis que l'usage interne professionnel est autorisée.**
 
 Publication sous "Non-Profit Open Software License 3.0 (NPOSL-3.0)"
+
+## Contributeur(s) :
+
+  - Ahmed TAHRI @Ousret, Développeur et mainteneur

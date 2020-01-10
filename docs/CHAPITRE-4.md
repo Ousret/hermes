@@ -155,7 +155,7 @@ Recommençons l'opération "Drag & Drop" et cette fois-ci arrêtons nous à "Ce 
 <img width="1198" alt="Capture d’écran 2020-01-09 à 10 11 40" src="https://user-images.githubusercontent.com/9326700/72054170-c220d100-32c8-11ea-957e-5c96426cd5a1.png">
 </p>
 
-Le moteur créer ce que l'on va appeler des **clés**. Elles sont auto-découvertes et permettent de simplifier votre 
+Le moteur créer ce que l'on va appeler des **clés**, ici soulignées en **rouges**. Elles sont auto-découvertes et permettent de simplifier votre 
 création de détecteur.
 
 #### L'auto-détection, comment en profiter ?

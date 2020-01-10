@@ -28,11 +28,15 @@ Trois section sont visibles :
 
 ## Comment ?
 
-Vous obtenez des variables de *TROIS* manières :
+Vous produisez des variables de *TROIS* manières :
 
   - Le résultat d'un critère de recherche
   - Une variable accessible globalement, depuis le menu "Mes variables globales"
   - Le résultat d'une action
+
+Vous pouvez exploiter les variables seulement :
+
+  - Dans les arguments d'une action
 
 ## Les filtres
 
@@ -42,7 +46,8 @@ Pouvoir stocker et réutiliser de l'information c'est bien, pouvoir la transform
 |----------------------|---------------------------------------------------------------------------------------------------------------|--------------------|--------------|
 | escapeQuote          | Sécurise une chaîne de caractère pour une insertion dans un JSON. Traite par ex. les doubles chevrons.        | Je"suis"           | Je\\"suis\\"   |
 | keys                 | Liste les clés d'un dictionnaire associatif                                                                   | {A: 0, B: 1, C: 2} | [A, B, C]    |
-| int                  | Conserve UNIQUEMENT les chiffres d'une chaîne de caractère                                                    | ITOP-T-00541       | 541          |
+| int                  | Conserve UNIQUEMENT les chiffres d'une chaîne de caractère et convertir en entier                             | ITOP-T-00541       | 541          |
+| float                | Conserve UNIQUEMENT les chiffres et caractère '.' et ',' et convertir en float                                | 1,22 €             | 1.22         |
 | lower                | Chaque caractère se transforme en minuscule s'il y a lieu                                                     | ITOP-T-00541       | itop-t-00541 |
 | upper                | Chaque caractère se transforme en majuscule s'il y a lieu                                                     | je suis            | JE SUIS      |
 | strip                | Retire les espaces d'une chaîne de caractères                                                                 | je suis            | jesuis       |
