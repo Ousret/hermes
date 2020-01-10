@@ -31,6 +31,12 @@ COMMON: &common
   WEBPACKEXT_PROJECT_DISTURL: './build/'
   WEBPACK_ASSETS_URL: './assets/'
 
+  BOOKMARKS:
+    -
+      LABEL: YOUR WEBSITE OR SERVICE
+      ICON: fa-globe
+      URL: 'http://intranet'
+
 
 DEVELOPMENT: &development
   <<: *common

@@ -242,10 +242,17 @@ admin.add_view(
     )
 )
 
-admin.add_link(FaLink(name='GIE Sesam-Vitale', category='Liens', url='http://intranet',
-                      icon_value='fa-globe', target="_blank"))
-admin.add_link(FaLink(name='iTop', category='Liens', url='https://sl-itop/itop-prod',
-                      icon_value='fa-ticket', target="_blank"))
+admin.add_link(FaLink(name='GitHub Hermès', category=_('Liens'), url='https://github.com/Ousret/hermes',
+                              icon_value='fa-github', target="_blank"))
+
+bookmarks = app.config.get('BOOKMARKS')
+
+if bookmarks:
+
+    for bookmark in bookmarks:
+        admin.add_link(FaLink(name=bookmark['LABEL'], category=_('Liens'), url=bookmark['URL'],
+                              icon_value=bookmark['ICON'], target="_blank"))
+
 
 admin.set_category_icon(name='Liens', icon_value='fa-star')
 
