@@ -74,7 +74,7 @@ FlaskWebpackExt(app)
 admin = AdminLte(
     app,
     skin='green-light',
-    name=_('Hermes - Automates de gestion des échanges électroniques'),
+    name=_('Hermes - Automates à réaction aux échanges IMAP'),
     short_name="<b>H</b><sup>ermes</sup>",
     long_name="<b>Hermes</b>",
     index_view=AdminIndexView(name=_("Éditeur d'Automate"), menu_icon_value='fa-pencil', menu_icon_type='fa')
