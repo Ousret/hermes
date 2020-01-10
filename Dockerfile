@@ -13,17 +13,10 @@ RUN pip install certifi pyopenssl
 
 EXPOSE 5000
 
-COPY ./setup.py /app/setup.py
-COPY ./configuration.yml /app/configuration.yml
-COPY ./upgrade.sh /app/upgrade.sh
-COPY ./wsgi.py /app/wsgi.py
-
-COPY ./hermes/ /app/hermes/
-COPY ./hermes_ui/ /app/hermes_ui/
-COPY ./msg_parser/ /app/msg_parser/
-
 WORKDIR /app
 
+RUN git clone https://github.com/Ousret/hermes.git
+COPY ./configuration.yml /app/configuration.yml
 RUN python setup.py install
 
 WORKDIR /app/hermes_ui
