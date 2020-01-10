@@ -1,7 +1,7 @@
 # Use an official Python runtime as an image
 FROM python:3.8
 
-MAINTAINER Ahmed TAHRI "ahmed.tahri@sii.fr"
+MAINTAINER Ahmed TAHRI "ahmed.tahri@cloudnursery.dev"
 
 RUN apt-get update
 RUN apt-get -y install curl gnupg wget git
@@ -15,8 +15,10 @@ EXPOSE 5000
 
 WORKDIR /app
 
-RUN git clone https://github.com/Ousret/hermes.git
+RUN git clone https://github.com/Ousret/hermes.git .
+
 COPY ./configuration.yml /app/configuration.yml
+
 RUN python setup.py install
 
 WORKDIR /app/hermes_ui
