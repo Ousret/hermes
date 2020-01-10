@@ -231,19 +231,11 @@ admin.add_view(
     )
 )
 
-admin.add_view(
-    AdminIndexView(
-        name=_("Manuel utilisateur"),
-        menu_icon_type='fa',
-        menu_icon_value='fa-book',
-        endpoint='/admin/manuel',
-        url='/admin/manuel',
-        template='/admin/manuel.html'
-    )
-)
-
 admin.add_link(FaLink(name='GitHub Hermès', category=_('Liens'), url='https://github.com/Ousret/hermes',
                               icon_value='fa-github', target="_blank"))
+
+admin.add_link(FaLink(name=_('Support Hermès'), category=_('Liens'), url='https://github.com/Ousret/hermes/issues',
+                              icon_value='fa-ticket', target="_blank"))
 
 bookmarks = app.config.get('BOOKMARKS')
 
