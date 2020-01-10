@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 export FLASK_APP=app.py
-cd ./gie_interoperabilite_ui/
+git pull
+cd hermes_ui || exit
 flask db upgrade
+yarn build
