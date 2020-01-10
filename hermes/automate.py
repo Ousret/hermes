@@ -1423,7 +1423,8 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
             smtp_kwargs = {
                 "host": self._hote_smtp,
                 "port": self._port_smtp,
-                'tls': self._activation_tls
+                'tls': self._activation_tls,
+                'timeout': 15
             }
 
             # if self._legacy_tls_support and self._activation_tls:
@@ -1590,7 +1591,8 @@ class TransfertSmtpActionNoeud(ManipulationSmtpActionNoeud):
             smtp_kwargs = {
                 "host": self._hote_smtp,
                 "port": self._port_smtp,
-                'tls': self._activation_tls
+                'tls': self._activation_tls,
+                'timeout': 15
             }
 
             # if self._legacy_tls_support and self._activation_tls:
