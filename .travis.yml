@@ -7,6 +7,7 @@ services:
 before_install:
   - cp configuration.dist.yml configuration.yml
   - docker-compose build
+  - docker-compose create
   - docker-compose start
   - docker ps
 
