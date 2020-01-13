@@ -91,9 +91,13 @@ docker-compose up
 
 Les pré-requis sont les suivants : `python3`, `pip`, `nodejs`, `npm`. Optionnellement `mariadb-server` et `mariadb-client`.
 
+Il est possible que cette commande nécessite les droits super-utilisateur. (Installation de l'utilitaire `yarn`)
+```shell script
+npm install yarn -g
+```
+
 ```shell script
 pip install certifi pyopenssl --user
-npm install yarn -g
 
 python setup.py install --user
 cd ./hermes_ui
@@ -124,6 +128,12 @@ Si vous ne souhaitez pas mettre en place `mariadb`, remplacez par :
 PRODUCTION: &production
   <<: *common
   SQLALCHEMY_DATABASE_URI: 'sqlite:///hermes.sqlite'
+```
+
+Pour finir lancer le programme `wsgi.py`.
+
+```shell script
+python wsgi.py
 ```
 
 ### APRÈS Méthode 1 OU 2
