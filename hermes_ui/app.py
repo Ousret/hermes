@@ -61,7 +61,7 @@ babel = Babel(
 project = WebpackTemplateProject(
     __name__,
     project_folder='assets',
-    config_path='config.json',
+    config_path='assets/config.json',
 )
 
 app.config.update(dict(
