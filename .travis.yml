@@ -1,12 +1,13 @@
 language: python
+python: 3.8
 
 services:
   - docker
 
 before_install:
+  - cp configuration.dist.yml configuration.yml
   - docker-compose build
 
 script:
-  - cp configuration.dist.yml configuration.yml
   - docker-compose up
   - curl http://127.0.0.1:5000
