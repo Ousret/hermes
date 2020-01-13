@@ -13,6 +13,14 @@ RUN pip install certifi pyopenssl
 
 EXPOSE 5000
 
+RUN mkdir /python-emails
+
+WORKDIR /python-emails
+
+RUN git clone https://github.com/Ousret/python-emails.git .
+
+RUN python setup.py install
+
 WORKDIR /app
 
 RUN git clone https://github.com/Ousret/hermes.git .
