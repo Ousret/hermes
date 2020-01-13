@@ -7,7 +7,8 @@ services:
 before_install:
   - cp configuration.dist.yml configuration.yml
   - docker-compose build
+  - docker-compose start
+  - docker ps
 
 script:
-  - docker-compose up
   - curl http://127.0.0.1:5000
