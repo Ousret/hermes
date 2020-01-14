@@ -58,24 +58,23 @@ class ExtractionInteret(object):
 
         self._sentences = ExtractionInteret.extract_sentences(self._source.replace('\n', '\n '))
 
-        if self._may_html is False:
-            for line in self._source.split('\n') + [self._titre]:
+        for line in self._source.split('\n') + [self._titre]:
 
-                self._recyles.append(line)
+            self._recyles.append(line)
 
-                mes_associations = re.findall(r'(([^\w])|^)([a-zA-Z $\u00C0-\u017F\'_]{3,})(:|→|⟶|-->|->)(.+?(?=[\n\"><\]\[]))', line+'\n')
-                mes_hyperliens = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', line)
+            mes_associations = re.findall(r'(([^\w])|^)([a-zA-Z $\u00C0-\u017F\'_]{3,})(:|→|⟶|-->|->)(.+?(?=[\n\"><\]\[]))', line+'\n')
+            mes_hyperliens = re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', line)
 
-                self._interets['hyperliens'] += [el.strip('<>') for el in mes_hyperliens if el.strip('<>') not in self._interets['hyperliens']]
+            self._interets['hyperliens'] += [el.strip('<>') for el in mes_hyperliens if el.strip('<>') not in self._interets['hyperliens']]
 
-                for association in mes_associations:  # type: tuple[str, str, str, str, str]
+            for association in mes_associations:  # type: tuple[str, str, str, str, str]
 
-                    a, b, c, e, d = association
+                a, b, c, e, d = association
 
-                    partie_possible_cle, partie_possible_valeur = c.rstrip().lstrip(), d.rstrip().lstrip()
+                partie_possible_cle, partie_possible_valeur = c.rstrip().lstrip(), d.rstrip().lstrip()
 
-                    if not partie_possible_valeur.startswith('//') and (self[partie_possible_cle] is None or self[partie_possible_cle] != partie_possible_valeur):
-                        self[partie_possible_cle] = partie_possible_valeur
+                if not partie_possible_valeur.startswith('//') and (self[partie_possible_cle] is None or self[partie_possible_cle] != partie_possible_valeur):
+                    self[partie_possible_cle] = partie_possible_valeur
 
         self._interets['informations'] = self.retrive_informations_balisees()
         self._interets['identifiants'] = self.retrieve_identifer(None, multiple=True)
