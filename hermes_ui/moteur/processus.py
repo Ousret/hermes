@@ -5,6 +5,7 @@ import threading
 
 from imapclient.exceptions import LoginError, ProtocolError
 
+from hermes.source import ExtractionSourceException
 from hermes_ui.db import db
 from hermes_ui.models import BoiteAuxLettresImap, Automate, ActionNoeud, AutomateExecution, ActionNoeudExecution, Configuration
 
@@ -95,7 +96,12 @@ class InstanceInteroperabilite:
                     logger.info(_("Arrêt de la surveillance continue des BAL"))
                     return
 
-                sources = mail_factory.extraire()
+                try:
+                    sources = mail_factory.extraire()
+                except ExtractionSourceException as e:
+                    logger.error(_("Une erreur est survenue lors de la lecture de votre BAL IMAP : {msg_err}").format(msg_err=str(e)))
+                    mail_factory.reset()
+                    continue
 
                 logger.debug(_("{n} sources ont été extraites de l'usine à production '{usine}'"), n=len(sources), usine=str(mail_factory))
 
