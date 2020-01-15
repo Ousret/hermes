@@ -16,6 +16,8 @@ Pour cela, nous vous invitons à vous rendre dans le menu "Sources de données" 
 Une fois sur la liste des boîtes, nous vous invitons à cliquer sur "Créer".
 
 🔒 Nous vous conseillons de laisser coché "TLS" et "Vérification Certificat" pour plus de sécurité.
+❓ La case **Activation** permet d'autoriser Hermès à inclure cet automate lors de la surveillance de(s) boite(s) IMAP. Inversement pour test(s) uniquement(s).
+⚠️ L'option "Legacy TLS" permet d'essayer de négocier une connexion sur un serveur ayant des protocols déchus. Cette option est déconseillée et risque de ne pas fonctionner selon vos installations locales. (openssl)
 
 ## Utilisation de variable
 

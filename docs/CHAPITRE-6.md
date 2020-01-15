@@ -1,6 +1,6 @@
 <h1 align="center">Éditer les actions d'un Automate</h1>
 
-**Pré-requis:** Avoir mis en place au moins un détecteur et la description d'un automate associée.
+**Pré-requis:** Avoir mis en place au moins un détecteur et la description associée d'un automate.
 
 ## ✨ Éditeur d'un automate
 
@@ -28,7 +28,7 @@ au moins une fois à cliquer sur "Guide de l'interface".
 
 Hermes remplace vos traitements répétitifs en vous permettant de créer une suite d'actions.
 
-Cette suite d'action s'organise en arbre binaire, chaque action possède deux issues, l'une en cas de **réussite**, l'autre en cas **d'échec**.
+Cette suite d'actions s'organise en arbre binaire, chaque action possède deux issues, l'une en cas de **réussite**, l'autre en cas **d'échec**.
 
 Vous pouvez modifier votre arbre d'actions avec les boutons suivants :
 
@@ -76,7 +76,7 @@ Pour traiter nos factures iCloud, nous allons employer le scénario suivant :
 
   - Si le montant de la facture est inférieur à 1.00 EUR on supprime le message immédiatement
   - Sinon on effectue une requête http sur un serveur distant pour l'informer de la facture
-  - Dans le cas ou facture >= 1.00 EUR on la conserver dans le dossier IMAP iCloud
+  - Dans le cas ou facture >= 1.00 EUR on la conserve dans le dossier IMAP iCloud
 
 Pour cela nous allons utiliser les actions de la manière suivante :
 

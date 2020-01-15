@@ -32,9 +32,9 @@ Une entreprise peut-être confrontée à cette problématique :
 L'origine est qu'une entreprise utilisant le programme ITSM iTop et l'Incoming Mail (Scanner de boîte mail).
 La description officielle du module iTop est la suivante : `This extension runs in the background to scan the defined mail inbox(es) and either create or update tickets based on the content of the incoming emails.`
 
-Avec l'ancienne solution (non exhaustif) :
+Avec l'ancienne solution (Incoming Mail):
 
-1) Impossible d'identifier clairement et automatiquement un message
+1) Identification d'un message très limitée et restreinte
 2) Obligation de créer des dossiers IMAP pour n opération(s)
 3) Les actions du scanner sont limitées à des simples opérations
 
@@ -51,7 +51,7 @@ Le projet Hermes s'installe et s'execute très facilement de deux manières. À 
 
 Quelque soit votre méthode préférée, commencez par :
 
-```shell script
+```shell
 cd $HOME
 git clone https://github.com/Ousret/hermes.git
 cd ./hermes
@@ -60,7 +60,7 @@ cp configuration.dist.yml configuration.yml
 
 Modifions d'abord la configuration à l'aide de votre éditeur préféré, `nano`, `vim`, etc..
 
-```shell script
+```shell
 nano configuration.yml
 ```
 
@@ -83,7 +83,7 @@ PRODUCTION: &production
 
 En ayant déjà installé `docker` et `docker-compose` sur votre machine, vous n'avez plus qu'à lancer :
 
-```shell script
+```shell
 docker-compose up
 ```
 
@@ -92,11 +92,11 @@ docker-compose up
 Les pré-requis sont les suivants : `python3`, `pip`, `nodejs`, `npm`. Optionnellement `mariadb-server` et `mariadb-client`.
 
 Il est possible que cette commande nécessite les droits super-utilisateur. (Installation de l'utilitaire `yarn`)
-```shell script
+```bash
 npm install yarn -g
 ```
 
-```shell script
+```shell
 pip install certifi pyopenssl --user
 
 python setup.py install --user
@@ -108,7 +108,7 @@ cd ..
 
 La seconde méthode nécessite de mettre en oeuvre une base de données. Si vous êtes sous `mariadb`, connectez-vous et créez une base de données `hermes`.
 
-```mysql
+```sql
 CREATE DATABASE hermes;
 ```
 
@@ -132,7 +132,7 @@ PRODUCTION: &production
 
 Pour finir lancer le programme `wsgi.py`.
 
-```shell script
+```shell
 python wsgi.py
 ```
 
@@ -152,8 +152,8 @@ Il est bien entendu sage de le modifier rapidement après la 1ere connexion.
 
 En bref, 
 
-Un message électronique est reçu, nous arrivons, grâce à une suite de critères à définir la nature du message tout en conservant les résultats de l'évaluation 
-des critères.  Ensuite une suite d'actions déterminées par le concepteur s'enchainera en arbre binaire, chaque action se solde par une réussite ou un échec et prend la branche correspondante 
+Un **message** électronique est reçu, nous arrivons, grâce à une suite **de critères** (depuis **un détecteur**) à définir la nature du message tout en conservant les résultats de l'évaluation 
+des critères.  Ensuite **une suite d'actions** déterminées par le concepteur s'enchainera en arbre binaire, chaque action se solde par **une réussite** ou **un échec** et prend la branche correspondante 
 pour exécuter l'action suivante.
 
 ## 👤 Documentations

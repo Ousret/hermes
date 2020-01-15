@@ -5,9 +5,9 @@
 Tout d'abord, la première tâche consiste à donner la capacité à Hermes de pouvoir 
 identifier un message électronique et de lui assigner une étiquette.
 
-**Un détecteur :** C'est un sac avec une désignation particulière contenant un emsemble de critères vérifiant la nature d'un message.
+**Un détecteur :** C'est un sac avec une libellé unique contenant un emsemble de critères vérifiant la nature d'un message.
 
-**Un critère :** C'est la capacité de vérifier la présence de qqch (unitaire) dans un message et d'en conserver la valeur dans une variable si nécessaire.
+**Un critère ou une règle :** C'est la capacité de vérifier la présence de qqch (unitaire) dans un message et d'en conserver la valeur dans une variable si nécessaire.
 
 ## Détecteur
 

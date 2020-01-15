@@ -11,7 +11,7 @@ Les espaces ne sont pas obligatoires.
 
 ##  Où ?
 
-Vous êtes autorisé à utiliser les variables dans vos actions et dans la description de vos boîtes IMAP.
+Vous êtes autorisés à utiliser les variables dans vos actions et dans la description de vos boîtes IMAP.
 Il n'est pas possible d'utiliser les variables dans les paramètres des critères de détection.
 
 Les variables disponibles sont accessible par un volet caché à droite.
@@ -20,11 +20,11 @@ Les variables disponibles sont accessible par un volet caché à droite.
 
 Le bouton en bas à droite vous permet de le faire apparaître et disparaître à votre guise.
 
-Trois section sont visibles :
+Trois sections sont visibles :
 
-  - Les variables locales sont produite par un automate, ses actions ainsi que les critères de selection d'un message.
-  - Les variables globales sont produite par vos entrés depuis le menu "Mes variables globales".
-  - Les filtres permettent d'agir une variable, pour plus d'information, ci-dessous.
+  - Les variables locales sont produites par un automate, ses actions ainsi que les critères de selection d'un message.
+  - Les variables globales sont produites par vos entrés depuis le menu "Mes variables globales".
+  - Les filtres permettent d'agir sur une variable, pour plus d'information, ci-dessous.
 
 ## Comment ?
 
@@ -130,7 +130,7 @@ Imaginons que la variable `{{ ma_variable }}` contienne :
 }
 ```
 
-Nous souhaitons obtenir la valeur associé à `A`, soit `1`. Nous écrirons, naturellement, alors `{{ ma_variable.tickets.561.A }}`.
+Nous souhaitons obtenir la valeur associée à `A`, soit `1`. Nous écrirons, naturellement, alors `{{ ma_variable.tickets.561.A }}`.
 Néanmoins, partons du principe que nous sachons pas à l'avance que nous souhaitons passer par le niveau `561`.
 
 Disons que si un de vos critères a réussi à capturer `561` dans la variable `mon_numero_de_ticket`.

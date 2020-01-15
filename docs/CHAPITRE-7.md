@@ -1,6 +1,6 @@
 <h1 align="center">Tester & Débugger un Automate</h1>
 
-**Pré-requis:** Avoir mis en place au moins un détecteur, la description d'un automate associée ainsi que des actions prêtes.
+**Pré-requis:** Avoir mis en place au moins un détecteur, la description associée d'un automate ainsi que des actions prêtes.
 
 ## ✨ Phase finale de conception
 
