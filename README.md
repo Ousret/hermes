@@ -182,6 +182,14 @@ Un projet Github est ouvert avec l'ensemble des idées / tâches à réaliser po
 
 Pour le moment, j'adresse la maintenance concernant les bugs et la sécurité et je relis et j'approuve les contributions soumises.
 
+## ⬆️ Mise à niveau
+
+Hermès peut être sujet à une mise à jour. Pour ce faire il est possible d'utiliser le script `upgrade.sh`.
+
+```shell
+./upgrade.sh
+```
+
 ## 📝 Droits
 
 **L'exploitation commerciale est strictement interdite tandis que l'usage interne professionnel est autorisée.**
