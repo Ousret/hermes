@@ -11,5 +11,9 @@ before_install:
   - docker-compose up --no-start
   - docker ps
 
+install:
+  - pip install nose codecov
+  - python setup.py install
+
 script:
-  - curl http://127.0.0.1:5000
+  - "nosetests --with-coverage --cover-package=hermes test/*.py"
