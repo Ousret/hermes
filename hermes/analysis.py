@@ -139,7 +139,7 @@ class ExtractionInteret(object):
 
         def extract(my_string):
             mes_informations = [el[1:-1] for el in re.findall(r'\[[a-zA-Z0-9:\-# _\'\u00C0-\u017F]{1,36}\]', my_string)] + \
-                               [''.join(el)[1:] for el in re.findall(r'(([^\w#])|^)#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])', my_string)]
+                               [''.join(el) for el in re.findall(r'(([^\w#])|^)#(\w*[0-9a-zA-Z]+\w*[0-9a-zA-Z])', my_string)]
             return mes_informations
 
         informations = list()
