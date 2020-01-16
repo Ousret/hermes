@@ -199,4 +199,5 @@ Publication sous "Non-Profit Open Software License 3.0 (NPOSL-3.0)"
 ## Contributeur(s) :
 
   - Ahmed TAHRI @Ousret, Développeur et mainteneur
-  - Didier JEAN ROBERT @SadarSSI, Conception / expression de besoins
+  - Didier JEAN ROBERT @SadarSSI, Conception et expression de besoins
+  - Denis GUILLOTEAU @Dsniss, Aide à la conception, expression de besoins, testeur, valideur
