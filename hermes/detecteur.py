@@ -143,6 +143,8 @@ class Detecteur(object):
         for el in self._elements:
             el.tester_sur(source.extraction_interet)
 
+        return self.est_accomplis
+
     def je_veux(self, recherche_interet):
         """
 
