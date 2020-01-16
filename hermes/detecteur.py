@@ -66,18 +66,61 @@ class Detecteur(object):
         :return:
         """
         my_table = PrettyTable()
-        my_table.field_names = ["Règle", "Execution", "Obligatoire", "Réussite", "Valeur"]
+        # my_table.field_names = ["Type", "Règle", "Execution", "Obligatoire", "Réussite", "Valeur"]
+
+        my_table.add_column(
+            'Type',
+            list(),
+            align='c'
+        )
+
+        my_table.add_column(
+            'Règle',
+            list(),
+            align='l'
+        )
+
+        my_table.add_column(
+            'Execution',
+            list(),
+            align='c'
+        )
+
+        my_table.add_column(
+            'Obligatoire',
+            list(),
+            align='c'
+        )
+
+        my_table.add_column(
+            'Réussite',
+            list(),
+            align='c'
+        )
+
+        my_table.add_column(
+            'Valeur',
+            list(),
+            align='c'
+        )
 
         for el in self._elements:
             my_table.add_row(
                 [
-                    el.titre,
+                    str(type(el)).split('.')[-1][:-2],
+                    el.titre if len(el.titre) <= 64 else el.titre[:64]+'..',
                     str(el.value is not None),
                     str(el.est_obligatoire),
                     str(el.est_accomplis),
                     "Aucune" if el.value is None else str(el.value)
                 ]
             )
+
+            if isinstance(el, OperationLogiqueRechercheInteret):
+                for sub_row in el.explain():
+                    my_table.add_row(
+                        sub_row
+                    )
 
         return my_table.get_string()
 
@@ -588,6 +631,27 @@ class OperationLogiqueRechercheInteret(RechercheInteret):
     @property
     def criteres(self):
         return copy.deepcopy(self._recherches)
+
+    def explain(self, niveau='-'):
+
+        explications = []
+
+        for el in self._recherches:
+
+            explications.append([
+                str(type(el)).split('.')[-1][:-2],
+                niveau + (el.titre if len(el.titre) <= 64 else el.titre[:64]+'..'),
+                str(el.value is not None),
+                str(el.est_obligatoire),
+                str(el.est_accomplis),
+                "Aucune" if el.value is None else str(el.value)
+            ])
+
+            if isinstance(el, OperationLogiqueRechercheInteret):
+                explications += el.explain(niveau+'-')
+
+        return explications
+
 
     def __eq__(self, other):
         """
