@@ -4,7 +4,10 @@
 <a href="https://travis-ci.org/Ousret/hermes" target="_blank"><img src="https://travis-ci.org/Ousret/hermes.svg?branch=master" alt="Travis-CI Build Badge"></a>
 <a href="https://www.codacy.com/manual/Ousret/hermes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Ousret/hermes&amp;utm_campaign=Badge_Grade"><img alt="Codacy Badge" src="https://api.codacy.com/project/badge/Grade/858f5795316e4786a6f8c39d25535756"/></a>
 <a href="https://github.com/ousret/hermes/blob/master/LICENSE">
-   <img alt="License: NPOSL-3.0" src="https://img.shields.io/badge/license-NPOSL-purple.svg" target="_blank" />
+   <img alt="License: NPOSL-3.0" src="https://img.shields.io/badge/license-NPOSL%203.0-purple.svg" target="_blank" />
+</a>
+<a href="https://codecov.io/gh/Ousret/hermes">
+  <img src="https://codecov.io/gh/Ousret/hermes/branch/master/graph/badge.svg" />
 </a>
 </p> 
 
