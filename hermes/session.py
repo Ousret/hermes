@@ -201,6 +201,14 @@ class Session:
                                     )
                                 )
                             valeur_dernier_niveau = valeur_dernier_niveau[int(el)]
+                        else:
+                            raise KeyError(
+                                "Transcription du champs '{}' impossible car il n'y a "
+                                "pas de sous niveaux pour le type {}.".format(
+                                    cle_recherchee,
+                                    type(valeur_dernier_niveau)
+                                )
+                            )
                 except KeyError as e:
                     if strict_mode is True or etage > 0:
                         raise KeyError(e)

@@ -185,6 +185,9 @@ class TestSession(unittest.TestCase):
         with self.assertRaises(KeyError):
             Session.UNIVERSELLE.retranscrire('{{ cle_n_existe_toujours_pas }}')
 
+        with self.assertRaises(KeyError):
+            TestSession.SESSION_LOCALE.retranscrire('{{ Class.hello.a }}')
+
     def test_key_dict_int(self):
 
         self.assertEqual(
