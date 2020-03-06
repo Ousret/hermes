@@ -27,6 +27,8 @@ RUN git clone https://github.com/Ousret/hermes.git .
 
 COPY ./configuration.yml /app/configuration.yml
 
+RUN pip install mysqlclient
+
 RUN python setup.py install
 
 WORKDIR /app/hermes_ui
