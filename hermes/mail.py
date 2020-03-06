@@ -305,11 +305,11 @@ class Mail(Source):
                 if message_part.get('Content-Disposition') is not None:
                     for attr in message_part.get('Content-Disposition').split(';'):
                         if 'filename=' in attr:
-                            filename = attr.split('"')[-2]
+                            filename = attr.split('=')[-1].replace('"', '')
                 else:
                     for attr in message_part.get('Content-Type').split(';'):
                         if 'name=' in attr:
-                            filename = attr.split('"')[-2]
+                            filename = attr.split('=')[-1].replace('"', '')
 
                 if filename is not None:
                     attachements.append(
