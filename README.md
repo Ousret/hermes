@@ -174,7 +174,8 @@ Cette section vous propose de prendre en main rapidement Hermes.
 Pour aller encore plus loin :
 
   - [ ] [Les critères de détection](docs/CRITERES.md)
-  - [ ] [Les actions](docs/ACTIONS.md)  
+  - [ ] [Les actions](docs/ACTIONS.md) 
+  - [ ] [GMail](docs/GMAIL.md)  
 
 ## 🚧 Maintenance
 
