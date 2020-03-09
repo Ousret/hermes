@@ -149,14 +149,14 @@ class Mail(Source):
 
     def extract_body(self, prefer='plain', strict=False):
         if len(self.bodies) == 0:
-            return None
+            return ''
 
         for bd in self.bodies:
             if 'text/{}'.format(prefer) in bd.content_type:
                 return str(bd)
 
         if strict is True:
-            return None
+            return ''
 
         for bd in self.bodies:
             if 'text/' in bd.content_type:
@@ -249,6 +249,10 @@ class Mail(Source):
                         charset_declared = message_part_header_value.split('=')[-1].replace('"', '')
                 if message_part_header.lower() == 'content-transfer-encoding':
                     content_transfert_encoding_declared = message_part_header_value
+
+            if charset_declared == 'flowed':
+                # Todo: maybe getting more understanding of it to handle this..
+                continue
 
             raw_body = message_part.as_string()
             raw_body_lines = raw_body.split('\n')
@@ -403,19 +407,20 @@ class MailBody:
         return None
 
     def __str__(self):
-        if self.get_head('Content-Transfer-Encoding').lower() == 'base64':
+        if self.get_head('Content-Transfer-Encoding') is not None:
+            if self.get_head('Content-Transfer-Encoding').lower() == 'base64':
 
-            try:
-                decoded_content = str(b64decode(self._source + '=' * (-len(self._source) % 4)), 'utf-8', 'ignore')
-                decoded_content = decoded_content.replace('\\\\', '\\')
-                return decoded_content[2:-1] if decoded_content.startswith("b'") else decoded_content
-            except binascii.Error as e:
-                pass
-        elif self.get_head('Content-Transfer-Encoding').lower() == 'quoted-printable':
-            try:
-                return decodestring(self._source.encode('utf-8')).decode('utf-8')
-            except:
-                pass
+                try:
+                    decoded_content = str(b64decode(self._source + '=' * (-len(self._source) % 4)), 'utf-8', 'ignore')
+                    decoded_content = decoded_content.replace('\\\\', '\\')
+                    return decoded_content[2:-1] if decoded_content.startswith("b'") else decoded_content
+                except binascii.Error as e:
+                    pass
+            elif self.get_head('Content-Transfer-Encoding').lower() == 'quoted-printable':
+                try:
+                    return decodestring(self._source.encode('utf-8')).decode('utf-8')
+                except:
+                    pass
 
         return self._source
 
