@@ -250,6 +250,10 @@ class Mail(Source):
                 if message_part_header.lower() == 'content-transfer-encoding':
                     content_transfert_encoding_declared = message_part_header_value
 
+            if charset_declared == 'flowed':
+                # Todo: maybe getting more understanding of it to handle this..
+                continue
+
             raw_body = message_part.as_string()
             raw_body_lines = raw_body.split('\n')
 
