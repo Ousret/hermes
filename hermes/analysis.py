@@ -34,7 +34,13 @@ class ExtractionInteret(object):
                 if table.attrs.get('class') is not None and 'MsoNormalTable' in table.attrs.get('class'):
                     continue
 
-                df = pd.read_html(table.html)
+                try:
+                    df = pd.read_html(table.html)
+                except ValueError:
+                    continue
+
+                if len(df) == 0:
+                    continue
 
                 for el in df[0].to_dict(orient='records'):
                     keys = el.keys()
@@ -46,7 +52,7 @@ class ExtractionInteret(object):
                         self[possible_key] = possible_value
                         self._recyles.append(possible_value)
 
-                    elif 1 not in keys:
+                    elif 1 not in keys and 0 in keys:
                         possible_line = str(el[0])
                         self._recyles.append(possible_line)
 
