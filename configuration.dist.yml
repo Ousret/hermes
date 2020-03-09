@@ -58,7 +58,7 @@ PRODUCTION: &production
   <<: *common
   SECRET_KEY: MerciDeMeChangerImmediatementAvantPremierLancement
   SECURITY_RECOVERABLE: False
-  SQLALCHEMY_DATABASE_URI: 'mysql://hermes:hermes@mariadb/hermes'
+  SQLALCHEMY_DATABASE_URI: 'mysql://hermes:hermes@mariadb/hermes?charset=utf8'
   SQLALCHEMY_ECHO: False
   SQLALCHEMY_TRACK_MODIFICATIONS: False
   SQLALCHEMY_RECORD_QUERIES: False
