@@ -160,7 +160,7 @@ class Mail(Source):
 
         for bd in self.bodies:
             if 'text/' in bd.content_type:
-                return bd
+                return str(bd)
 
         return ''
 
