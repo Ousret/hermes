@@ -407,19 +407,20 @@ class MailBody:
         return None
 
     def __str__(self):
-        if self.get_head('Content-Transfer-Encoding').lower() == 'base64':
+        if self.get_head('Content-Transfer-Encoding') is not None:
+            if self.get_head('Content-Transfer-Encoding').lower() == 'base64':
 
-            try:
-                decoded_content = str(b64decode(self._source + '=' * (-len(self._source) % 4)), 'utf-8', 'ignore')
-                decoded_content = decoded_content.replace('\\\\', '\\')
-                return decoded_content[2:-1] if decoded_content.startswith("b'") else decoded_content
-            except binascii.Error as e:
-                pass
-        elif self.get_head('Content-Transfer-Encoding').lower() == 'quoted-printable':
-            try:
-                return decodestring(self._source.encode('utf-8')).decode('utf-8')
-            except:
-                pass
+                try:
+                    decoded_content = str(b64decode(self._source + '=' * (-len(self._source) % 4)), 'utf-8', 'ignore')
+                    decoded_content = decoded_content.replace('\\\\', '\\')
+                    return decoded_content[2:-1] if decoded_content.startswith("b'") else decoded_content
+                except binascii.Error as e:
+                    pass
+            elif self.get_head('Content-Transfer-Encoding').lower() == 'quoted-printable':
+                try:
+                    return decodestring(self._source.encode('utf-8')).decode('utf-8')
+                except:
+                    pass
 
         return self._source
 
