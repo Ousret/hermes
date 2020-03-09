@@ -158,7 +158,11 @@ class Mail(Source):
         if strict is True:
             return None
 
-        return '\n'.join([str(bd) for bd in self.bodies])
+        for bd in self.bodies:
+            if 'text/' in bd.content_type:
+                return bd
+
+        return ''
 
     @staticmethod
     def from_file(file_path):
