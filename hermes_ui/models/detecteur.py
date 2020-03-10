@@ -347,8 +347,8 @@ class InformationRechercheInteret(RechercheInteret):
 
     def __repr__(self):
         if self.focus_cle and self.focus_cle != '':
-            return _('<Recherche Information Balisée \'{expr}\' DANS "{loc}">').format(expr=self.expression_recherchee, loc=self.focus_cle)
-        return _('<Recherche Information Balisée \'{expr}\' PARTOUT>').format(expr=self.expression_recherchee)
+            return _('<Recherche Information Balisée \'{expr}\' DANS "{loc}">').format(expr=self.information_cible, loc=self.focus_cle)
+        return _('<Recherche Information Balisée \'{expr}\' PARTOUT>').format(expr=self.information_cible)
 
     def transcription(self):
         """
