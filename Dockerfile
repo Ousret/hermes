@@ -5,7 +5,7 @@ MAINTAINER Ahmed TAHRI "ahmed.tahri@cloudnursery.dev"
 
 RUN apt-get update
 RUN apt-get -y install curl gnupg wget git
-RUN curl -sL https://deb.nodesource.com/setup_11.x  | bash -
+RUN curl -sL https://deb.nodesource.com/setup_13.x  | bash -
 RUN apt-get -y install nodejs
 RUN npm install yarn -g
 
