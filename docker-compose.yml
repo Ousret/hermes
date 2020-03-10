@@ -8,7 +8,7 @@ services:
       - mariadb
     environment:
       FLASK_ENV: PRODUCTION
-      FLASK_DEBUG: 1
+      FLASK_DEBUG: 0
     ports:
       - "5000:5000"
     restart: on-failure
