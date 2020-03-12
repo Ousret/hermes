@@ -501,7 +501,10 @@ class RequeteHttpActionNoeud(ActionNoeud):
         super().je_realise(source)
 
         try:
-            response = request(self._methode_http, self._url_dest, data=self._form_data, proxies=self._proxies,
+            params = self._form_data if self._methode_http == 'GET' else None
+            data = self._form_data if params is None else None
+            
+            response = request(self._methode_http, self._url_dest, params=params, data=data, proxies=self._proxies,
                                verify=self._verify_peer)
         except RequestException as e:
             logger.error(_("L'action '{action_nom}' est en échec pour la raison suivante : '{msg_err}'"),
