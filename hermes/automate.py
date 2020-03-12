@@ -1835,8 +1835,8 @@ class DeplacerMailSourceActionNoeud(ManipulationRudimentaireSourceActionNoeud):
             )
         except FileNotFoundError as e:
             logger.error(
-                _("L'action '{action_nom}' sur la source '{source_nom}' est en échec : {msg_err}"), self._designation,
-                source.titre, str(e))
+                _("L'action '{action_nom}' sur la source '{source_nom}' est en échec : {msg_err}"), action_nom=self._designation,
+                source_nom=source.titre, msg_err=str(e))
             return self._jai_echouee(source)
         except ManipulationSourceException as e:
 
