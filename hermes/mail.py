@@ -245,14 +245,16 @@ class Mail(Source):
             for message_part_header, message_part_header_value in headers:
 
                 if message_part_header.lower() == 'content-type':
-                    if 'charset=' in message_part_header_value.lower():
-                        charset_declared = message_part_header_value.split('=')[-1].replace('"', '')
+                    attrs = dict(
+                        [
+                            el.split('=') for el in [el.lstrip() for el in message_part_header_value.split(';')] if
+                            '=' in el
+                        ]
+                    )
+                    if 'charset' in attrs:
+                        charset_declared = attrs['charset']
                 if message_part_header.lower() == 'content-transfer-encoding':
                     content_transfert_encoding_declared = message_part_header_value
-
-            if charset_declared == 'flowed':
-                # Todo: maybe getting more understanding of it to handle this..
-                continue
 
             raw_body = message_part.as_string()
             raw_body_lines = raw_body.split('\n')

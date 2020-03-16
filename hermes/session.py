@@ -1,3 +1,4 @@
+import re
 from json import dumps, loads
 from re import findall, sub
 from glob import glob
@@ -240,6 +241,20 @@ SessionFiltre.FILTRES.append(
     SessionFiltre(
         'escapeQuote',
         lambda ma_variable: dumps(str(ma_variable))[1:-1]
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'stripTag',
+        lambda ma_variable: re.sub(r'(<!--.*?-->|<[^>]*>)', '', str(ma_variable))
+    )
+)
+
+SessionFiltre.FILTRES.append(
+    SessionFiltre(
+        'fillIfVoid',
+        lambda ma_variable: '******' if len(str(ma_variable).lstrip()) == 0 else ma_variable
     )
 )
 

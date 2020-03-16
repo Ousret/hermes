@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='hermes',
-    version='1.0.7',
+    version='1.0.8',
     author='Ahmed TAHRI',
     author_email='ahmed.tahri@cloudnursery.dev',
     description='Automates programmables à réaction aux échanges électroniques reçus depuis une boîte IMAP4',
