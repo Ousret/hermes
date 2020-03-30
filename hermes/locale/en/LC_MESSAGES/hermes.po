@@ -6,7 +6,7 @@
 msgid ""
 msgid ""
 "Project-Id-Version: hermes 2.1.0 \ n"
-"Report-Msgid-Bugs-To: EMAIL @ ADDRESS \ n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS \ n"
 "POT-Creation-Date: 2019-12-06 09: 57 + 0100 \ n"
 "PO-Revision-Date: 2019-12-06 09: 58 + 0100 \ n"
 "Last-Translator: FULL NAME <EMAIL @ ADDRESS> \ n"
@@ -45,7 +45,7 @@ msgid ""
 #: hermes / automate.py: 131
 msgid ""
 "Initialization of the automaton '{automate_nom}' with the source"
-"'{source_name}'."
+"'{source_nom}'."
 msgid ""
 
 #: hermes / automate.py: 143
@@ -53,15 +53,15 @@ msgid "Start of the automaton '{automate_nom}' with the source '{source_nom}'."
 msgid ""
 
 #: hermes / automate.py: 163
-msgid "The controller does not seem to be affected by the source '{detecteur_name}'"
+msgid "The controller does not seem to be affected by the source '{detecteur_nom}'"
 msgid ""
 
 #: hermes / automate.py: 227
-msgid "Failed action '{action_name}' on '{source_name}'"
+msgid "Failed action '{action_nom}' on '{source_nom}'"
 msgid ""
 
 #: hermes / automate.py: 240
-msgid "End of action '{action_name}' on '{source_name}'"
+msgid "End of action '{action_nom}' on '{source_nom}'"
 msgid ""
 
 #: hermes / automate.py: 303
@@ -69,7 +69,7 @@ msgid "{n_action} child actions launched"
 msgid ""
 
 #: hermes / automate.py: 345
-msgid "Starting action '{action_name}' on '{source_name}'"
+msgid "Starting action '{action_nom}' on '{source_nom}'"
 msgid ""
 
 #: hermes / automate.py: 373 hermes / automate.py: 390 hermes / automate.py: 403
@@ -96,7 +96,7 @@ msgid ""
 #: hermes / automate.py: 641 hermes / automate.py: 715 hermes / automate.py: 790
 #: hermes / automate.py: 858 hermes / automate.py: 1079 hermes / automate.py: 1089
 #: hermes / automate.py: 1116 hermes / automate.py: 1125 hermes / automate.py: 1209
-msgid "The action '{action_name}' failed for the following reason: '{msg_err}'"
+msgid "The action '{action_nom}' failed for the following reason: '{msg_err}'"
 msgid ""
 
 #: hermes / automate.py: 521
@@ -177,3 +177,4 @@ msgid ""
 "An error occurred while retrieving the cached ICS file."
 "Path: \" {path} \ ", Error: \" {msg_err} \ ""
 msgid ""
+
