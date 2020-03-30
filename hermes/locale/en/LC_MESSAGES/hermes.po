@@ -1,1655 +1,179 @@
 # English translations for hermes.
 # Copyright (C) 2019 ORGANIZATION
 # This file is distributed under the same license as the hermes project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+# FIRST AUTHOR <EMAIL @ ADDRESS>, 2019.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: hermes 2.1.0\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-12-06 09:57+0100\n"
-"PO-Revision-Date: 2019-12-06 09:58+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: en\n"
-"Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.7.0\n"
+msgid ""
+"Project-Id-Version: hermes 2.1.0 \ n"
+"Report-Msgid-Bugs-To: EMAIL @ ADDRESS \ n"
+"POT-Creation-Date: 2019-12-06 09: 57 + 0100 \ n"
+"PO-Revision-Date: 2019-12-06 09: 58 + 0100 \ n"
+"Last-Translator: FULL NAME <EMAIL @ ADDRESS> \ n"
+"Language: in \ n"
+"Language-Team: in <LL@li.org> \ n"
+"Plural-Forms: nplurals = 2; plural = (n! = 1) \ n"
+"MIME-Version: 1.0 \ n"
+"Content-Type: text / plain; charset = utf-8 \ n"
+"Content-Transfer-Encoding: 8bit \ n"
+"Generated-By: Babel 2.7.0 \ n"
 
-#: hermes/automate.py:99
+#: hermes / automate.py: 99
 msgid "Type"
-msgstr ""
+msgid ""
 
-#: hermes/automate.py:99
+#: hermes / automate.py: 99
 msgid "Action"
-msgstr ""
-
-#: hermes/automate.py:99 hermes_ui/templates/admin/index.html:69
-#: hermes_ui/templates/admin/index.html:270
-#: hermes_ui/templates/admin/index.html:282
-msgid "Réussite"
-msgstr ""
-
-#: hermes/automate.py:99
-msgid "Valeur"
-msgstr ""
-
-#: hermes/automate.py:107 hermes_ui/templates/admin/base.html:49
-#: hermes_ui/templates/admin/base.html:59
-#: hermes_ui/templates/admin/base.html:69
-msgid "Aucune"
-msgstr ""
-
-#: hermes/automate.py:131
 msgid ""
-"Initialisation de l'automate '{automate_nom}' avec la source "
-"'{source_nom}'."
-msgstr ""
 
-#: hermes/automate.py:143
-msgid "Démarrage de l'automate '{automate_nom}' avec la source '{source_nom}'."
-msgstr ""
-
-#: hermes/automate.py:163
-msgid "L'automate ne semble pas concerné par la source '{detecteur_nom}'"
-msgstr ""
-
-#: hermes/automate.py:227
-msgid "Échec de l'action '{action_nom}' sur '{source_nom}'"
-msgstr ""
-
-#: hermes/automate.py:240
-msgid "Fin de l'action '{action_nom}' sur '{source_nom}'"
-msgstr ""
-
-#: hermes/automate.py:303
-msgid "{n_action} actions fils lancées"
-msgstr ""
-
-#: hermes/automate.py:345
-msgid "Démarrage de l'action '{action_nom}' sur '{source_nom}'"
-msgstr ""
-
-#: hermes/automate.py:373 hermes/automate.py:390 hermes/automate.py:403
+#: hermes / automate.py: 99 hermes_ui / templates / admin / index.html: 69
+#: hermes_ui / templates / admin / index.html: 270
+#: hermes_ui / templates / admin / index.html: 282
+msgid "Success"
 msgid ""
-"L'action '{action_nom}' sur la source '{source_nom}' est en échec car "
+
+#: hermes / automate.py: 99
+msgid "Value"
+msgid ""
+
+#: hermes / automate.py: 107 hermes_ui / templates / admin / base.html: 49
+#: hermes_ui / templates / admin / base.html: 59
+#: hermes_ui / templates / admin / base.html: 69
+msgid "Any"
+msgid ""
+
+#: hermes / automate.py: 131
+msgid ""
+"Initialization of the automaton '{automate_nom}' with the source"
+"'{source_name}'."
+msgid ""
+
+#: hermes / automate.py: 143
+msgid "Start of the automaton '{automate_nom}' with the source '{source_nom}'."
+msgid ""
+
+#: hermes / automate.py: 163
+msgid "The controller does not seem to be affected by the source '{detecteur_name}'"
+msgid ""
+
+#: hermes / automate.py: 227
+msgid "Failed action '{action_name}' on '{source_name}'"
+msgid ""
+
+#: hermes / automate.py: 240
+msgid "End of action '{action_name}' on '{source_name}'"
+msgid ""
+
+#: hermes / automate.py: 303
+msgid "{n_action} child actions launched"
+msgid ""
+
+#: hermes / automate.py: 345
+msgid "Starting action '{action_name}' on '{source_name}'"
+msgid ""
+
+#: hermes / automate.py: 373 hermes / automate.py: 390 hermes / automate.py: 403
+msgid ""
+"The action '{action_nom}' on the source '{source_nom}' is failing because"
 "'{msg_err}'"
-msgstr ""
-
-#: hermes/automate.py:375
-msgid "Le protocol SGDB {} n'est pas encore supporté !"
-msgstr ""
-
-#: hermes/automate.py:450 hermes/automate.py:460
-msgid "L'action '{action_nom}' sur '{source_nom}' est en échec : {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:455
 msgid ""
-"L'action '{action_nom}' sur '{source_nom}' est en échec : '{msg_err}' "
+
+#: hermes / automate.py: 375
+msgid "The SGDB {} protocol is not yet supported!"
+msgid ""
+
+#: hermes / automate.py: 450 hermes / automate.py: 460
+msgid "The action '{action_nom}' on '{source_nom}' failed: {msg_err}"
+msgid ""
+
+#: hermes / automate.py: 455
+msgid ""
+"The action '{action_nom}' on '{source_nom}' has failed: '{msg_err}'"
 "'{fault_msg}'"
-msgstr ""
-
-#: hermes/automate.py:501 hermes/automate.py:526 hermes/automate.py:571
-#: hermes/automate.py:641 hermes/automate.py:715 hermes/automate.py:790
-#: hermes/automate.py:858 hermes/automate.py:1079 hermes/automate.py:1089
-#: hermes/automate.py:1116 hermes/automate.py:1125 hermes/automate.py:1209
-msgid "L'action '{action_nom}' est en échec pour la raison suivante : '{msg_err}'"
-msgstr ""
-
-#: hermes/automate.py:521
 msgid ""
-"L'action '{action_nom}' n'a pas réussi à exploiter le résultat : "
+
+#: hermes / automate.py: 501 hermes / automate.py: 526 hermes / automate.py: 571
+#: hermes / automate.py: 641 hermes / automate.py: 715 hermes / automate.py: 790
+#: hermes / automate.py: 858 hermes / automate.py: 1079 hermes / automate.py: 1089
+#: hermes / automate.py: 1116 hermes / automate.py: 1125 hermes / automate.py: 1209
+msgid "The action '{action_name}' failed for the following reason: '{msg_err}'"
+msgid ""
+
+#: hermes / automate.py: 521
+msgid ""
+"The action '{action_nom}' failed to exploit the result:"
 "'{msg_err}'"
-msgstr ""
-
-#: hermes/automate.py:528
-msgid "La requête HTTP a retournée un code erreur ou différent de celui attendu"
-msgstr ""
-
-#: hermes/automate.py:576 hermes/automate.py:646 hermes/automate.py:720
-#: hermes/automate.py:795 hermes/automate.py:863
 msgid ""
-"Le module REST JSON d'iTop ne semble pas fonctionner correctement. Une "
-"réponse a été capturée sous le code HTTP/{http_code}."
-msgstr ""
 
-#: hermes/automate.py:587
+#: hermes / automate.py: 528
+msgid "The HTTP request returned an error code or different from that expected"
 msgid ""
-"La requête core/get iTop REST '{req_dql}' n'a pas aboutie correctement. "
-"Une erreur a été soulevée (code {code_itop}) : {message_itop}"
-msgstr ""
 
-#: hermes/automate.py:657
+#: hermes / automate.py: 576 hermes / automate.py: 646 hermes / automate.py: 720
+#: hermes / automate.py: 795 hermes / automate.py: 863
 msgid ""
-"La requête core/create iTop REST '{classe_itop}' n'a pas aboutie "
-"correctement. Une erreur a été soulevée (code {code_itop}) : "
+"The iTop REST JSON module does not seem to be working properly. A"
+"response was captured under HTTP code / {http_code}."
+msgid ""
+
+#: hermes / automate.py: 587
+msgid ""
+"The iTop REST '{req_dql}' core / get request did not complete successfully."
+"An error was raised (code {code_itop}): {message_itop}"
+msgid ""
+
+#: hermes / automate.py: 657
+msgid ""
+"The core / create iTop REST '{class_itop}' request failed"
+"correctly. An error was raised (code {code_itop}):"
 "{message_itop}"
-msgstr ""
-
-#: hermes/automate.py:731
 msgid ""
-"La requête core/update iTop REST '{req_dql}' n'a pas aboutie "
-"correctement. Une erreur a été soulevée (code {code_itop}) : "
+
+#: hermes / automate.py: 731
+msgid ""
+"The iTop REST core / update request '{req_dql}' was unsuccessful"
+"correctly. An error was raised (code {code_itop}):"
 "{message_itop}"
-msgstr ""
-
-#: hermes/automate.py:806
 msgid ""
-"La requête core/apply_stimulus iTop REST '{req_dql}' n'a pas aboutie "
-"correctement. Une erreur a été soulevée (code {code_itop}) : "
+
+#: hermes / automate.py: 806
+msgid ""
+"The core / apply_stimulus iTop REST '{req_dql}' request was not successful"
+"correctly. An error was raised (code {code_itop}):"
 "{message_itop}"
-msgstr ""
-
-#: hermes/automate.py:874
 msgid ""
-"La requête core/delete iTop REST '{req_dql}' n'a pas aboutie "
-"correctement. Une erreur a été soulevée (code {code_itop}) : "
+
+#: hermes / automate.py: 874
+msgid ""
+"The core / delete iTop REST '{req_dql}' request was not successful"
+"correctly. An error was raised (code {code_itop}):"
 "{message_itop}"
-msgstr ""
-
-#: hermes/automate.py:927
-msgid ""
-"L'opérateur '{operateur}' n'est pas reconnu pour effectuer une "
-"comparaison entre deux membres"
-msgstr ""
-
-#: hermes/automate.py:933
-msgid ""
-"Impossible de comparer un nombre avec un autre type de donnée. "
-"({membre_gauche} AVEC {membre_droite})"
-msgstr ""
-
-#: hermes/automate.py:1081
-msgid ""
-"Les dates de départ et de fin, (, ), ne sont pas dans un format "
-"facilement reconnaissable !"
-msgstr ""
-
-#: hermes/automate.py:1091
-msgid "La date de départ est supérieure ou égale à la date de fin"
-msgstr ""
-
-#: hermes/automate.py:1118
-msgid ""
-"Une erreur est survenue lors de la récupération du fichier ICS en cache. "
-"Chemin: \"{chemin}\", Erreur: \"{msg_err}\""
-msgstr ""
-
-#: hermes/automate.py:1127
-msgid "Impossible d'annuler un évènement sans l'avoir créer au préalable"
-msgstr ""
-
-#: hermes/automate.py:1175
-msgid ""
-"Bonjour Madame, Monsieur,\n"
-"\n"
-"Par procuration de l'organisateur <b>{organisateur}</b>,\n"
-"Dans le cadre de <i>\"{sujet}\"</i> nous vous joignons une invitation à "
-"l'évenement localisé à <b>\"{lieu}\"</b> en date du <b>{date_depart}</b>."
-"\n"
-"Cette invitation est sujette à être modifiée ou annulée dans le temps, "
-"vous serez notifié le cas échéant.\n"
-"\n"
-"Description: {description} \n"
-"\n"
-"Nous vous remercions de votre attention."
-msgstr ""
-
-#: hermes/automate.py:1192
-msgid "Envoyer invitation ICS depuis serveur SMTP"
-msgstr ""
-
-#: hermes/automate.py:1211
-msgid "Impossible d'envoyer le fichier invitation ICS par le biais serveur SMTP"
-msgstr ""
-
-#: hermes/automate.py:1284
-msgid ""
-"Impossible de générer une notification HTML de votre message car la "
-"template n'existe pas, {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1290
-msgid ""
-"Impossible de générer une notification HTML de votre message car la "
-"template est inaccesible, {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1296
-msgid ""
-"Impossible de générer une notification HTML de votre message car le "
-"moteur de template rend une erreur, {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1351
-msgid ""
-"La source '{source_nom}' de type '{source_type}' ne supporte pas la "
-"transformation en PJ 'supplémentaire' pour un envoie via SMTP"
-msgstr ""
-
-#: hermes/automate.py:1362
-msgid ""
-"Action '{action_nom}': Impossible d'émettre un message à cette adresse "
-"'{addr_cible}' car elle ne respecte pas le RFC 5322"
-msgstr ""
-
-#: hermes/automate.py:1372
-msgid ""
-"Action '{action_nom}': Impossible d'émettre un message car aucune adresse"
-" valide n'est disponible au sens du RFC 5322"
-msgstr ""
-
-#: hermes/automate.py:1408
-msgid ""
-"L'action '{action_nom}' est en échec car il est impossible de se "
-"connecter au serveur SMTP '{srv_smtp}' distant. Veuillez vérifier votre "
-"configuration SMTP. {msg_err}."
-msgstr ""
-
-#: hermes/automate.py:1418
-msgid ""
-"L'action '{action_nom}' est en échec car il est impossible de lire les "
-"adresses destinataires Veuillez vérifier vos adresses. [{msg_err} :: "
-"{mail_to}]."
-msgstr ""
-
-#: hermes/automate.py:1429
-msgid ""
-"L'action '{action_nom}' est en échec car le serveur SMTP '{srv_smtp}' "
-"distant à refusé d'envoyer votre message. Le serveur a répondu avec le "
-"code {smtp_code} ({smtp_err}). Veuillez vérifier votre configuration "
-"SMTP."
-msgstr ""
-
-#: hermes/automate.py:1478
-msgid ""
-"Action '{action_nom}': Impossible d'émettre un message à cette adresse "
-"'{mail_to}' car elle ne respecte pas la RFC 5322"
-msgstr ""
-
-#: hermes/automate.py:1488
-msgid ""
-"Action '{action_nom}': Impossible d'émettre un message car aucune adresse"
-" valide n'est disponible au sens de la RFC 5322"
-msgstr ""
-
-#: hermes/automate.py:1515
-msgid ""
-"Tentative de sollicitation du serveur SMTP pour expédier à '{mail_to}' le"
-" message '{mail_subject}'."
-msgstr ""
-
-#: hermes/automate.py:1518
-msgid " ET "
-msgstr ""
-
-#: hermes/automate.py:1532
-msgid ""
-"L'action '{action_nom}' est en échec car il est impossible de se "
-"connecter au serveur SMTP distant. Veuillez vérifier votre configuration "
-"SMTP. {smtp_err}."
-msgstr ""
-
-#: hermes/automate.py:1541
-msgid ""
-"L'action '{action_nom}' est en échec car le serveur SMTP distant à refusé"
-" d'envoyer votre message. Le serveur a répondu avec le code {smtp_err}. "
-"Veuillez vérifier votre configuration SMTP."
-msgstr ""
-
-#: hermes/automate.py:1563
-msgid ""
-"L'action '{action_nom}' est en échec car une variable n'a pas pu être "
-"résolue. {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1586 hermes/automate.py:1596 hermes/automate.py:1614
-#: hermes/automate.py:1621 hermes/automate.py:1629 hermes/automate.py:1710
-#: hermes/automate.py:1722 hermes/automate.py:1759 hermes/automate.py:1771
-#: hermes/automate.py:1807
-msgid ""
-"L'action '{action_nom}' sur la source '{source_nom}' est en échec : "
-"{msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1588
-msgid ""
-"Argument variable avec pattern liste identifiable non précisé, une "
-"variable est forcement de la forme suivante : {{ ma_variable }}"
-msgstr ""
-
-#: hermes/automate.py:1598
-msgid ""
-"Argument variable avec pattern liste identifiable non identifiable, aucun"
-" entier ne peut être découvert pour itérer sur une liste tel que : {{ "
-"ma_variable.0.adresse_mail }}, alors que vous donnez: {pattern_arg}"
-msgstr ""
-
-#: hermes/automate.py:1616 hermes/automate.py:1631
-msgid ""
-"Argument variable avec pattern liste identifiable mais non résolvable, le"
-" premier niveau ne donne pas de résolution : {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1623
-msgid ""
-"Argument variable avec pattern liste identifiable mais le type de sortie "
-"est inconnu, le premier niveau ne donne pas de résolution avec type "
-"identifiable : {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1712 hermes/automate.py:1761
-msgid "Aucune usine à production n'est associée à la source"
-msgstr ""
-
-#: hermes/automate.py:1729 hermes/automate.py:1738 hermes/automate.py:1778
-#: hermes/automate.py:1787 hermes/automate.py:1820 hermes/automate.py:1829
-msgid ""
-"L'action '{action_nom}' sur la source '{source_nom}' est en échec, "
-"l'usine ayant produit la source n'a pas pu effectuer un changement sur la"
-" source : {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1853
-msgid ""
-"L'action '{action_nom}' sur '{source_nom}' est en échec car votre cible "
-"'{resultat}' n'existe pas (1)"
-msgstr ""
-
-#: hermes/automate.py:1863
-msgid ""
-"L'action '{action_nom}' sur '{source_nom}' est en échec car votre cible "
-"'{resultat}' n'existe pas : {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1875
-msgid ""
-"L'action '{action_nom}' sur '{source_nom}' est en échec car votre cible "
-"n'est pas un objet serializable : {msg_err}"
-msgstr ""
-
-#: hermes/automate.py:1882
-msgid ""
-"L'action '{action_nom}' sur '{source_nom}' est en échec car votre cible "
-"n'est pas une liste"
-msgstr ""
-
-#: hermes_ui/app.py:74
-msgid "Hermes - Automates de gestion des échanges électroniques"
-msgstr ""
-
-#: hermes_ui/app.py:77
-msgid "Éditeur d'Automate"
-msgstr ""
-
-#: hermes_ui/app.py:89
-msgid "Boite aux lettres (IMAP)"
-msgstr ""
-
-#: hermes_ui/app.py:91
-msgid "Sources de données"
-msgstr ""
-
-#: hermes_ui/app.py:99
-msgid "Mes variables globales"
-msgstr ""
-
-#: hermes_ui/app.py:108
-msgid "Description des Automates"
-msgstr ""
-
-#: hermes_ui/app.py:117 hermes_ui/templates/admin/base.html:98
-msgid "Détecteur"
-msgstr ""
-
-#: hermes_ui/app.py:126
-msgid "Identifiant"
-msgstr ""
-
-#: hermes_ui/app.py:128 hermes_ui/app.py:138 hermes_ui/app.py:148
-#: hermes_ui/app.py:158 hermes_ui/app.py:168 hermes_ui/app.py:178
-#: hermes_ui/app.py:188 hermes_ui/app.py:198 hermes_ui/app.py:208
-#: hermes_ui/app.py:218
-msgid "Critères de recherche"
-msgstr ""
-
-#: hermes_ui/app.py:136
-msgid "Recherche d'expression"
-msgstr ""
-
-#: hermes_ui/app.py:146
-msgid "Date"
-msgstr ""
-
-#: hermes_ui/app.py:156
-msgid "XPath (HTML)"
-msgstr ""
-
-#: hermes_ui/app.py:166
-msgid "Expression exacte"
-msgstr ""
-
-#: hermes_ui/app.py:176
-msgid "Clé"
-msgstr ""
-
-#: hermes_ui/app.py:186
-msgid "Expression exacte dans la clé"
-msgstr ""
-
-#: hermes_ui/app.py:196
-msgid "Expression régulière"
-msgstr ""
-
-#: hermes_ui/app.py:206
-msgid "Information balisée"
-msgstr ""
-
-#: hermes_ui/app.py:216
-msgid "Opération sur critères"
-msgstr ""
-
-#: hermes_ui/app.py:226
-msgid "Vue globales critères"
-msgstr ""
-
-#: hermes_ui/app.py:233
-msgid "Manuel utilisateur"
-msgstr ""
-
-#: hermes_ui/app.py:295
-msgid "Fichier message invalide, fichier JSON requis !"
-msgstr ""
-
-#: hermes_ui/app.py:338
-msgid ""
-"Impossible d'importer votre fichier '{fname}' car votre fichier ne "
-"respecte pas la structure JSON obligatoire ! '{msg_err}'."
-msgstr ""
-
-#: hermes_ui/app.py:369
-msgid ""
-"Impossible d'importer votre automate '{automate_nom}' car une erreur de "
-"transposition en base de données est survenue '{msg_err}'."
-msgstr ""
-
-#: hermes_ui/app.py:379
-msgid "Erreur SQL '{err_msg}'."
-msgstr ""
-
-#: hermes_ui/app.py:381
-msgid "Erreur de transaction SQL : {err_msg}"
-msgstr ""
-
-#: hermes_ui/app.py:488
-msgid ""
-"Impossible de proposer la liste des variables disponibles pour un "
-"automate inexistant"
-msgstr ""
-
-#: hermes_ui/app.py:532
-msgid ""
-"L'environnement de test nécessite que le traitement des flux soit "
-"désactivé."
-msgstr ""
-
-#: hermes_ui/app.py:537 hermes_ui/app.py:755 hermes_ui/app.py:773
-#: hermes_ui/app.py:825 hermes_ui/app.py:935 hermes_ui/app.py:985
-msgid "Aucun automate ne correspond à ID {id}"
-msgstr ""
-
-#: hermes_ui/app.py:540
-msgid "Votre automate ne doit pas être en mode production."
-msgstr ""
-
-#: hermes_ui/app.py:546
-msgid "Votre automate est toujours en attente d'être testé. Veuillez patienter."
-msgstr ""
-
-#: hermes_ui/app.py:566
-msgid "Fichier message invalide, fichier binaire *.EML ou *.MSG requis !"
-msgstr ""
-
-#: hermes_ui/app.py:651 hermes_ui/app.py:691
-msgid "Formulaire incomplet, manque le sujet de la source"
-msgstr ""
-
-#: hermes_ui/app.py:653 hermes_ui/app.py:693
-msgid "Formulaire incomplet, manque le corps de la source"
-msgstr ""
-
-#: hermes_ui/app.py:656
-msgid "Formulaire incomplet, manque l'identifiant du detecteur cible à tester"
-msgstr ""
-
-#: hermes_ui/app.py:661
-msgid "Impossible de trouver le detecteur n°{n}"
-msgstr ""
-
-#: hermes_ui/app.py:796 hermes_ui/app.py:840
-msgid "Type d'action illégale à la création: \"{action_type}\""
-msgstr ""
-
-#: hermes_ui/app.py:803 hermes_ui/app.py:847
-msgid "Le type d'action demandé à la création est inexistant: {action_type}"
-msgstr ""
-
-#: hermes_ui/app.py:822 hermes_ui/app.py:932
-msgid "Aucun corps JSON présent dans la requête HTTP"
-msgstr ""
-
-#: hermes_ui/app.py:830 hermes_ui/app.py:942
-msgid "Le JSON présent dans la requête est invalide"
-msgstr ""
-
-#: hermes_ui/app.py:856
-msgid "Le formulaire de création est invalide, pour cause de \"{msg_err}\""
-msgstr ""
-
-#: hermes_ui/app.py:881
-msgid "Les informations de votre action parente sont malformés"
-msgstr ""
-
-#: hermes_ui/app.py:887
-msgid "L'action parente n'existe pas !"
-msgstr ""
-
-#: hermes_ui/app.py:897
-msgid "Le noeud que vous souhaitez remplacer est inexistant"
-msgstr ""
-
-#: hermes_ui/app.py:937 hermes_ui/app.py:987
-msgid ""
-"Aucun action noeud ne correspond à ID {action_id} pour l'automate ID "
-"{automate_id}"
-msgstr ""
-
-#: hermes_ui/app.py:1044
-msgid ""
-"Exception générique attrapée lors de la requête de test schéma. "
-"\"{msg_err}\""
-msgstr ""
-
-#: hermes_ui/models/automate.py:45
-msgid "<Automate '{automate_nom}'>"
-msgstr ""
-
-#: hermes_ui/models/automate.py:66
-msgid "Une courte explication de ce que votre action va réaliser"
-msgstr ""
-
-#: hermes_ui/models/automate.py:71
-msgid ""
-"Un nom simple (de variable) sans espace pour réutiliser le résultat de "
-"votre action si il y a lieu"
-msgstr ""
-
-#: hermes_ui/models/automate.py:161
-msgid ""
-"Effectuer une requête de type SQL sur un serveur SGDB tel que Oracle, "
-"MySQL, PosgreSQL, Microsoft SQL Serveur et MariaDB"
-msgstr ""
-
-#: hermes_ui/models/automate.py:167
-msgid "Type de serveur SGDB distant"
-msgstr ""
-
-#: hermes_ui/models/automate.py:173
-msgid "Adresse IPv4 xxx.xxx.xxx.xxx de votre serveur SGDB"
-msgstr ""
-
-#: hermes_ui/models/automate.py:178
-msgid ""
-"Port TCP à utiliser pour se connecter à votre serveur, eg. 3306 pour "
-"MySQL, MariaDB; 5432 pour PosgreSQL; 1521 pour Oracle; etc.."
-msgstr ""
-
-#: hermes_ui/models/automate.py:184
-msgid "Nom de votre base de données sur laquelle sera executée la requête SQL"
-msgstr ""
-
-#: hermes_ui/models/automate.py:189
-msgid ""
-"Requête SQL à lancer sur votre serveur, l'usage des variables {{ "
-"ma_variable }} est autorisée dans la clause WHERE. Elles seront insérées "
-"de manière sécurisée. eg. \"SELECT * FROM Product WHERE name = {{ "
-"nom_produit }} LIMIT 5\""
-msgstr ""
-
-#: hermes_ui/models/automate.py:196
-msgid "Saisir le nom d'utilisateur pour la connexion si nécessaire"
-msgstr ""
-
-#: hermes_ui/models/automate.py:201
-msgid ""
-"Saisir le mot de passe associé à l'utilisateur pour la connexion si "
-"nécessaire"
-msgstr ""
-
-#: hermes_ui/models/automate.py:244
-msgid "Effectuer une requête de type SOAP Webservice"
-msgstr ""
-
-#: hermes_ui/models/automate.py:249
-msgid "URL du service WDSL cible sur lequel le webservice SOAP est actif"
-msgstr ""
-
-#: hermes_ui/models/automate.py:254
-msgid ""
-"Choix de la méthode (fonction) à utiliser, la documentation du webservice"
-" doit vous le fournir"
-msgstr ""
-
-#: hermes_ui/models/automate.py:259
-msgid ""
-"La structure de données à fournir au webservice, il est possible que "
-"celle-ci soit vide"
-msgstr ""
-
-#: hermes_ui/models/automate.py:264
-msgid "Nom utilisateur à utiliser pour une éventuelle authentification"
-msgstr ""
-
-#: hermes_ui/models/automate.py:269
-msgid "Mot de passe associé à utiliser pour une éventuelle authentification"
-msgstr ""
-
-#: hermes_ui/models/automate.py:274
-msgid "Adresse de votre proxy pour les requêtes HTTP non sécurisée"
-msgstr ""
-
-#: hermes_ui/models/automate.py:279
-msgid "Adresse de votre proxy pour les requêtes HTTPS sécurisée"
-msgstr ""
-
-#: hermes_ui/models/automate.py:327
-msgid "Effectuer une requête de type HTTP sur un serveur distant"
-msgstr ""
-
-#: hermes_ui/models/automate.py:332
-msgid "Adresse URL du serveur HTTP distant sur laquelle la requête sera lancée"
-msgstr ""
-
-#: hermes_ui/models/automate.py:337
-msgid ""
-"La méthode (ou verbe) HTTP à utiliser avec la requête, cette information "
-"peut être disponible dans votre documentation du service distant"
-msgstr ""
-
-#: hermes_ui/models/automate.py:343
-msgid "Les données à transmettre dans votre requête HTTP"
-msgstr ""
-
-#: hermes_ui/models/automate.py:348 hermes_ui/models/automate.py:1107
-#: hermes_ui/models/automate.py:1224 hermes_ui/models/automate.py:1347
-#: hermes_ui/models/automate.py:1475
-msgid ""
-"Si une authentification est nécessaire par le billet d'une "
-"authentification basique, précisez le nom utilisateur"
-msgstr ""
-
-#: hermes_ui/models/automate.py:353 hermes_ui/models/automate.py:1112
-#: hermes_ui/models/automate.py:1229 hermes_ui/models/automate.py:1352
-#: hermes_ui/models/automate.py:1480
-msgid ""
-"Si une authentification est nécessaire par le billet d'une "
-"authentification basique, précisez le mot de passe"
-msgstr ""
-
-#: hermes_ui/models/automate.py:358 hermes_ui/models/automate.py:1117
-#: hermes_ui/models/automate.py:1234 hermes_ui/models/automate.py:1357
-#: hermes_ui/models/automate.py:1485
-msgid ""
-"Si votre requête doit utiliser un proxy pour les requêtes non sécurisées,"
-" précisez l'adresse de votre serveur mandataire HTTP"
-msgstr ""
-
-#: hermes_ui/models/automate.py:363 hermes_ui/models/automate.py:1122
-#: hermes_ui/models/automate.py:1239 hermes_ui/models/automate.py:1362
-#: hermes_ui/models/automate.py:1490
-msgid ""
-"Si votre requête doit utiliser un proxy pour les requêtes sécurisées, "
-"précisez l'adresse de votre serveur mandataire HTTP"
-msgstr ""
-
-#: hermes_ui/models/automate.py:368
-msgid ""
-"Si vous attendez un code de retour HTTP spécifique pour vérifier que la "
-"requête à réussi, précisez-le"
-msgstr ""
-
-#: hermes_ui/models/automate.py:373 hermes_ui/models/automate.py:1127
-#: hermes_ui/models/automate.py:1244 hermes_ui/models/automate.py:1367
-#: hermes_ui/models/automate.py:1495
-msgid ""
-"Cochez cette case pour activer la vérification TLS distante, dans le "
-"doute laissez cette case cochée"
-msgstr ""
-
-#: hermes_ui/models/automate.py:426
-msgid "Ecrire un message électronique vers n-tiers via un serveur SMTP"
-msgstr ""
-
-#: hermes_ui/models/automate.py:431
-msgid ""
-"L'adresse email du destinataire, en cas de multiple destinataire, "
-"veuillez les séparer par une virgule."
-msgstr ""
-
-#: hermes_ui/models/automate.py:437 hermes_ui/models/automate.py:536
-msgid "Le sujet de votre email transféré"
-msgstr ""
-
-#: hermes_ui/models/automate.py:442
-msgid "Le corps de votre message électronique, format HTML supporté"
-msgstr ""
-
-#: hermes_ui/models/automate.py:447 hermes_ui/models/automate.py:541
-#: hermes_ui/models/automate.py:735
-msgid "Votre serveur SMTP par lequel votre message transitera"
-msgstr ""
-
-#: hermes_ui/models/automate.py:452
-msgid ""
-"Le port de votre serveur SMTP à utiliser, soit 587 (le plus courant) ou "
-"le port 25 à titre d'exemple"
-msgstr ""
-
-#: hermes_ui/models/automate.py:458 hermes_ui/models/automate.py:551
-#: hermes_ui/models/automate.py:745
-msgid "Le nom d'utilisateur à utiliser avec le serveur SMTP si il y a lieu"
-msgstr ""
-
-#: hermes_ui/models/automate.py:463 hermes_ui/models/automate.py:556
-#: hermes_ui/models/automate.py:750
-msgid "Le mot de passe à utiliser avec le serveur SMTP si il y a lieu"
-msgstr ""
-
-#: hermes_ui/models/automate.py:468
-msgid ""
-"Cochez cette case pour utiliser la connexion via un port sécurisé, dans "
-"le doute laissez cette case cochée"
-msgstr ""
-
-#: hermes_ui/models/automate.py:474
-msgid ""
-"Cochez cette case pour transférer le message source en pièce jointe si la"
-" source le permet"
-msgstr ""
-
-#: hermes_ui/models/automate.py:479 hermes_ui/models/automate.py:567
-#: hermes_ui/models/automate.py:761
-msgid ""
-"Cochez cette case si votre serveur SMTP utilise des protocols obsolètes. "
-"eg. TLS inférieur à 1.2."
-msgstr ""
-
-#: hermes_ui/models/automate.py:525
-msgid "Transferer un message électronique vers n-tiers via un serveur SMTP"
-msgstr ""
-
-#: hermes_ui/models/automate.py:530
-msgid ""
-"L'adresse email du destinaire, en cas de multiple destinataire, veuillez "
-"les séparer par une virgule"
-msgstr ""
-
-#: hermes_ui/models/automate.py:546 hermes_ui/models/automate.py:740
-msgid "Le port de votre serveur SMTP à utiliser, le plus fréquent 587 ou 25"
-msgstr ""
-
-#: hermes_ui/models/automate.py:561 hermes_ui/models/automate.py:755
-msgid ""
-"Cochez cette case pour utiliser la connexion SMTP via un port sécurisé, "
-"dans le doute laissez cette case cochée"
-msgstr ""
-
-#: hermes_ui/models/automate.py:608
-msgid "Construire une variable intermédiaire"
-msgstr ""
-
-#: hermes_ui/models/automate.py:613
-msgid "Contruire votre objet variable intermédiaire"
-msgstr ""
-
-#: hermes_ui/models/automate.py:643
-msgid "Fabriquer une chaîne de caractère à partir d'une liste identifiable"
-msgstr ""
-
-#: hermes_ui/models/automate.py:648
-msgid ""
-"Votre variable contenant au moins une liste identifiable tel que {{ "
-"ma_variable.0.adresse }}"
-msgstr ""
-
-#: hermes_ui/models/automate.py:653
-msgid "Le séparateur à mettre pendant la phase de collage"
-msgstr ""
-
-#: hermes_ui/models/automate.py:684
-msgid ""
-"Emettre ou mettre à jour une invitation à un évenement par message "
-"electronique"
-msgstr ""
-
-#: hermes_ui/models/automate.py:689
-msgid ""
-"Précisez-nous qui est à l'origine de cette invitation, nom ou adresse de "
-"messagerie"
-msgstr ""
-
-#: hermes_ui/models/automate.py:694
-msgid ""
-"Une liste d'adresse de messagerie séparées par une virgule, peut être "
-"précédemment construit par une autre action"
-msgstr ""
-
-#: hermes_ui/models/automate.py:700
-msgid "En bref, le sujet au coeur de votre invitation"
-msgstr ""
-
-#: hermes_ui/models/automate.py:705
-msgid ""
-"Décrivez-nous en détails votre invitation, les enjeux, les prérequis, "
-"etc.. (!HTML non supporté!)"
-msgstr ""
-
-#: hermes_ui/models/automate.py:710
-msgid "Le lieu où l'invitation aura lieu"
-msgstr ""
-
-#: hermes_ui/models/automate.py:715
-msgid ""
-"La date et heure de début de l'évenement, doit être facilement lisible "
-"pour un robot, format français ou anglais. eg. '15/01/2019 15:22 GMT+02'"
-msgstr ""
-
-#: hermes_ui/models/automate.py:722
-msgid ""
-"La date et heure de fin de l'évenement, doit être facilement lisible pour"
-" un robot, format français ou anglais. eg. '20/01/2019 15:22 GMT+02'"
-msgstr ""
-
-#: hermes_ui/models/automate.py:729
-msgid "Cochez-le si l'évenement doit être maintenu"
-msgstr ""
-
-#: hermes_ui/models/automate.py:817
-msgid "Vérifie si une variable est Vrai"
-msgstr ""
-
-#: hermes_ui/models/automate.py:822
-msgid ""
-"Nom de votre variable à tester à Vrai, vous pouvez utiliser le format {{ "
-"ma_varible }}"
-msgstr ""
-
-#: hermes_ui/models/automate.py:851
-msgid "Execution d'une routine en ce basant sur un automate existant"
-msgstr ""
-
-#: hermes_ui/models/automate.py:856
-msgid ""
-"Nom de l'automate à executer sur la source. Le résultat final est celui "
-"donnée par la dernière action. Priere de ne pas jouer à Inception. À vos "
-"risques et périls"
-msgstr ""
-
-#: hermes_ui/models/automate.py:888
-msgid ""
-"Effectue une comparaison entre deux variables de votre choix, nombres, "
-"dates, etc.."
-msgstr ""
-
-#: hermes_ui/models/automate.py:893 hermes_ui/models/automate.py:904
-msgid ""
-"Membre de gauche de notre comparaison, vous pouvez utiliser le format {{ "
-"ma_varible }}"
-msgstr ""
-
-#: hermes_ui/models/automate.py:898
-msgid "Type d'opérateur à utiliser dans le cadre de notre comparaison"
-msgstr ""
-
-#: hermes_ui/models/automate.py:937
-msgid "Déplacer un message électronique sur un autre dossier"
-msgstr ""
-
-#: hermes_ui/models/automate.py:942
-msgid "La destination dans lequel votre source sera déplacée"
-msgstr ""
-
-#: hermes_ui/models/automate.py:970
-msgid "Copier un message électronique dans un autre dossier"
-msgstr ""
-
-#: hermes_ui/models/automate.py:975
-msgid "La destination dans lequel votre source sera copiée"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1003
-msgid "Supprime un message électronique"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1027
-msgid ""
-"Création d'une variable intermédiaire sachant une liste [{'cle_a': "
-"'val_a', 'cle_b': 'val_b'}] vers {'val_a': 'val_b'}"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1034
-msgid "Le nom de la variable concernée par la transformation"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1039
-msgid "Le nom du champ clé"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1044
-msgid "Le nom du champ valeur"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1077
-msgid "Requête sur iTop opération core/get REST JSON"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1082 hermes_ui/models/automate.py:1189
-#: hermes_ui/models/automate.py:1312 hermes_ui/models/automate.py:1435
-msgid "Adresse URL du service iTop REST/JSON à utiliser pour la requête"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1087 hermes_ui/models/automate.py:1317
-msgid ""
-"Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de "
-"type core/get"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1092 hermes_ui/models/automate.py:1199
-#: hermes_ui/models/automate.py:1445
-msgid ""
-"Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une "
-"requête rest de type core/get"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1097
-msgid "Votre requête DQL à utiliser dans le cadre de la requête"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1102 hermes_ui/models/automate.py:1214
-msgid ""
-"Les champs à extraire des objets iTop, pour récupérer l'ensemble des "
-"champs, mettre \"*\". Sinon la liste des champs séparés par une virgule."
-msgstr ""
-
-#: hermes_ui/models/automate.py:1184
-msgid "Requête sur iTop opération core/create REST JSON"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1194
-msgid ""
-"Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de "
-"type core/create"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1204
-msgid "Le nom de votre classe iTop dont la création sera nécessaire"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1209
-msgid ""
-"Veuillez construire votre nouvel objet à l'aide de cet utilitaire tel que"
-" votre schéma de données le permet"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1219
-msgid "Explicitez brièvement la nature de votre création sous iTop (Journal iTop)"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1307
-msgid "Requête sur iTop opération core/update REST JSON"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1322
-msgid ""
-"Mot de passe de votre utilisateur iTop ayant la capacité d'émettre une "
-"requête rest de type core/update"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1327
-msgid "La requête DQL permettant d'identifier l'objet iTop visé"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1332
-msgid "Veuillez indiquez les champs à mettre à niveau à l'aide de cet utilitaire"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1337 hermes_ui/models/automate.py:1465
-msgid ""
-"Les champs à extraire des objets iTop ensuite, pour récupérer l'ensemble "
-"des champs, mettre \"*\". Sinon la liste des champs séparés par une "
-"virgule."
-msgstr ""
-
-#: hermes_ui/models/automate.py:1342 hermes_ui/models/automate.py:1470
-msgid "Explicitez brièvement la nature de votre mise à jour iTop (Journal iTop)"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1430
-msgid "Requête sur iTop opération core/apply_stimulus REST JSON"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1440
-msgid ""
-"Nom d'utilisateur iTop ayant la capacité d'émettre une requête rest de "
-"type core/apply_stimulus"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1450
-msgid ""
-"Le requête DQL à effectuer pour identifier l'objet sur lequel appliquer "
-"un stimulis iTop"
-msgstr ""
-
-#: hermes_ui/models/automate.py:1455
-msgid "Veuillez indiquez le nom de votre stimulus. eg. \"ev_xxxxx\"."
-msgstr ""
-
-#: hermes_ui/models/automate.py:1460
-msgid ""
-"Veuillez indiquez les arguments nécessaires à votre stimulus. Laissez "
-"vide si aucun."
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:27
-msgid "<Détection DE '{detecteur_nom}'>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:79
-msgid "<Recherche DE '{nom}'>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:110
-msgid "<Recherche Identifiant Préfixé '{identifiant_prefixe}' DANS '{focus_cle}'>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:111
-msgid "<Recherche Identifiant Préfixé '{identifiant_prefixe}' PARTOUT>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:142
-msgid "<Recherche XPath '{expr_xpath}' DANS CORPS HTML>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:172 hermes_ui/models/detecteur.py:178
-msgid "<Recherche Expression ENTRE '{expr_gauche}' ET '{expr_droite}' {loc}>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:172 hermes_ui/models/detecteur.py:174
-#: hermes_ui/models/detecteur.py:176 hermes_ui/models/detecteur.py:178
-msgid "PARTOUT"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:172 hermes_ui/models/detecteur.py:174
-#: hermes_ui/models/detecteur.py:176 hermes_ui/models/detecteur.py:178
-msgid "DANS '{}'"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:174
-msgid "<Recherche Expression À DROITE DE '{expr_gauche}' {loc}>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:176
-msgid "<Recherche Expression À GAUCHE DE '{expr_droite}' {loc}>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:207
-msgid "<Recherche Exactement '{expr}' DANS '{loc}'>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:208
-msgid "<Recherche Exactement '{expr}' PARTOUT>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:237
-msgid "<Recherche REGEX '{expr}' DANS '{loc}'>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:238
-msgid "<Recherche REGEX '{expr}' PARTOUT>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:265
-msgid "<Recherche Clé Auto-Découverte '{loc}'>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:292
-msgid "<Recherche Date '{prefixe}' DANS '{loc}'>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:293
-msgid "<Recherche Date '{prefixe}' PARTOUT>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:322
-msgid "<Recherche Exactement '{expr}' DANS Clé Auto-Découverte \"{loc}\">"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:350
-msgid "<Recherche Information Balisée '{expr}' DANS \"{loc}\">"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:351
-msgid "<Recherche Information Balisée '{expr}' PARTOUT>"
-msgstr ""
-
-#: hermes_ui/models/detecteur.py:396
-msgid "<Opération sur Critère(s) {operande} \"{nom}\">"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:31
-msgid "Chargement des variables globales passées en base de données"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:35
-msgid "Chargement de la configuration <'{conf_nom}'::{conf_format}>"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:43
-msgid ""
-"Impossible de charger la configuration <'{conf_nom}'::{conf_format}> car "
-"'{error_msg}'"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:45
-msgid "Démarrage de la boucle de surveillance des automates sur les boîtes IMAP4"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:64 hermes_ui/moteur/processus.py:67
-msgid ""
-"Impossible de démarrer l'usine à production de source '{designation}' car"
-" '{msg_err}'"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:71
-msgid "Aucune usine à production de source n'est active, impossible de continuer"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:74
-msgid "{n} usine(s) à production de source sont actives"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:85
-msgid ""
-"Aucune automate à traitement de source n'est actif, impossible de "
-"continuer"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:88
-msgid "{n} automates en production sont actifs"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:92
-msgid "Ouverture de la BAL '{nom_utilisateur}'@'{hote_imap}'"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:95 hermes_ui/moteur/processus.py:111
-msgid "Arrêt de la surveillance continue des BAL"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:100
-msgid "{n} sources ont été extraites de l'usine à production '{usine}'"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:104
-msgid "Vérification du message électronique '{source_nom}'"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:115
-msgid "Séquence de test ne conserne pas '{automate_nom}'."
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:131
-msgid ""
-"L'automate '{automate_nom}' ne va pas traiter la source '{source_nom}' "
-"car celle ci  dépasse la limite de {n} lancement(s) par heure."
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:149
-msgid ""
-"L'automate '{automate_nom}' ne va pas traiter la source '{source_nom}' "
-"car celle ci  dépasse la limite en échec de {n} lancement(s) par heure."
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:162
-msgid ""
-"L'automate '{automate_nom}' vient de traiter avec succès la source "
-"'{source_nom}'"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:168
-msgid ""
-"L'automate '{automate_nom}' vient de traiter avec au moins une erreur la "
-"source '{source_nom}'"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:177
-msgid ""
-"L'automate '{automate_nom}' n'a pas réussi à aboutir, au moins une action"
-" est en échec"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:178
-msgid ""
-"Vous recevez ce message car votre automate '{automate_nom}' est "
-"configurée pour émettre une notification dans ce cas. \n"
-"\n"
-"En PJ les élements nécessaires à l'analyse des évènements. L'automate est"
-" toujours actif. \n"
-"\n"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:188
-msgid ""
-"L'automate '{automate_nom}' ne dispose pas d'un détecteur contraignant, "
-"il est nécessaire d'avoir au moins une règle avec obligation. "
-"Désactivation de l'automate."
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:199
-msgid ""
-"L'automate '{automate_nom}' est en erreur grave, une variable est non "
-"résolue: '{err_msg}'"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:207
-msgid ""
-"L'automate '{automate_nom}' est en erreur grave, une variable est non "
-"résolue !"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:209
-msgid ""
-"Vous recevez ce message car votre automate '{automate_nom}' n'est pas en "
-"mesure d'aboutir. \n"
-"\n"
-"Une variable est non résolue. Veuillez revenir en conception. L'automate "
-"<b>a été désactivé</b> par précaution. \n"
-"\n"
-"Information technique: \n"
-"\n"
-"<pre class='code code-html'><label></label><code>{msg_err}</code></pre>"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:234
 msgid ""
-"L'automate '{automate_nom}' est en erreur critique, une exception est "
-"soulevée: '{msg_err}'"
-msgstr ""
 
-#: hermes_ui/moteur/processus.py:243
-msgid "Informations complémentaires '{exc_type}', '{fname}' à la ligne {lineno}."
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:253
-msgid ""
-"L'automate '{automate_nom}' est en erreur critique, une exception est "
-"soulevée !"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:255
-msgid ""
-"Vous recevez ce message car votre automate '{automate_nom}' n'est pas en "
-"mesure d'aboutir. \n"
-"\n"
-"Une exception est non résolue. Veuillez revenir en conception. L'automate"
-" a été désactivé par précaution. \n"
-"\n"
-"Information technique: \n"
-"\n"
-"<pre class='code code-"
-"html'><label>Logs</label><code>{msg_err}</code></pre>"
-msgstr ""
-
-#: hermes_ui/moteur/processus.py:310
-msgid "Fin de surveillance continue des automates sur les boîtes IMAP4"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:44
-msgid "Variables locales"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:54
-msgid "Variables globales"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:64
-msgid "Filtres sur variable"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:83
-msgid "Simulation de détection"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:93
-#: hermes_ui/templates/admin/base.html:98
-msgid "Analyse Manuelle"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:93
-msgid "Brute"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:165
-msgid "Modifier mot de passe"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:171
-msgid "Déconnexion"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:192
-msgid "NAVIGATION"
-msgstr ""
-
-#: hermes_ui/templates/admin/base.html:219
-msgid "Version"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:23
+#: hermes / automate.py: 927
 msgid ""
-"Interface utilisateur pour gérer le service et mettre en oeuvre des "
-"actions sur les automates"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:27
-msgid "Surveillance Continue & Éditeur d'Action"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:39
-msgid "Automate(s)"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:44
-msgid "Nombre d'automate programmé"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:54
-msgid "Critère(s)"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:59
-msgid "Nombre de critère"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:74
-msgid "Nombre execution en réussite"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:84
-msgid "Echec"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:89
-msgid "Nombre execution en échec"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:104
-msgid "Surveillance Continue des BAL"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:109
-msgid "Démarrer"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:113
-msgid "Arrêter"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:128
-msgid "Assistant"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:135
-msgid "Guide de l'interface"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:139
-msgid "Exporter"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:143
-msgid "Importer"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:160
-msgid "Choisir Automate"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:166
-msgid "Modifier liste d'Automate"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:170
-msgid "Vos automates"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:172
-msgid "Veuillez choisir votre automate"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:198
-msgid "Visionneuse Automate"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:205
-msgid "Tester Automate"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:209
-msgid "Nouvelle Action"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:213
-msgid "Supprimer Action"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:217
-msgid "Modifier Action"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:221
-msgid "Remplacer Action"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:225
-msgid "Veuillez choisir un automate pour commencer"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:239
-msgid "Console"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:258
-msgid "Historique des exécutions"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:266
-#: hermes_ui/templates/admin/index.html:278
-msgid "Numéro"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:267
-#: hermes_ui/templates/admin/index.html:279
-msgid "Automate"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:268
-#: hermes_ui/templates/admin/index.html:280
-msgid "Date de traitement"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:269
-#: hermes_ui/templates/admin/index.html:281
-msgid "Sujet de l'échange"
-msgstr ""
-
-#: hermes_ui/templates/admin/index.html:271
-#: hermes_ui/templates/admin/index.html:283
-msgid "Info"
-msgstr ""
-
-#: hermes_ui/templates/security/forgot_password.html:17
-msgid "Recevoir des instructions de réinitialisation"
-msgstr ""
-
-#: hermes_ui/templates/security/forgot_password.html:29
-msgid "Connexion"
-msgstr ""
-
-#: hermes_ui/templates/security/login_user.html:17
-msgid "Connexion à Hermes"
-msgstr ""
-
-#: hermes_ui/templates/security/login_user.html:35
-msgid "Mot de passe perdu"
-msgstr ""
-
-#: hermes_ui/templates/security/login_user.html:38
-msgid "Je m'inscris"
-msgstr ""
-
-#: hermes_ui/views/automate.py:25
+"The operator '{operator}' is not recognized for performing a"
+"comparison between two members"
 msgid ""
-"Associe un détecteur, qui si résolu avec une source permet de lancer "
-"votre suite d'action"
-msgstr ""
-
-#: hermes_ui/views/automate.py:26
-msgid "Description courte de ce que réalise votre automate, un objectif"
-msgstr ""
-
-#: hermes_ui/views/automate.py:27
-msgid "Si cette case est cochée, votre automate sera executé en production"
-msgstr ""
 
-#: hermes_ui/views/automate.py:28
+#: hermes / automate.py: 933
 msgid ""
-"Un entier à partir de 0 (Zéro) permettant de priviligier une execution "
-"d'automate par rapport à un autre sur une source. De plus la priorité est"
-" proche de 0 (Zéro), de plus il est prioritaire"
-msgstr ""
-
-#: hermes_ui/views/automate.py:31
+"Cannot compare a number with another type of data."
+"({left_member} WITH {right_member})"
 msgid ""
-"Active les notifications en cas d'échec d'au moins une des actions de "
-"votre automate"
-msgstr ""
 
-#: hermes_ui/views/detecteur.py:58 hermes_ui/views/detecteur.py:134
-#: hermes_ui/views/detecteur.py:176 hermes_ui/views/detecteur.py:233
-#: hermes_ui/views/detecteur.py:292 hermes_ui/views/detecteur.py:347
-#: hermes_ui/views/detecteur.py:403 hermes_ui/views/detecteur.py:442
-#: hermes_ui/views/detecteur.py:481 hermes_ui/views/detecteur.py:534
+#: hermes / automate.py: 1081
 msgid ""
-"Si vous souhaitez conserver et exploiter le résultat de la règle dans "
-"votre automate, spécifiez un nom simple ici"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:60
-msgid "Nom du type de la règle"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:61 hermes_ui/views/detecteur.py:136
-#: hermes_ui/views/detecteur.py:177 hermes_ui/views/detecteur.py:235
-#: hermes_ui/views/detecteur.py:294 hermes_ui/views/detecteur.py:349
-#: hermes_ui/views/detecteur.py:483
+"The start and end dates, (,) are not in a format"
+"easily recognizable!"
 msgid ""
-"Force le moteur à effectuer la recherche sur une partie restreinte de la "
-"source, laissez vide pour laisser le moteur rechercher PARTOUT."
-msgstr ""
 
-#: hermes_ui/views/detecteur.py:117 hermes_ui/views/detecteur.py:172
-#: hermes_ui/views/detecteur.py:226 hermes_ui/views/detecteur.py:289
-#: hermes_ui/views/detecteur.py:344 hermes_ui/views/detecteur.py:400
-#: hermes_ui/views/detecteur.py:439 hermes_ui/views/detecteur.py:478
-#: hermes_ui/views/detecteur.py:532
-msgid "Résultat dans variable"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:117 hermes_ui/views/detecteur.py:172
-#: hermes_ui/views/detecteur.py:226 hermes_ui/views/detecteur.py:289
-#: hermes_ui/views/detecteur.py:344 hermes_ui/views/detecteur.py:478
-msgid "Recherche ciblée"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:122 hermes_ui/views/detecteur.py:184
-#: hermes_ui/views/detecteur.py:242 hermes_ui/views/detecteur.py:301
-#: hermes_ui/views/detecteur.py:358 hermes_ui/views/detecteur.py:490
-msgid "Uniquement dans le TITRE"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:123 hermes_ui/views/detecteur.py:185
-#: hermes_ui/views/detecteur.py:243 hermes_ui/views/detecteur.py:302
-#: hermes_ui/views/detecteur.py:359 hermes_ui/views/detecteur.py:491
-msgid "Uniquement dans le CORPS"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:124 hermes_ui/views/detecteur.py:186
-#: hermes_ui/views/detecteur.py:244 hermes_ui/views/detecteur.py:303
-#: hermes_ui/views/detecteur.py:360 hermes_ui/views/detecteur.py:492
-msgid "Dans le champ expéditeur du message"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:125 hermes_ui/views/detecteur.py:187
-#: hermes_ui/views/detecteur.py:245 hermes_ui/views/detecteur.py:304
-#: hermes_ui/views/detecteur.py:361 hermes_ui/views/detecteur.py:493
-msgid "Dans le champ destinataire du message"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:126 hermes_ui/views/detecteur.py:188
-#: hermes_ui/views/detecteur.py:246 hermes_ui/views/detecteur.py:305
-#: hermes_ui/views/detecteur.py:362 hermes_ui/views/detecteur.py:494
-msgid "Dans la liste des URLs découvertes"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:127 hermes_ui/views/detecteur.py:189
-#: hermes_ui/views/detecteur.py:247 hermes_ui/views/detecteur.py:306
-#: hermes_ui/views/detecteur.py:363 hermes_ui/views/detecteur.py:495
-msgid "Dans la liste des noms des pièces jointes"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:128 hermes_ui/views/detecteur.py:190
-#: hermes_ui/views/detecteur.py:248 hermes_ui/views/detecteur.py:307
-#: hermes_ui/views/detecteur.py:364 hermes_ui/views/detecteur.py:496
-msgid "Dans la liste des formats MIME des pièces jointes"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:133
-msgid "Le préfixe qui précède votre date, par ex. \"Suivi à la date du\""
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:175
-msgid "Indiquez ici le préfixe de votre identifiant"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:229
+#: hermes / automate.py: 1091
+msgid "The start date is greater than or equal to the end date"
 msgid ""
-"Expression immédiatement à gauche de ce que vous souhaitez extraire, "
-"laissez vide si votre cible est au début"
-msgstr ""
 
-#: hermes_ui/views/detecteur.py:231
+#: hermes / automate.py: 1118
 msgid ""
-"Expression immédiatement à droite de ce que vous souhaitez extraire, "
-"laissez vide si votre cible est déjà en fin"
-msgstr ""
-
-#: hermes_ui/views/detecteur.py:351
+"An error occurred while retrieving the cached ICS file."
+"Path: \" {path} \ ", Error: \" {msg_err} \ ""
 msgid ""
-"Expression régulière à utiliser pour la recherche d'information. Les "
-"groupes de capture sont supporté pour scinder le résultat."
-msgstr ""
-
