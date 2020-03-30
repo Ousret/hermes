@@ -1,7 +1,7 @@
 # English translations for hermes.
-# Copyright (C) 2019 ORGANIZATION
+# Copyright (C) 2019-2020 ORGANIZATION
 # This file is distributed under the same license as the hermes project.
-# FIRST AUTHOR <EMAIL @ ADDRESS>, 2019.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
 msgid ""
 msgid ""
