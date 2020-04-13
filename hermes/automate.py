@@ -907,7 +907,7 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
                 operateur=self._operande)
             return self._jai_echouee(source, False, True)
 
-        if self._membre_droite.isdigit() or self._membre_gauche.isdigit() and self._membre_droite.isdigit() != self._membre_gauche.isdigit():
+        if self._membre_droite.isdigit() != self._membre_gauche.isdigit():
             logger.warning(
                 _(
                     "Impossible de comparer un nombre avec un autre type de donnée. ({membre_gauche} AVEC {membre_droite})"),
@@ -1334,7 +1334,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
         for pj_source in [source if self._pj_source is True else None,
                           self._source_pj_complementaire if self._source_pj_complementaire is not None else None]:
 
-            if pj_source is None:
+            if pj_source is None or not isinstance(pj_source, Source):
                 continue
 
             try:
@@ -1373,7 +1373,7 @@ class EnvoyerMessageSmtpActionNoeud(ManipulationSmtpActionNoeud):
 
                         m.attachments.by_filename(pj_source.nom_fichier)._cached_part = p
 
-            except NotImplemented:
+            except NotImplementedError:
                 logger.warning(_("La source '{source_nom}' de type '{source_type}' "
                                  "ne supporte pas la transformation "
                                  "en PJ 'supplémentaire' pour un envoie via SMTP"), source_nom=pj_source.titre,

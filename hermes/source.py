@@ -29,16 +29,16 @@ class SourceFactory:
         :return: List of extracted Source
         :rtype list[Source]
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     def copier(self, source, destination):
-        raise NotImplemented
+        raise NotImplementedError
 
     def deplacer(self, source, destination):
-        raise NotImplemented
+        raise NotImplementedError
 
     def supprimer(self, source):
-        raise NotImplemented
+        raise NotImplementedError
 
     def __repr__(self):
         return "<SourceFactory::'{}'>".format(self.designation)
@@ -68,7 +68,7 @@ class Source:
 
     @property
     def raw(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     @property
     def session(self):
@@ -80,15 +80,15 @@ class Source:
 
     @property
     def titre(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     @property
     def corps(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     @property
     def nom_fichier(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     @property
     def hash(self):
