@@ -907,7 +907,7 @@ class ComparaisonVariableActionNoeud(ActionNoeud):
                 operateur=self._operande)
             return self._jai_echouee(source, False, True)
 
-        if self._membre_droite.isdigit() or self._membre_gauche.isdigit() and self._membre_droite.isdigit() != self._membre_gauche.isdigit():
+        if self._membre_droite.isdigit() != self._membre_gauche.isdigit():
             logger.warning(
                 _(
                     "Impossible de comparer un nombre avec un autre type de donnée. ({membre_gauche} AVEC {membre_droite})"),
