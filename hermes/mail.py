@@ -252,8 +252,8 @@ class Mail(Source):
 
                         bodies.append(
                             MailBody(
-                                dict(sub_headers.to_dict()),
                                 sub_headers,
+                                str(sub_headers.content_type),
                                 sub_concerned_body
                             )
                         )
