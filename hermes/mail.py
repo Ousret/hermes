@@ -253,7 +253,7 @@ class Mail(Source):
                         bodies.append(
                             MailBody(
                                 dict(sub_headers.to_dict()),
-                                str(sub_headers.content_type),
+                                sub_headers,
                                 sub_concerned_body
                             )
                         )
@@ -265,7 +265,7 @@ class Mail(Source):
 
                 bodies.append(
                     MailBody(
-                        dict(headers.to_dict()),
+                        headers,
                         str(headers.content_type),
                         concerned_body if content_transfert_encoding_declared is not None and 'quoted-printable' not in content_transfert_encoding_declared else decodestring(concerned_body).decode(charset_declared if charset_declared is not None else 'utf-8', errors='ignore')
                     )
@@ -333,7 +333,7 @@ class MailBody:
     def __init__(self, headers, content_type, source):
         """
 
-        :param dict headers:
+        :param kiss_headers.Headers headers:
         :param str content_type:
         :param str source:
         """
@@ -349,11 +349,7 @@ class MailBody:
         :param str target_header:
         :return:
         """
-        for it in self.headers:
-            head, value = it
-            if head.lower() == target_header.lower():
-                return True
-        return False
+        return self.headers.has(target_header)
 
     def get_head(self, target_header):
         """
@@ -361,11 +357,7 @@ class MailBody:
         :param str target_header:
         :return:
         """
-        for it in self.headers:
-            head, value = it
-            if head.lower() == target_header.lower():
-                return value
-        return None
+        return self.headers.to_dict().get(target_header, None)
 
     def __str__(self):
         if self.get_head('Content-Transfer-Encoding') is not None:
