@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='hermes',
-    version='1.0.9',
+    version='1.0.10',
     author='Ahmed TAHRI',
     author_email='ahmed.tahri@cloudnursery.dev',
     description='Automates programmables à réaction aux échanges électroniques reçus depuis une boîte IMAP4',
@@ -15,7 +15,7 @@ setup(
                       'flask-emails', 'ruamel.std.zipfile', 'ics==0.5', 'olefile', 'html5lib', 'pandas', 'flask_babel',
                       'records', 'flask_babel', 'unidecode', 'pandas', 'records', 'marshmallow-oneofschema', 'loguru',
                       'Flask-Webpack', 'mysql-connector-python', 'werkzeug', 'sqlalchemy', 'flask_webpackext',
-                      'pyopenssl', 'msg_parser>=1.1.0', 'wtforms', 'dateparser'],
+                      'pyopenssl', 'msg_parser>=1.1.0', 'wtforms', 'dateparser', 'kiss-headers>=2.0.4'],
     tests_require=[],
     keywords=[],
     dependency_links=[

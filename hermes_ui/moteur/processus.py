@@ -291,7 +291,7 @@ class InstanceInteroperabilite:
 
                                 action_noeud_execution = ActionNoeudExecution(
                                     automate_execution=automate_execution,
-                                    action_noeud=db.session.query(ActionNoeud).filter_by(designation=action_lancee.designation, automate_id=model.id).one(),
+                                    action_noeud=db.session.query(ActionNoeud).filter_by(designation=action_lancee.designation, automate_id=model.id).first(),
                                     validation_action_noeud=action_lancee.est_reussite,
                                     payload=str(action_lancee.payload),
                                     args_payload=dumps(action_lancee.snapshot)
