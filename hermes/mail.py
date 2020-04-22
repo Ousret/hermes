@@ -245,7 +245,7 @@ class Mail(Source):
 
                     sub_charset_declared = sub_headers.content_type.charset if 'charset' in sub_headers.content_type else None
 
-                    if sub_headers.has('content-transfer-encoding') and 'quoted-printable' not in sub_headers.content_transfer_encoding:
+                    if sub_headers.has('content-transfer-encoding') and 'quoted-printable' in sub_headers.content_transfer_encoding:
                         sub_concerned_body = decodestring(sub_concerned_body).decode(sub_charset_declared if sub_charset_declared else 'utf-8', errors='ignore')
 
                     if (sub_headers.has("content-disposition") is False or 'attachment' not in sub_headers.content_disposition) and 'text/plain' in sub_headers.content_type or 'text/html' in sub_headers.content_type:
