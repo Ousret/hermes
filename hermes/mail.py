@@ -260,7 +260,7 @@ class Mail(Source):
 
             elif ('content-disposition' not in headers or 'attachment' not in headers.content_disposition) and headers.content_type.has('text/plain') or headers.content_type.has('text/html'):
 
-                if headers.has('content-transfer-encoding') and 'quoted-printable' not in headers.content_transfer_encoding:
+                if headers.has('content-transfer-encoding') and 'quoted-printable' in headers.content_transfer_encoding:
                     concerned_body = decodestring(concerned_body).decode(charset_declared if charset_declared else 'utf-8', errors='ignore')
 
                 bodies.append(
