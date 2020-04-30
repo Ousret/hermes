@@ -267,7 +267,7 @@ class Mail(Source):
                     MailBody(
                         headers,
                         str(headers.content_type),
-                        concerned_body if content_transfert_encoding_declared is not None and 'quoted-printable' not in content_transfert_encoding_declared else decodestring(concerned_body).decode(charset_declared if charset_declared is not None else 'utf-8', errors='ignore')
+                        concerned_body
                     )
                 )
 
