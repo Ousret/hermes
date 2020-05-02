@@ -14,7 +14,7 @@ setup(
         'python-slugify',
         'requests>=2.23,<3.0',
         'prettytable',
-        'imapclient=>2.1.0,<3.0',
+        'imapclient>=2.1.0,<3.0',
         'zeep>=3.4,<4.0',
         'tqdm',
         'emails>=0.6.1,<1.0',
