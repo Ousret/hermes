@@ -7,7 +7,7 @@ from hermes_ui.models import *
 ma = Marshmallow()
 
 
-class ActionNoeudLegacySchema(ma.ModelSchema):
+class ActionNoeudLegacySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ActionNoeud
         exclude = ('id', 'createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'mapped_class_child', 'friendly_name')
@@ -44,7 +44,7 @@ class ActionNoeudLegacyPolySchema(OneOfSchema):
     type_schemas = dict([(str(cl_type).split("'")[-2].split('.')[-1].replace('LegacySchema', ''), cl_type) for cl_type in ActionNoeudLegacySchema.__subclasses__()])
 
 
-class RechercheInteretLegacySchema(ma.ModelSchema):
+class RechercheInteretLegacySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RechercheInteret
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'friendly_name')
@@ -78,7 +78,7 @@ class RechercheInteretLegacyPolySchema(OneOfSchema):
     type_schemas = dict([(str(cl_type).split("'")[-2].split('.')[-1].replace('LegacySchema', ''), cl_type) for cl_type in RechercheInteretLegacySchema.__subclasses__()])
 
 
-class DetecteurLegacySchema(ma.ModelSchema):
+class DetecteurLegacySchema(ma.SQLAlchemyAutoSchema):
 
     class Meta:
         model = Detecteur
@@ -89,7 +89,7 @@ class DetecteurLegacySchema(ma.ModelSchema):
     )
 
 
-class AutomateLegacySchema(ma.ModelSchema):
+class AutomateLegacySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Automate
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'actions', 'id', 'detecteur', 'priorite')

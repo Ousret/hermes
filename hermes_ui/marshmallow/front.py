@@ -7,13 +7,13 @@ from hermes_ui.models import *
 ma = Marshmallow()
 
 
-class UserSchema(ma.ModelSchema):
+class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         exclude = ('password',)
 
 
-class ActionNoeudSchema(ma.ModelSchema):
+class ActionNoeudSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ActionNoeud
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
@@ -37,7 +37,7 @@ class ActionNoeudPolySchema(OneOfSchema):
     type_schemas = dict([(str(cl_type).split("'")[-2].split('.')[-1].replace('Schema', ''), cl_type) for cl_type in ActionNoeudSchema.__subclasses__()])
 
 
-class RechercheInteretSchema(ma.ModelSchema):
+class RechercheInteretSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RechercheInteret
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
@@ -61,7 +61,7 @@ class RechercheInteretPolySchema(OneOfSchema):
     type_schemas = dict([(str(cl_type).split("'")[-2].split('.')[-1].replace('Schema', ''), cl_type) for cl_type in RechercheInteretSchema.__subclasses__()])
 
 
-class DetecteurSchema(ma.ModelSchema):
+class DetecteurSchema(ma.SQLAlchemyAutoSchema):
 
     class Meta:
         model = Detecteur
@@ -75,7 +75,7 @@ class DetecteurSchema(ma.ModelSchema):
     )
 
 
-class AutomateSchema(ma.ModelSchema):
+class AutomateSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Automate
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
@@ -88,21 +88,21 @@ class AutomateSchema(ma.ModelSchema):
     responsable_derniere_modification = flask_marshmallow.fields.fields.Nested(UserSchema)
 
 
-class ActionNoeudExecutionSchema(ma.ModelSchema):
+class ActionNoeudExecutionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ActionNoeudExecution
 
     action_noeud = flask_marshmallow.fields.fields.Nested(ActionNoeudPolySchema)
 
 
-class RechercheInteretExecutionSchema(ma.ModelSchema):
+class RechercheInteretExecutionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RechercheInteretExecution
 
     recherche_interet = flask_marshmallow.fields.fields.Nested(RechercheInteretSchema)
 
 
-class AutomateExecutionSchema(ma.ModelSchema):
+class AutomateExecutionSchema(ma.SQLAlchemyAutoSchema):
 
     class Meta:
         model = AutomateExecution
@@ -119,7 +119,7 @@ class AutomateExecutionSchema(ma.ModelSchema):
     )
 
 
-class AutomateExecutionDataTableSchema(ma.ModelSchema):
+class AutomateExecutionDataTableSchema(ma.SQLAlchemyAutoSchema):
 
     data = flask_marshmallow.fields.fields.List(
         flask_marshmallow.fields.fields.Nested(AutomateExecutionSchema)
