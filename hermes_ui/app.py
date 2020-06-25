@@ -1092,4 +1092,6 @@ except NoReferencedTableError as e:
     init_db()
 except NoSuchTableError as e:
     init_db()
+except ProgrammingError as e:
+    init_db()
 
