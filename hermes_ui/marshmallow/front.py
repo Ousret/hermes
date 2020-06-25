@@ -11,12 +11,14 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         exclude = ('password',)
+        load_instance = True
 
 
 class ActionNoeudSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ActionNoeud
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
+        load_instance = True
 
     action_reussite = flask_marshmallow.fields.fields.Nested('ActionNoeudPolySchema')
     action_echec = flask_marshmallow.fields.fields.Nested('ActionNoeudPolySchema')
@@ -27,7 +29,8 @@ for my_class in ActionNoeud.__subclasses__():
         """class {class_name}Schema(ActionNoeudSchema):
     class Meta:
         model = {class_name}
-        exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
+        exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
+        load_instance = True""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
     )
 
 
@@ -41,6 +44,7 @@ class RechercheInteretSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RechercheInteret
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
+        load_instance = True
 
     createur = flask_marshmallow.fields.fields.Nested(UserSchema)
     responsable_derniere_modification = flask_marshmallow.fields.fields.Nested(UserSchema)
@@ -51,7 +55,8 @@ for my_class in RechercheInteret.__subclasses__():
         """class {class_name}Schema(RechercheInteretSchema):
     class Meta:
         model = {class_name}
-        exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
+        exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
+        load_instance = True""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
     )
 
 
@@ -66,6 +71,7 @@ class DetecteurSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Detecteur
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
+        load_instance = True
 
     createur = flask_marshmallow.fields.fields.Nested(UserSchema)
     responsable_derniere_modification = flask_marshmallow.fields.fields.Nested(UserSchema)
@@ -79,6 +85,7 @@ class AutomateSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Automate
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification')
+        load_instance = True
 
     detecteur = flask_marshmallow.fields.fields.Nested(DetecteurSchema)
     action_racine = flask_marshmallow.fields.fields.Nested(ActionNoeudPolySchema)
@@ -91,6 +98,7 @@ class AutomateSchema(ma.SQLAlchemyAutoSchema):
 class ActionNoeudExecutionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ActionNoeudExecution
+        load_instance = True
 
     action_noeud = flask_marshmallow.fields.fields.Nested(ActionNoeudPolySchema)
 
@@ -98,6 +106,7 @@ class ActionNoeudExecutionSchema(ma.SQLAlchemyAutoSchema):
 class RechercheInteretExecutionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RechercheInteretExecution
+        load_instance = True
 
     recherche_interet = flask_marshmallow.fields.fields.Nested(RechercheInteretSchema)
 
@@ -106,6 +115,7 @@ class AutomateExecutionSchema(ma.SQLAlchemyAutoSchema):
 
     class Meta:
         model = AutomateExecution
+        load_instance = True
 
     automate = flask_marshmallow.fields.fields.Nested(AutomateSchema)
     detecteur = flask_marshmallow.fields.fields.Nested(DetecteurSchema)

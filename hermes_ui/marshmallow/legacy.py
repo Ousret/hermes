@@ -11,6 +11,7 @@ class ActionNoeudLegacySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ActionNoeud
         exclude = ('id', 'createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'mapped_class_child', 'friendly_name')
+        load_instance = True
 
     action_reussite = flask_marshmallow.fields.fields.Nested('ActionNoeudLegacyPolySchema', allow_none=True, required=False)
     action_echec = flask_marshmallow.fields.fields.Nested('ActionNoeudLegacyPolySchema', allow_none=True, required=False)
@@ -25,7 +26,8 @@ for my_class in ActionNoeud.__subclasses__():
             """class {class_name}LegacySchema(ActionNoeudLegacySchema):
         class Meta:
             model = {class_name}
-            exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'mapped_class_child', 'id', 'friendly_name')""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
+            exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'mapped_class_child', 'id', 'friendly_name')
+            load_instance = True""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
         )
     else:
         exec(
@@ -33,6 +35,7 @@ for my_class in ActionNoeud.__subclasses__():
         class Meta:
             model = {class_name}
             exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'mapped_class_child', 'id', 'friendly_name', 'automate')
+            load_instance = True
         automate = flask_marshmallow.fields.fields.Nested('AutomateLegacySchema', many=False)""".format(
                 class_name=str(my_class).split("'")[-2].split('.')[-1])
         )
@@ -48,6 +51,7 @@ class RechercheInteretLegacySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = RechercheInteret
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'friendly_name')
+        load_instance = True
 
     variable = flask_marshmallow.fields.fields.String(attribute='friendly_name', allow_none=True, required=False)
 
@@ -59,7 +63,8 @@ for my_class in RechercheInteret.__subclasses__():
             """class {class_name}LegacySchema(RechercheInteretLegacySchema):
         class Meta:
             model = {class_name}
-            exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'id', 'detecteurs', 'mapped_class_child', 'friendly_name')""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
+            exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'id', 'detecteurs', 'mapped_class_child', 'friendly_name')
+            load_instance = True""".format(class_name=str(my_class).split("'")[-2].split('.')[-1])
         )
     else:
         exec(
@@ -67,6 +72,7 @@ for my_class in RechercheInteret.__subclasses__():
         class Meta:
             model = {class_name}
             exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'id', 'detecteurs', 'mapped_class_child', 'sous_regles', 'friendly_name')
+            load_instance = True
         sous_criteres = flask_marshmallow.fields.fields.Nested('RechercheInteretLegacyPolySchema', many=True, attribute="sous_regles")""".format(
                 class_name=str(my_class).split("'")[-2].split('.')[-1])
         )
@@ -83,6 +89,7 @@ class DetecteurLegacySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Detecteur
         exclude = ('id', 'createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'automates', 'regles')
+        load_instance = True
 
     criteres = flask_marshmallow.fields.fields.Nested(
         RechercheInteretLegacyPolySchema, many=True, attribute="regles"
@@ -93,6 +100,7 @@ class AutomateLegacySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Automate
         exclude = ('createur', 'responsable_derniere_modification', 'date_creation', 'date_modification', 'actions', 'id', 'detecteur', 'priorite')
+        load_instance = True
 
     regle = flask_marshmallow.fields.fields.Nested(DetecteurLegacySchema, attribute='detecteur')
     action_racine = flask_marshmallow.fields.fields.Nested(ActionNoeudLegacyPolySchema, allow_none=True, required=False)
