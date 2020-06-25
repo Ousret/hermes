@@ -1094,4 +1094,6 @@ except NoSuchTableError as e:
     init_db()
 except ProgrammingError as e:
     init_db()
-
+except Exception as e:  # dirty hack..
+    if "MySQLdb._exceptions.ProgrammingError" in str(e.__class__):
+        init_db()
