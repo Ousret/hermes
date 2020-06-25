@@ -1058,6 +1058,7 @@ def supprimer_action(automate_id, action_noeud_id):
 
 
 def init_db():
+    logger.warning("Database will be created from scratch")
 
     db.drop_all()
     db.create_all()
@@ -1083,6 +1084,8 @@ def init_db():
         db.session.add(test_user)
 
         db.session.commit()
+
+    logger.info("Database has been created")
     return
 
 
@@ -1094,6 +1097,7 @@ except NoSuchTableError as e:
     init_db()
 except ProgrammingError as e:
     init_db()
-except Exception as e:  # dirty hack..
-    if "MySQLdb._exceptions.ProgrammingError" in str(e.__class__):
-        init_db()
+except OperationalError as e:  # dirty hack..
+    init_db()
+except Exception as e:
+    init_db()
