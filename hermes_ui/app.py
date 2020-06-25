@@ -1092,11 +1092,4 @@ except NoReferencedTableError as e:
     init_db()
 except NoSuchTableError as e:
     init_db()
-except OperationalError as e:
-    init_db()
-except ProgrammingError as e:
-    init_db()
-except Exception as e:
-    logger.warning(_('Exception générique attrapée lors de la requête de test schéma. "{msg_err}"'), msg_err=str(e))
-    init_db()
 
