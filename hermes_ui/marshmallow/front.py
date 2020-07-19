@@ -129,7 +129,11 @@ class AutomateExecutionSchema(ma.SQLAlchemyAutoSchema):
     )
 
 
-class AutomateExecutionDataTableSchema(ma.SQLAlchemyAutoSchema):
+class AutomateExecutionDataTableSchema(ma.Schema):
+
+    class Meta:
+        model = AutomateExecutionDataTable
+        load_instance = True
 
     data = flask_marshmallow.fields.fields.List(
         flask_marshmallow.fields.fields.Nested(AutomateExecutionSchema)
