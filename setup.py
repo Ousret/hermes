@@ -34,7 +34,6 @@ setup(
         'olefile>=0.46,<1.0',
         'html5lib',
         'pandas',
-        'flask_babel>=1.0.*',
         'records',
         'flask_babel',
         'unidecode',
