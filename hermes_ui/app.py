@@ -1058,6 +1058,7 @@ def supprimer_action(automate_id, action_noeud_id):
 
 
 def init_db():
+    logger.warning("Database will be created from scratch")
 
     db.drop_all()
     db.create_all()
@@ -1083,6 +1084,8 @@ def init_db():
         db.session.add(test_user)
 
         db.session.commit()
+
+    logger.info("Database has been created")
     return
 
 
@@ -1092,11 +1095,9 @@ except NoReferencedTableError as e:
     init_db()
 except NoSuchTableError as e:
     init_db()
-except OperationalError as e:
-    init_db()
 except ProgrammingError as e:
     init_db()
-except Exception as e:
-    logger.warning(_('Exception générique attrapée lors de la requête de test schéma. "{msg_err}"'), msg_err=str(e))
+except OperationalError as e:  # dirty hack..
     init_db()
-
+except Exception as e:
+    init_db()

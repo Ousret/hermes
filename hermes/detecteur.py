@@ -224,7 +224,7 @@ class Detecteur(object):
         return self
 
     def je_veux_une_seule_des_conditions(self, designation, **kwargs):
-        raise NotImplemented
+        raise NotImplementedError
 
     def je_souhaite_au_moins_une_condition(self, designation, **kwargs):
         self._elements.append(
@@ -247,7 +247,7 @@ class RechercheInteret:
         self._value = None
 
     def __eq__(self, other):
-        raise NotImplemented
+        raise NotImplementedError
 
     def __str__(self):
         return "Je {negation} '{ma_designation}'".format(negation="contient bien" if self.est_accomplis else "ne contient pas", ma_designation=self._titre)
@@ -261,7 +261,7 @@ class RechercheInteret:
         :param hermes.ExtractionInteret extraction_interet:
         :return:
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     @property
     def est_obligatoire(self):

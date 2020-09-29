@@ -7,9 +7,7 @@ from imapclient.exceptions import CapabilityError, IMAPClientError, IMAPClientAb
 from base64 import b64decode
 import email
 from ssl import CERT_NONE, SSLContext, PROTOCOL_TLS, OP_ALL
-from email.header import decode_header
-from quopri import decodestring
-from email.parser import HeaderParser
+from kiss_headers import parse_it
 from email.utils import parseaddr
 from quopri import decodestring
 
@@ -209,123 +207,84 @@ class Mail(Source):
     @staticmethod
     def from_message(message):
 
-        subject, encoding = str(), None
+        global_headers = parse_it(message)
 
-        for element in decode_header(message.get('Subject')):
-            partials, partials_encoding = element
-            if isinstance(partials, str):
-                subject += partials
-            if isinstance(partials, bytes):
-                subject += partials.decode(partials_encoding if partials_encoding is not None else 'utf-8', errors='ignore')
-            if encoding is None and partials_encoding is not None:
-                encoding = partials_encoding
+        subject = str(global_headers.subject)
 
         bodies = list()
         attachements = list()
-
-        if isinstance(subject, bytes):
-            raise ValueError('This case should never ever happen !')
-            # charset_detector = detect(subject)
-            # try:
-            #     subject = subject.decode('utf-8')
-            # except UnicodeDecodeError as e:
-            #     subject = subject.decode(charset_detector['encoding'], errors='ignore')
-
-        header_parser = HeaderParser()
 
         for message_part in message.walk():
 
             charset_declared = None
             content_transfert_encoding_declared = None
-            headers = header_parser.parsestr(message_part.as_string()).items()
 
-            content_type = message_part.get_content_type()
-            content_disposition = message_part.get_content_disposition() or ''
+            headers = parse_it(message_part.as_string())
 
-            for message_part_header, message_part_header_value in headers:
+            if 'content-type' in headers and 'charset' in headers.content_type:
+                charset_declared = headers.content_type.charset
 
-                if message_part_header.lower() == 'content-type':
-                    attrs = dict(
-                        [
-                            el.split('=') for el in [el.lstrip() for el in message_part_header_value.split(';')] if
-                            '=' in el
-                        ]
-                    )
-                    if 'charset' in attrs:
-                        charset_declared = attrs['charset']
-                if message_part_header.lower() == 'content-transfer-encoding':
-                    content_transfert_encoding_declared = message_part_header_value
+            if 'content-transfer-encoding' in headers:
+                content_transfert_encoding_declared = headers.content_transfer_encoding
 
             raw_body = message_part.as_string()
             raw_body_lines = raw_body.split('\n')
 
             concerned_body = "\n".join(raw_body_lines[raw_body_lines.index(''):])
 
-            if content_type == 'multipart/mixed' or content_type == 'multipart/related':
+            if 'multipart/mixed' in headers.content_type or 'multipart/related' in headers.content_type:
 
                 for sub_message_part in message_part.walk():
-                    sub_content_transfert_encoding_declared = None
-                    sub_charset_declared = None
 
-                    sub_content_type = sub_message_part.get_content_type()
-                    sub_content_disposition = sub_message_part.get_content_disposition() or ''
-                    sub_headers = header_parser.parsestr(sub_message_part.as_string()).items()
+                    sub_headers = parse_it(sub_message_part.as_string())
 
                     sub_raw_body = sub_message_part.as_string()
                     sub_raw_body_lines = sub_raw_body.split('\n')
 
                     sub_concerned_body = "\n".join(sub_raw_body_lines[sub_raw_body_lines.index(''):])
 
-                    for message_part_header, message_part_header_value in sub_headers:
+                    sub_charset_declared = sub_headers.content_type.charset if 'charset' in sub_headers.content_type else None
 
-                        if message_part_header.lower() == 'content-type':
-                            if 'charset=' in message_part_header_value.lower():
-                                sub_charset_declared = message_part_header_value.split('=')[-1].replace('"', '')
-                        if message_part_header.lower() == 'content-transfer-encoding':
-                            sub_content_transfert_encoding_declared = message_part_header_value
+                    if sub_headers.has('content-transfer-encoding') and 'quoted-printable' in sub_headers.content_transfer_encoding:
+                        sub_concerned_body = decodestring(sub_concerned_body).decode(sub_charset_declared if sub_charset_declared else 'utf-8', errors='ignore')
 
-                    if 'attachment' not in sub_content_disposition.lower() and sub_content_type == 'text/plain' or sub_content_type == 'text/html':
+                    if (sub_headers.has("content-disposition") is False or 'attachment' not in sub_headers.content_disposition) and 'text/plain' in sub_headers.content_type or 'text/html' in sub_headers.content_type:
 
                         bodies.append(
                             MailBody(
                                 sub_headers,
-                                sub_content_type,
-                                sub_concerned_body if sub_content_transfert_encoding_declared is not None and 'quoted-printable' not in sub_content_transfert_encoding_declared else decodestring(sub_concerned_body).decode(sub_charset_declared if sub_charset_declared is not None else 'utf-8', errors='ignore')
+                                str(sub_headers.content_type),
+                                sub_concerned_body
                             )
                         )
 
-            elif 'attachment' not in content_disposition.lower() and message_part.get_content_type() == 'text/plain' or message_part.get_content_type() == 'text/html':
+            elif ('content-disposition' not in headers or 'attachment' not in headers.content_disposition) and headers.content_type.has('text/plain') or headers.content_type.has('text/html'):
+
+                if headers.has('content-transfer-encoding') and 'quoted-printable' in headers.content_transfer_encoding:
+                    concerned_body = decodestring(concerned_body).decode(charset_declared if charset_declared else 'utf-8', errors='ignore')
 
                 bodies.append(
                     MailBody(
-                        header_parser.parsestr(raw_body).items(),
-                        content_type,
-                        concerned_body if content_transfert_encoding_declared is not None and 'quoted-printable' not in content_transfert_encoding_declared else decodestring(concerned_body).decode(charset_declared if charset_declared is not None else 'utf-8', errors='ignore')
+                        headers,
+                        str(headers.content_type),
+                        concerned_body
                     )
                 )
 
-            elif content_type != 'multipart/mixed' and content_type != 'multipart/related':
-                if 'Content-Type' not in dict(headers):
-                    continue
-
-                real_content_type = ''.join([el.decode(enc) if enc is not None else (el.decode('ascii') if isinstance(el, bytes) else el) for el, enc in decode_header(dict(headers)['Content-Type'])])
+            elif 'multipart/mixed' not in headers.content_type and 'multipart/related' not in headers.content_type:
 
                 filename = None
 
-                if message_part.get('Content-Disposition') is not None:
-                    for attr in message_part.get('Content-Disposition').split(';'):
-                        if 'filename=' in attr:
-                            filename = attr.split('=')[-1].replace('"', '')
-                else:
-                    for attr in message_part.get('Content-Type').split(';'):
-                        if 'name=' in attr:
-                            filename = attr.split('=')[-1].replace('"', '')
+                if 'Content-Disposition' in headers and 'filename' in headers.content_disposition:
+                    filename = headers.content_disposition.filename
+                elif headers.content_type.has('name'):
+                    filename = headers.content_type.name
 
                 if filename is not None:
                     attachements.append(
                         MailAttachement(
                             filename,
-                            real_content_type,
+                            str(headers.content_type),
                             "\n".join(raw_body_lines[raw_body_lines.index(''):])
                         )
                     )
@@ -337,7 +296,7 @@ class Mail(Source):
 
         return Mail(
             message.get('Message-ID'),
-            str(subject, encoding) if encoding and not isinstance(subject, str) is not None else subject,
+            subject,
             bodies,
             attachements,
             parseaddr(message.get('From')),
@@ -374,7 +333,7 @@ class MailBody:
     def __init__(self, headers, content_type, source):
         """
 
-        :param dict headers:
+        :param kiss_headers.Headers headers:
         :param str content_type:
         :param str source:
         """
@@ -390,11 +349,7 @@ class MailBody:
         :param str target_header:
         :return:
         """
-        for it in self.headers:
-            head, value = it
-            if head.lower() == target_header.lower():
-                return True
-        return False
+        return self.headers.has(target_header)
 
     def get_head(self, target_header):
         """
@@ -402,11 +357,7 @@ class MailBody:
         :param str target_header:
         :return:
         """
-        for it in self.headers:
-            head, value = it
-            if head.lower() == target_header.lower():
-                return value
-        return None
+        return self.headers.to_dict().get(target_header, None)
 
     def __str__(self):
         if self.get_head('Content-Transfer-Encoding') is not None:
