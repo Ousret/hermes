@@ -23,7 +23,13 @@ RUN python setup.py install
 
 WORKDIR /app
 
-RUN git clone https://github.com/Ousret/hermes.git .
+COPY ./hermes ./hermes
+COPY ./hermes_ui ./hermes_ui
+COPY setup.py ./setup.py
+COPY setup.cfg ./setup.cfg
+COPY wsgi.py ./wsgi.py
+
+RUN mkdir invitations
 
 COPY ./configuration.yml /app/configuration.yml
 
