@@ -6,7 +6,9 @@ FROM python:3.8
 #Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
 
-MAINTAINER Ahmed TAHRI "ahmed.tahri@cloudnursery.dev"
+LABEL MAINTAINER Ahmed TAHRI "ahmed.tahri@cloudnursery.dev"
+LABEL version ="0.1"
+LABEL description="This is a customer docker build for Hermes - https://github.com/Ousret/hermes"
 
 # Update Current available packages
 RUN apt-get update
@@ -55,3 +57,6 @@ RUN yarn build
 WORKDIR /app
 
 CMD python wsgi.py
+
+# This will clean up any un-used apps and any other mess we might have made.
+rm -rf /var/lib/apt/lists/* && apt clean
