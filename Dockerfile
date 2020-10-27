@@ -1,9 +1,19 @@
+# Use Ubuntu 20.04 as the base image
+FROM ubuntu:20.04
 # Use an official Python runtime as an image
 FROM python:3.8
 
+#Disable Prompt During Packages Installation
+ARG DEBIAN_FRONTEND=noninteractive
+
 MAINTAINER Ahmed TAHRI "ahmed.tahri@cloudnursery.dev"
 
+# Update Current available packages
 RUN apt-get update
+# Upgrade all installed packages so most recent files are used.
+RUN apt-get ugrdade -y
+
+# Lets install some mandatory requirements to grad the rest of the files needed
 RUN apt-get -y install curl gnupg wget git
 RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
 RUN apt-get -y install nodejs
