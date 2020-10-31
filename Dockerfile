@@ -59,4 +59,4 @@ WORKDIR /app
 CMD python wsgi.py
 
 # This will clean up any un-used apps and any other mess we might have made.
-rm -rf /var/lib/apt/lists/* && apt clean
+RUN rm -rf /var/lib/apt/lists/* && apt clean
