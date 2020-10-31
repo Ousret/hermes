@@ -13,7 +13,7 @@ LABEL description="This is a customer docker build for Hermes - https://github.c
 # Update Current available packages
 RUN apt-get update
 # Upgrade all installed packages so most recent files are used.
-RUN apt-get ugrdade -y
+RUN apt-get upgrade -y
 
 # Lets install some mandatory requirements to grad the rest of the files needed
 RUN apt-get -y install curl gnupg wget git
