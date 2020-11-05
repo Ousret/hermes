@@ -25,7 +25,7 @@ WORKDIR /app
 
 RUN git clone https://github.com/Ousret/hermes.git .
 
-COPY ./configuration.yml /app/configuration.yml
+COPY ./configuration.dist.yml /app/configuration.yml
 
 RUN pip install mysqlclient
 
