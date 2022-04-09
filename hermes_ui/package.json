@@ -34,7 +34,7 @@
     "lodash.template": "^4.5.0",
     "manifest-revision-webpack-plugin": "^0.0.5",
     "mini-css-extract-plugin": "^0.8.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
     "script-loader": "^0.6.1",
